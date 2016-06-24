@@ -1,16 +1,21 @@
 #include <iostream>
-#include <GLFW\glfw3.h>
-#include "src\Debugging\Logger.h"
+#include "src\Shard.h"
+#include "src\Gfx\Window.h"
 
 using namespace Shard;
-using namespace Debugging;
 
 int main(void)
 {
-	if (!glfwInit())
-		std::cout << "noinit" << std::endl;
-	else
-		std::cout << "YEE" << std::endl;
+	Core::Initialize();
+
+	Gfx::Window display("Shard Engine", 960, 540);
+	while (!display.IsCloseRequested())
+	{
+		display.Update();
+	}
+
+	display.Dispose();
+	Core::Deinitialize();
 
 	system("PAUSE");
 	return 0;

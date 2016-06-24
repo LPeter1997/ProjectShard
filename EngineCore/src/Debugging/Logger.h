@@ -22,7 +22,7 @@ namespace Shard
 			{
 				auto t = std::time(nullptr);
 				auto tm = *std::localtime(&t);
-				return s_Ostream << '[' << std::put_time(&tm, "%H-%M-%S") << "] " << Level::GetDescription() << ' ' << (unsigned int)Level::GetLevel() << ": ";
+				return s_Ostream << '[' << std::put_time(&tm, "%H:%M:%S") << "] " << Level::GetDescription() << ' ' << (unsigned int)Level::GetLevel() << ": ";
 			}
 		};
 
