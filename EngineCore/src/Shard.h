@@ -1,8 +1,10 @@
 #pragma once
 
+#include <GL\glew.h>
 #include <GLFW\glfw3.h>
 #include "Patterns\Static.h"
 #include "Debugging\Logger.h"
+#include "Gfx\Shader\ShaderFactory.h"
 
 namespace Shard
 {
@@ -34,6 +36,7 @@ namespace Shard
 			if (!s_Initialized)
 				return;
 
+			Gfx::ShaderFactory::DisposeAll();
 			glfwTerminate();
 			Debugging::Logger::Log<Debugging::Info>() << "GLFW terminated!" << std::endl;
 			s_Initialized = false;

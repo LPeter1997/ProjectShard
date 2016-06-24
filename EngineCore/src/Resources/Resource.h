@@ -43,6 +43,8 @@ namespace Shard
 				}
 			}
 
+			virtual ~Resource() {}
+
 		public:
 			inline uint GetResourceID() const { return m_ResourceID; }
 			inline ResourceType GetResourceType() const { return m_ResourceType; }

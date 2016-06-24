@@ -42,6 +42,12 @@
     <ClCompile Include="src\Resources\ContentManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Gfx\Shader\GLSLProgram.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Gfx\Shader\ShaderFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Debugging\Logger.h">
@@ -113,5 +119,18 @@
     <ClInclude Include="src\Resources\Text.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Gfx\Shader\GLSLProgram.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Gfx\Shader\Shader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Gfx\Shader\ShaderFactory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="res\basic.vert" />
+    <Text Include="res\basic.frag" />
   </ItemGroup>
 </Project>

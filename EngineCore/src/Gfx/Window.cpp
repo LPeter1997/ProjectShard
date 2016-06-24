@@ -1,4 +1,5 @@
 #include <GL\glew.h>
+#include <GLFW\glfw3.h>
 #include "Window.h"
 #include "../Debugging/Logger.h"
 #include "../Input/Input.h"

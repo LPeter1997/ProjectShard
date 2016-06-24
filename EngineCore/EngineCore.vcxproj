@@ -119,6 +119,8 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\Debugging\Logger.cpp" />
+    <ClCompile Include="src\Gfx\Shader\GLSLProgram.cpp" />
+    <ClCompile Include="src\Gfx\Shader\ShaderFactory.cpp" />
     <ClCompile Include="src\Gfx\Window.cpp" />
     <ClCompile Include="src\Input\Keyboard.cpp" />
     <ClCompile Include="src\Input\KeyboardState.cpp" />
@@ -130,6 +132,9 @@
   <ItemGroup>
     <ClInclude Include="src\Debugging\Logger.h" />
     <ClInclude Include="src\Debugging\LogLevel.h" />
+    <ClInclude Include="src\Gfx\Shader\GLSLProgram.h" />
+    <ClInclude Include="src\Gfx\Shader\Shader.h" />
+    <ClInclude Include="src\Gfx\Shader\ShaderFactory.h" />
     <ClInclude Include="src\Gfx\Window.h" />
     <ClInclude Include="src\Input\Button.h" />
     <ClInclude Include="src\Input\Input.h" />
@@ -151,6 +156,10 @@
     <ClInclude Include="src\Resources\Text.h" />
     <ClInclude Include="src\Shard.h" />
     <ClInclude Include="src\Types.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="res\basic.vert" />
+    <Text Include="res\basic.frag" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
