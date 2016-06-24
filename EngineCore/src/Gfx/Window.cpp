@@ -1,6 +1,7 @@
 #include <GL\glew.h>
 #include "Window.h"
 #include "../Debugging/Logger.h"
+#include "../Input/Input.h"
 
 namespace Shard
 {
@@ -22,7 +23,6 @@ namespace Shard
 
 			glfwMakeContextCurrent(m_Window);
 
-			// TODO: Logging
 			if (glewInit() != GLEW_OK)
 			{
 				Debugging::Logger::Log<Debugging::Error>() << "Failed to initialize GLEW context!" << std::endl;
@@ -30,12 +30,12 @@ namespace Shard
 			}
 
 			Debugging::Logger::Log<Debugging::Info>() << "GLEW context initialized successfully!" << std::endl;
-
+			
 			glfwSwapInterval(0);
 
-			//Input::Keyboard::SetKeyCallback(m_Window);
-			//Input::Mouse::SetButtonCallback(m_Window);
-			//Input::Mouse::SetCursorPositionCallback(m_Window);
+			Input::Keyboard::SetKeyCallback(m_Window);
+			Input::Mouse::SetButtonCallback(m_Window);
+			Input::Mouse::SetCursorPositionCallback(m_Window);
 		}
 
 		Window::~Window()

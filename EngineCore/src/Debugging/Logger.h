@@ -25,7 +25,5 @@ namespace Shard
 				return s_Ostream << '[' << std::put_time(&tm, "%H:%M:%S") << "] " << Level::GetDescription() << ' ' << (unsigned int)Level::GetLevel() << ": ";
 			}
 		};
-
-		std::ostream& Logger::s_Ostream = std::cout;
 	}
 }

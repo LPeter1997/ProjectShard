@@ -77,7 +77,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GLEW_STATIC;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <AdditionalDependencies>glfw3.lib;glew32s.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -118,12 +118,24 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="src\Debugging\Logger.cpp" />
     <ClCompile Include="src\Gfx\Window.cpp" />
+    <ClCompile Include="src\Input\Keyboard.cpp" />
+    <ClCompile Include="src\Input\KeyboardState.cpp" />
+    <ClCompile Include="src\Input\Mouse.cpp" />
+    <ClCompile Include="src\Input\MouseState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Debugging\Logger.h" />
     <ClInclude Include="src\Debugging\LogLevel.h" />
     <ClInclude Include="src\Gfx\Window.h" />
+    <ClInclude Include="src\Input\Button.h" />
+    <ClInclude Include="src\Input\Input.h" />
+    <ClInclude Include="src\Input\Key.h" />
+    <ClInclude Include="src\Input\Keyboard.h" />
+    <ClInclude Include="src\Input\KeyboardState.h" />
+    <ClInclude Include="src\Input\Mouse.h" />
+    <ClInclude Include="src\Input\MouseState.h" />
     <ClInclude Include="src\Maths\Constants.h" />
     <ClInclude Include="src\Maths\Matrix.h" />
     <ClInclude Include="src\Maths\Trigonometry.h" />

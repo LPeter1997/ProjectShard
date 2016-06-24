@@ -1,6 +1,7 @@
 #include <iostream>
 #include "src\Shard.h"
 #include "src\Gfx\Window.h"
+#include "src\Input\Input.h"
 
 using namespace Shard;
 
@@ -12,11 +13,13 @@ int main(void)
 	while (!display.IsCloseRequested())
 	{
 		display.Update();
+		Input::Update();
+
+		if (Input::Keyboard::IsKeyDown(Input::Keys::A))
+			std::cout << "a";
 	}
 
 	display.Dispose();
 	Core::Deinitialize();
-
-	system("PAUSE");
 	return 0;
 }
