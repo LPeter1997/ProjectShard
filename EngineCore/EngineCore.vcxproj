@@ -124,6 +124,8 @@
     <ClCompile Include="src\Input\KeyboardState.cpp" />
     <ClCompile Include="src\Input\Mouse.cpp" />
     <ClCompile Include="src\Input\MouseState.cpp" />
+    <ClCompile Include="src\Resources\ContentManager.cpp" />
+    <ClCompile Include="src\Resources\Text.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Debugging\Logger.h" />
@@ -144,6 +146,9 @@
     <ClInclude Include="src\Maths\Vector4.h" />
     <ClInclude Include="src\Patterns\Singleton.h" />
     <ClInclude Include="src\Patterns\Static.h" />
+    <ClInclude Include="src\Resources\ContentManager.h" />
+    <ClInclude Include="src\Resources\Resource.h" />
+    <ClInclude Include="src\Resources\Text.h" />
     <ClInclude Include="src\Shard.h" />
     <ClInclude Include="src\Types.h" />
   </ItemGroup>
