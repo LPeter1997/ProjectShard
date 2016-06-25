@@ -11,5 +11,5 @@ out vec4 pos;
 void main()
 {
 	gl_Position = pr_matrix * vw_matrix * ml_matrix * position;
-	pos = position;
+	pos = ml_matrix * position;
 }

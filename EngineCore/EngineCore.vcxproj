@@ -120,6 +120,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\Debugging\Logger.cpp" />
     <ClCompile Include="src\Gfx\Buffers\BufferLayout.cpp" />
+    <ClCompile Include="src\Gfx\Buffers\IndexBuffer.cpp" />
     <ClCompile Include="src\Gfx\Buffers\VertexArray.cpp" />
     <ClCompile Include="src\Gfx\Buffers\VertexBuffer.cpp" />
     <ClCompile Include="src\Gfx\Shader\GLSLProgram.cpp" />
@@ -136,8 +137,10 @@
     <ClInclude Include="src\Debugging\Logger.h" />
     <ClInclude Include="src\Debugging\LogLevel.h" />
     <ClInclude Include="src\Gfx\Buffers\BufferLayout.h" />
+    <ClInclude Include="src\Gfx\Buffers\IndexBuffer.h" />
     <ClInclude Include="src\Gfx\Buffers\VertexArray.h" />
     <ClInclude Include="src\Gfx\Buffers\VertexBuffer.h" />
+    <ClInclude Include="src\Gfx\Renderable\Renderable2D.h" />
     <ClInclude Include="src\Gfx\Shader\GLSLProgram.h" />
     <ClInclude Include="src\Gfx\Shader\Shader.h" />
     <ClInclude Include="src\Gfx\Shader\ShaderFactory.h" />
