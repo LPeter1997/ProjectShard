@@ -6,7 +6,10 @@ uniform mat4 pr_matrix;
 uniform mat4 vw_matrix = mat4(1.0);
 uniform mat4 ml_matrix = mat4(1.0);
 
+out vec4 pos;
+
 void main()
 {
-	gl_Position = position;
+	gl_Position = pr_matrix * vw_matrix * ml_matrix * position;
+	pos = position;
 }

@@ -105,7 +105,7 @@ namespace Shard
 
 			// In place transpose for square matrices only
 			template <typename = typename std::enable_if<N == M>::type>
-			Matrix<N, N, T>& Tramspose()
+			Matrix<N, N, T>& Transpose()
 			{
 				for (unsigned int i = 0; i < N; i++)
 				{
