@@ -49,15 +49,15 @@ namespace Shard
 			}
 
 			template<>
-			inline void Push<unsigned int>(const std::string& name, uint count, bool normalized)
+			inline void Push<uint>(const std::string& name, uint count, bool normalized)
 			{
-				Push(name, GL_UNSIGNED_INT, sizeof(unsigned int) * count, count, normalized);
+				Push(name, GL_UNSIGNED_INT, sizeof(uint) * count, count, normalized);
 			}
 
 			template<>
-			inline void Push<unsigned char>(const std::string& name, uint count, bool normalized)
+			inline void Push<byte>(const std::string& name, uint count, bool normalized)
 			{
-				Push(name, GL_UNSIGNED_BYTE, sizeof(unsigned char) * count, count, normalized);
+				Push(name, GL_UNSIGNED_BYTE, sizeof(byte) * count, count, normalized);
 			}
 
 			template<>

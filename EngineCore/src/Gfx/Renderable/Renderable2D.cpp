@@ -6,7 +6,7 @@ namespace Shard
 	namespace Gfx
 	{
 		Renderable2D::Renderable2D(const Maths::Vector2f& pos, const Maths::Vector2f& size, uint col)
-			: m_Position(pos), m_Size(size), m_Color(col)
+			: m_Position(Maths::Vector3f(pos.x, pos.y, 0.0f)), m_Size(size), m_Color(col)
 		{
 		}
 

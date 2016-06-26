@@ -19,7 +19,7 @@ namespace Shard
 			inline void Bind() const { glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_BufferID); }
 			inline void Unbind() const { glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); }
 
-			inline GLuint GetSize() const { return m_Count; }
+			inline GLuint GetCount() const { return m_Count; }
 			inline GLuint GetBufferID() const { return m_BufferID; }
 		};
 	}
