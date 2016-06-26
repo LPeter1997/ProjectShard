@@ -2,15 +2,20 @@
 
 #include "Keyboard.h"
 #include "Mouse.h"
+#include "../Patterns/Static.h"
 
 namespace Shard
 {
 	namespace Input
 	{
-		inline void Update()
+		class InputDevices : public Patterns::Static
 		{
-			Keyboard::Update();
-			Mouse::Update();
-		}
+		public:
+			static inline void Update()
+			{
+				Keyboard::Update();
+				Mouse::Update();
+			}
+		};
 	}
 }

@@ -69,8 +69,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\GLEW\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Dependencies\GLFW\lib;$(SolutionDir)Dependencies\GLEW\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\FreeImage\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Dependencies\GLFW\lib;$(SolutionDir)Dependencies\GLEW\lib;$(SolutionDir)Dependencies\FreeImage\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -80,7 +80,7 @@
       <PreprocessorDefinitions>GLEW_STATIC;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>glfw3.lib;glew32s.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;glew32s.lib;opengl32.lib;FreeImage.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -123,6 +123,7 @@
     <ClCompile Include="src\Gfx\Buffers\IndexBuffer.cpp" />
     <ClCompile Include="src\Gfx\Buffers\VertexArray.cpp" />
     <ClCompile Include="src\Gfx\Buffers\VertexBuffer.cpp" />
+    <ClCompile Include="src\Gfx\Renderable\Renderable2D.cpp" />
     <ClCompile Include="src\Gfx\Shader\GLSLProgram.cpp" />
     <ClCompile Include="src\Gfx\Shader\ShaderFactory.cpp" />
     <ClCompile Include="src\Gfx\Window.cpp" />
@@ -134,13 +135,16 @@
     <ClCompile Include="src\Resources\Text.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Debugging\DebugBlock.h" />
     <ClInclude Include="src\Debugging\Logger.h" />
     <ClInclude Include="src\Debugging\LogLevel.h" />
     <ClInclude Include="src\Gfx\Buffers\BufferLayout.h" />
     <ClInclude Include="src\Gfx\Buffers\IndexBuffer.h" />
     <ClInclude Include="src\Gfx\Buffers\VertexArray.h" />
     <ClInclude Include="src\Gfx\Buffers\VertexBuffer.h" />
+    <ClInclude Include="src\Gfx\ColorUtils.h" />
     <ClInclude Include="src\Gfx\Renderable\Renderable2D.h" />
+    <ClInclude Include="src\Gfx\Renderable\Sprite.h" />
     <ClInclude Include="src\Gfx\Shader\GLSLProgram.h" />
     <ClInclude Include="src\Gfx\Shader\Shader.h" />
     <ClInclude Include="src\Gfx\Shader\ShaderFactory.h" />
