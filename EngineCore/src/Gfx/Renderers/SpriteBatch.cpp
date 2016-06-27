@@ -67,6 +67,7 @@ namespace Shard
 
 		void SpriteBatch::Render()
 		{
+			m_Shader.Enable();
 			m_VAO->Bind();
 			m_IBO->Bind();
 
@@ -78,35 +79,23 @@ namespace Shard
 			m_IndexCount = 0;
 		}
 
-		void SpriteBatch::Draw(const Maths::Vector3f& pos, const Maths::Vector2f& size, uint color)
+		void SpriteBatch::Draw(const Maths::Vector3f& position, const Maths::Vector2f& size, uint color)
 		{
-			Maths::Vector3f position = pos;
-
-			m_Buffer->TextureID = 0;
-			m_Buffer->Position = position;
+			//m_Buffer->TextureID = 0;
+			m_Buffer->Position = { position.x, position.y, position.z };
 			m_Buffer++->Color = color;
-			//++m_Buffer;
 
-			position.y += size.y;
-
-			m_Buffer->TextureID = 0;
-			m_Buffer->Position = position;
+			//m_Buffer->TextureID = 0;
+			m_Buffer->Position = { position.x, position.y + size.y, position.z };
 			m_Buffer++->Color = color;
-			//++m_Buffer;
 
-			position.x += size.x;
-
-			m_Buffer->TextureID = 0;
-			m_Buffer->Position = position;
+			//m_Buffer->TextureID = 0;
+			m_Buffer->Position = { position.x + size.x, position.y + size.y, position.z };
 			m_Buffer++->Color = color;
-			//++m_Buffer;
 
-			position.y -= size.y;
-
-			m_Buffer->TextureID = 0;
-			m_Buffer->Position = position;
+			//m_Buffer->TextureID = 0;
+			m_Buffer->Position = { position.x + size.x, position.y, position.z };
 			m_Buffer++->Color = color;
-			//++m_Buffer;
 
 			m_IndexCount += 6;
 		}

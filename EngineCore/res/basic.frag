@@ -17,5 +17,5 @@ void main()
 {
 	vec4 texColor = fs_in.color;
 	// TODO: textures
-	color = fs_in.color; // * texColor;
+	color = fs_in.color.wzyx; // * texColor;
 }

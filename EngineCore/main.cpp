@@ -13,7 +13,7 @@
 
 #define RANDF() ((float)(static_cast <float> (std::rand()) / static_cast <float> (RAND_MAX)))
 #define RAND_COL_COMP() ((uint)(RANDF() * 255.0f))
-#define RAND_COL() ((RAND_COL_COMP() << 24) | (RAND_COL_COMP() << 16) | (RAND_COL_COMP() << 8) | 255)
+#define RAND_COL() (((RAND_COL_COMP() << 24) * 1) | ((RAND_COL_COMP() << 16) * 1) | ((RAND_COL_COMP() << 8) * 1) | 255)
 
 struct POD
 {
@@ -30,9 +30,6 @@ int main(void)
 	using namespace Input;
 	using namespace Resources;
 
-	//FreeImage_Initialise();
-	//FreeImage_DeInitialise();
-
 	Core::Initialize();
 
 	Window display("Shard Engine", 960, 540);
@@ -48,27 +45,31 @@ int main(void)
 	shader.SetUniformMat4f("pr_matrix", ortho);
 	shader.SetUniformMat4f("ml_matrix", Matrix4f::Translation(Vector3f(0, 0, 0)));
 
-	SpriteBatch batch(shader, 60000);
+	SpriteBatch batch(shader, 57600);
 
-	std::vector<POD> sprites;
+	POD* sprites = new POD[57600];
 
 	std::srand(std::time(0));
 	for (uint i = 0; i < 320; i++)
 		for (uint j = 0; j < 180; j++)
-			sprites.push_back({ Maths::Vector3f(i * 3, j * 3, 0), Maths::Vector2f(3, 3), RAND_COL() });
+			sprites[i * 180 + j] = (POD{ Maths::Vector3f(i * 3, j * 3, 0), Maths::Vector2f(3, 3), RAND_COL() });
 
-	time_t start;
-	std::time(&start);
 	uint frames = 0;
+	clock_t start = std::clock();
 
 	while (!display.IsCloseRequested())
 	{
+		clock_t current_last = std::clock();
+
 		display.Clear();
 		
 		batch.Begin();
 
-		for (POD s : sprites)
+		for (uint i = 0; i < 57600; i++)
+		{
+			POD& s = sprites[i];
 			batch.Draw(s.Position, s.Size, s.color);
+		}
 
 		batch.End();
 		batch.Render();
@@ -78,12 +79,13 @@ int main(void)
 
 		frames++;
 
-		time_t current;
-		std::time(&current);
+		clock_t current = std::clock();
 
-		if (current - start >= 1)
+		//std::cout << "Elapsed: " << current - current_last << std::endl;
+
+		if (current - start >= CLOCKS_PER_SEC)
 		{
-			start += 1;
+			start += CLOCKS_PER_SEC;
 			std::cout << "FPS: " << frames << std::endl;
 			frames = 0;
 		}

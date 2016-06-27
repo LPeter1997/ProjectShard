@@ -30,7 +30,7 @@ namespace Shard
 			void End() override;
 			void Render() override;
 
-			void Draw(const Maths::Vector3f& pos, const Maths::Vector2f& size, uint color);
+			void Draw(const Maths::Vector3f& position, const Maths::Vector2f& size, uint color);
 		};
 	}
 }

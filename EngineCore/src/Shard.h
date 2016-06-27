@@ -2,6 +2,7 @@
 
 #include <GL\glew.h>
 #include <GLFW\glfw3.h>
+#include <FreeImage.h>
 #include "Patterns\Static.h"
 #include "Debugging\Logger.h"
 #include "Gfx\Shader\ShaderFactory.h"
@@ -19,6 +20,8 @@ namespace Shard
 			if (s_Initialized)
 				return true;
 
+			glfwSetErrorCallback(glfw_error_callback);
+
 			if (!glfwInit())
 			{
 				Debugging::Logger::Log<Debugging::Fatal>() << "Could not initialize GLFW!" << std::endl;
@@ -26,6 +29,9 @@ namespace Shard
 			}
 
 			Debugging::Logger::Log<Debugging::Info>() << "GLFW initialized successfully!" << std::endl;
+			
+			FreeImage_Initialise();
+			Debugging::Logger::Log<Debugging::Info>() << "FreeImage initialized successfully!" << std::endl;
 
 			s_Initialized = true;
 			return true;
@@ -37,9 +43,20 @@ namespace Shard
 				return;
 
 			Gfx::ShaderFactory::DisposeAll();
+			Debugging::Logger::Log<Debugging::Info>() << "Disposed all shader programs!" << std::endl;
+
 			glfwTerminate();
 			Debugging::Logger::Log<Debugging::Info>() << "GLFW terminated!" << std::endl;
+			
+			FreeImage_DeInitialise();
+			Debugging::Logger::Log<Debugging::Info>() << "FreeImage terminated!" << std::endl;
+
 			s_Initialized = false;
+		}
+
+		static inline void glfw_error_callback(int error, const char* msg)
+		{
+			Debugging::Logger::Log<Debugging::Error>() << "GLFW error[" << error << "] - '" << msg << "'!" << std::endl;
 		}
 	};
 

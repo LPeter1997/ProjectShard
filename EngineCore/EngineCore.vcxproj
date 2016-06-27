@@ -102,6 +102,11 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLEW_STATIC;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <OmitFramePointers>false</OmitFramePointers>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -129,8 +134,6 @@
     <ClCompile Include="src\Gfx\Buffers\IndexBuffer.cpp" />
     <ClCompile Include="src\Gfx\Buffers\VertexArray.cpp" />
     <ClCompile Include="src\Gfx\Buffers\VertexBuffer.cpp" />
-    <ClCompile Include="src\Gfx\Renderable\Renderable2D.cpp" />
-    <ClCompile Include="src\Gfx\Renderable\Sprite.cpp" />
     <ClCompile Include="src\Gfx\Renderers\SpriteBatch.cpp" />
     <ClCompile Include="src\Gfx\Shader\GLSLProgram.cpp" />
     <ClCompile Include="src\Gfx\Shader\ShaderFactory.cpp" />
@@ -141,6 +144,7 @@
     <ClCompile Include="src\Input\MouseState.cpp" />
     <ClCompile Include="src\Resources\ContentManager.cpp" />
     <ClCompile Include="src\Resources\Text.cpp" />
+    <ClCompile Include="src\Resources\Texture2D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Debugging\DebugBlock.h" />
@@ -151,8 +155,6 @@
     <ClInclude Include="src\Gfx\Buffers\VertexArray.h" />
     <ClInclude Include="src\Gfx\Buffers\VertexBuffer.h" />
     <ClInclude Include="src\Gfx\ColorUtils.h" />
-    <ClInclude Include="src\Gfx\Renderable\Renderable2D.h" />
-    <ClInclude Include="src\Gfx\Renderable\Sprite.h" />
     <ClInclude Include="src\Gfx\Renderers\Renderer2D.h" />
     <ClInclude Include="src\Gfx\Renderers\SpriteBatch.h" />
     <ClInclude Include="src\Gfx\Shader\GLSLProgram.h" />
@@ -178,6 +180,7 @@
     <ClInclude Include="src\Resources\ContentManager.h" />
     <ClInclude Include="src\Resources\Resource.h" />
     <ClInclude Include="src\Resources\Text.h" />
+    <ClInclude Include="src\Resources\Texture2D.h" />
     <ClInclude Include="src\Shard.h" />
     <ClInclude Include="src\Types.h" />
   </ItemGroup>
