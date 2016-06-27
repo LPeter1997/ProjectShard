@@ -6,6 +6,7 @@
 #include "Resource.h"
 #include "../Debugging/Logger.h"
 #include "Text.h"
+#include "Texture2D.h"
 
 namespace Shard
 {
@@ -62,6 +63,15 @@ namespace Shard
 				text->Load();
 				m_Resources.insert(std::make_pair(text->GetResourceID(), text));
 				return text;
+			}
+
+			template <>
+			Texture2D* Load(const std::string& path)
+			{
+				Texture2D* texture = new Texture2D(m_IDcounter++, m_Root + path);
+				texture->Load();
+				m_Resources.insert(std::make_pair(texture->GetResourceID(), texture));
+				return texture;
 			}
 		};
 	}

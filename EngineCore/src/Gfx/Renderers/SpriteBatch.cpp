@@ -5,16 +5,16 @@ namespace Shard
 {
 	namespace Gfx
 	{
-		SpriteBatch::SpriteBatch(const GLSLProgram& shader, uint count)
-			: Renderer2D(shader), m_SpriteCount(count)
+		SpriteBatch::SpriteBatch(uint count)
+			: m_SpriteCount(count)
 		{
 			// Initialize batch
 			// Construct layout based on vertex data
 			BufferLayout layout;
 			layout.Push<Maths::Vector3f>("position");
 			layout.Push<byte>("color", 4, true);
-			layout.Push<Maths::Vector2f>("UV");
 			layout.Push<float>("TextureID");
+			layout.Push<Maths::Vector2f>("UV");
 
 			m_VBO = new VertexBuffer(GL_ARRAY_BUFFER, GL_DYNAMIC_DRAW, layout);
 			m_VBO->Bind();
@@ -67,7 +67,12 @@ namespace Shard
 
 		void SpriteBatch::Render()
 		{
-			m_Shader.Enable();
+			for (uint i = 0; i < m_TextureSlots.size(); i++)
+			{
+				glActiveTexture(GL_TEXTURE0 + i);
+				glBindTexture(GL_TEXTURE_2D, m_TextureSlots.at(i));
+			}
+
 			m_VAO->Bind();
 			m_IBO->Bind();
 
@@ -77,27 +82,85 @@ namespace Shard
 			m_VAO->Unbind();
 
 			m_IndexCount = 0;
+			m_TextureSlots.clear();
 		}
 
 		void SpriteBatch::Draw(const Maths::Vector3f& position, const Maths::Vector2f& size, uint color)
 		{
-			//m_Buffer->TextureID = 0;
+			m_Buffer->TextureID = 0;
 			m_Buffer->Position = { position.x, position.y, position.z };
 			m_Buffer++->Color = color;
 
-			//m_Buffer->TextureID = 0;
+			m_Buffer->TextureID = 0;
 			m_Buffer->Position = { position.x, position.y + size.y, position.z };
 			m_Buffer++->Color = color;
 
-			//m_Buffer->TextureID = 0;
+			m_Buffer->TextureID = 0;
 			m_Buffer->Position = { position.x + size.x, position.y + size.y, position.z };
 			m_Buffer++->Color = color;
 
-			//m_Buffer->TextureID = 0;
+			m_Buffer->TextureID = 0;
 			m_Buffer->Position = { position.x + size.x, position.y, position.z };
 			m_Buffer++->Color = color;
 
 			m_IndexCount += 6;
+		}
+
+		void SpriteBatch::Draw(const Maths::Vector3f& position, const Resources::Texture2D& texture)
+		{
+			const float ts = PushTexture(texture.GetTextureID());
+
+			m_Buffer->TextureID = ts;
+			m_Buffer->UV = { 0, 1 };
+			m_Buffer->Position = { position.x, position.y, position.z };
+			m_Buffer++->Color = 0xffffffff;
+
+			m_Buffer->TextureID = ts;
+			m_Buffer->UV = { 0, 0 };
+			m_Buffer->Position = { position.x, position.y + texture.GetHeight(), position.z };
+			m_Buffer++->Color = 0xffffffff;
+
+			m_Buffer->TextureID = ts;
+			m_Buffer->UV = { 1, 0 };
+			m_Buffer->Position = { position.x + texture.GetWidth(), position.y + texture.GetHeight(), position.z };
+			m_Buffer++->Color = 0xffffffff;
+
+			m_Buffer->TextureID = ts;
+			m_Buffer->UV = { 1, 1 };
+			m_Buffer->Position = { position.x + texture.GetWidth(), position.y, position.z };
+			m_Buffer++->Color = 0xffffffff;
+
+			m_IndexCount += 6;
+		}
+
+		float SpriteBatch::PushTexture(GLuint textureID)
+		{
+			float ts = 0;
+			bool found = false;
+			for (uint i = 0; i < m_TextureSlots.size(); i++)
+			{
+				if (m_TextureSlots.at(i) == textureID)
+				{
+					ts = (float)(i + 1);
+					found = true;
+					break;
+				}
+			}
+
+			if (!found)
+			{
+				if (m_TextureSlots.size() >= SPRITEBATCH_TEXTURE_SLOTS)
+				{
+					End();
+					Render();
+					Begin();
+				}
+
+				m_TextureSlots.push_back(textureID);
+				ts = (float)m_TextureSlots.size();
+			}
+
+			return ts;
 		}
 	}
 }

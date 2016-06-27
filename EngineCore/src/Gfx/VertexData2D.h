@@ -12,8 +12,8 @@ namespace Shard
 		{
 			Maths::Vector3f Position;
 			uint Color;
-			Maths::Vector2f UV;
 			float TextureID;
+			Maths::Vector2f UV;
 		};
 	}
 }

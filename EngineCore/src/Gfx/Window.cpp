@@ -46,6 +46,12 @@ namespace Shard
 
 		void Window::Update() const
 		{
+			GLenum error = glGetError();
+			if (error != GL_NO_ERROR)
+			{
+				Debugging::Logger::Log<Debugging::Error>() << "OpenGL error: " << error << "!" << std::endl;
+			}
+
 			glfwPollEvents();
 			glfwSwapBuffers(m_Window);
 		}

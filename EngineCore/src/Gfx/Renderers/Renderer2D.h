@@ -9,11 +9,9 @@ namespace Shard
 		class Renderer2D
 		{
 		protected:
-			const GLSLProgram& m_Shader;
 
 		protected:
-			Renderer2D(const GLSLProgram& shader)
-				: m_Shader(shader)
+			Renderer2D()
 			{
 			}
 

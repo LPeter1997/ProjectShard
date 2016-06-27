@@ -5,6 +5,9 @@
 #include "../Buffers/VertexBuffer.h"
 #include "../Buffers/IndexBuffer.h"
 #include "../VertexData2D.h"
+#include "../../Resources/Texture2D.h"
+
+#define SPRITEBATCH_TEXTURE_SLOTS 32
 
 namespace Shard
 {
@@ -19,10 +22,11 @@ namespace Shard
 			IndexBuffer* m_IBO;
 			uint m_IndexCount;
 			VertexData2D* m_Buffer;
+			std::vector<GLuint> m_TextureSlots;
 
 		public:
 			//SpriteBatch(const GLSLProgram& shader);
-			SpriteBatch(const GLSLProgram& shader, uint count);
+			SpriteBatch(uint count);
 
 			~SpriteBatch();
 
@@ -31,6 +35,10 @@ namespace Shard
 			void Render() override;
 
 			void Draw(const Maths::Vector3f& position, const Maths::Vector2f& size, uint color);
+			void Draw(const Maths::Vector3f& position, const Resources::Texture2D& texture);
+
+		private:
+			float PushTexture(GLuint textureID);
 		};
 	}
 }
