@@ -11,17 +11,20 @@
 #include "src\Gfx\Buffers\IndexBuffer.h"
 #include "src\Gfx\Renderers\SpriteBatch.h"
 #include "src\Gfx\ColorUtils.h"
+#include <cctype>
 
 #define RANDF() ((float)(static_cast <float> (std::rand()) / static_cast <float> (RAND_MAX)))
 #define RAND_COL_COMP() ((uint)(RANDF() * 255.0f))
 #define RAND_COL() ((255 << 24) | ((RAND_COL_COMP() << 16) * 1) | ((RAND_COL_COMP() << 8) * 1) | ((RAND_COL_COMP()) * 1))
 
+#ifdef TEST_MANY_SPRITES
 struct POD
 {
 	Shard::Maths::Vector3f Position;
 	Shard::Maths::Vector2f Size;
 	Shard::uint color;
 };
+#endif
 
 int main(void)
 {
@@ -40,10 +43,13 @@ int main(void)
 	Text* file2 = content.Load<Text>("basic.frag");
 	GLSLProgram& shader = ShaderFactory::CreateShader(file1->GetText(), file2->GetText());
 
-	Texture2D* player = content.Load<Texture2D>("sprite1.png");
-	Texture2D* ground = content.Load<Texture2D>("sprite2.png");
-	Texture2D* cloud = content.Load<Texture2D>("sprite3.png");
-	Texture2D* grass = content.Load<Texture2D>("sprite4.png");
+	Texture2D& player = content.Load<Texture2D>("sprite1.png");
+	Texture2D& ground = content.Load<Texture2D>("sprite2.png");
+	Texture2D& cloud = content.Load<Texture2D>("sprite3.png");
+	Texture2D& grass = content.Load<Texture2D>("sprite4.png");
+
+	Font* fnt = content.Load<Font>("font1.ttf");
+	FontAtlas atlas = fnt->RenderAtlas(72);
 
 	Matrix4f ortho = Matrix4f::Orthographic(0.0f, 960.0f, 540.0f, 0.0f, -1.0f, 1.0f);
 
@@ -97,31 +103,37 @@ int main(void)
 #endif
 
 		/*
-		batch.Draw(Vector3f(90, 10, 0), *cloud);
-		batch.Draw(Vector3f(800, 70, 0), *cloud);
+		batch.Draw(Vector3f(90, 10, 0), cloud);
+		batch.Draw(Vector3f(800, 70, 0), cloud);
 
-		batch.Draw(Vector3f(0, 384, 0), *ground);
-		batch.Draw(Vector3f(128, 384, 0), *ground);
-		batch.Draw(Vector3f(256, 384, 0), *ground);
-		batch.Draw(Vector3f(384, 384, 0), *ground);
-		batch.Draw(Vector3f(384, 512, 0), *ground);
-		batch.Draw(Vector3f(512, 512, 0), *ground);
-		batch.Draw(Vector3f(640, 512, 0), *ground);
-		batch.Draw(Vector3f(768, 512, 0), *ground);
-		batch.Draw(Vector3f(896, 512, 0), *ground);
+		batch.Draw(Vector3f(0, 384, 0), ground);
+		batch.Draw(Vector3f(128, 384, 0), ground);
+		batch.Draw(Vector3f(256, 384, 0), ground);
+		batch.Draw(Vector3f(384, 384, 0), ground);
+		batch.Draw(Vector3f(384, 512, 0), ground);
+		batch.Draw(Vector3f(512, 512, 0), ground);
+		batch.Draw(Vector3f(640, 512, 0), ground);
+		batch.Draw(Vector3f(768, 512, 0), ground);
+		batch.Draw(Vector3f(896, 512, 0), ground);
 
-		batch.Draw(Vector3f(0, 256, 0), *grass);
-		batch.Draw(Vector3f(384, 256, 0), *grass);
-		batch.Draw(Vector3f(512, 384, 0), *grass);
-		batch.Draw(Vector3f(640, 384, 0), *grass);
-		batch.Draw(Vector3f(768, 384, 0), *grass);
-		batch.Draw(Vector3f(896, 384, 0), *grass);
+		batch.Draw(Vector3f(0, 256, 0), grass);
+		batch.Draw(Vector3f(384, 256, 0), grass);
+		batch.Draw(Vector3f(512, 384, 0), grass);
+		batch.Draw(Vector3f(640, 384, 0), grass);
+		batch.Draw(Vector3f(768, 384, 0), grass);
+		batch.Draw(Vector3f(896, 384, 0), grass);
 
-		batch.Draw(Vector3f(192, 256, 0), *player);
+		batch.Draw(Vector3f(192, 256, 0), player);
 		*/
 
+		//batch.Draw(Vector3f(100, 200, 0), atlas);
+		//batch.GetTransformationStack().Push(Matrix4f::Rotation(45, Vector3f(0, 0, 1)));
+		batch.DrawString(Vector3f(20, 80, 0), "Hello, World!", atlas, ColorUtils::RGBATo32IntABGR(Vector4f(1, 1, 1, 1)));
+		batch.DrawString(Vector3f(20, 180, 0), "Some test", atlas, ColorUtils::RGBATo32IntABGR(Vector4f(0, 0, 0, 1)));
+		//batch.GetTransformationStack().Pop();
+
 		// STACKING ///////////////////////////////////////////////////////////
-		batch.GetTransformationStack().Push(Matrix4f::Translation(Vector3f(100, 100, 0)));
+		/*batch.GetTransformationStack().Push(Matrix4f::Translation(Vector3f(100, 100, 0)));
 
 		batch.Draw(Vector3f(0, 0, 0), Vector2f(200, 70), ColorUtils::RGBATo32IntABGR(Vector4f(1, 0, 0, 1)));
 
@@ -133,7 +145,7 @@ int main(void)
 
 		batch.Draw(Vector3f(0, 0, 0), Vector2f(20, 20), ColorUtils::RGBATo32IntABGR(Vector4f(0, 1, 0, 1)));
 
-		batch.GetTransformationStack().Pop();
+		batch.GetTransformationStack().Pop();*/
 		////////////////////////////////////////////////////////////////////////
 
 		batch.End();

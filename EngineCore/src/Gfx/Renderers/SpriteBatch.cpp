@@ -115,7 +115,7 @@ namespace Shard
 			m_IndexCount += 6;
 		}
 
-		void SpriteBatch::Draw(const Maths::Vector3f& position, const Resources::Texture2D& texture)
+		void SpriteBatch::Draw(const Maths::Vector3f& position, const Texture2D& texture)
 		{
 			const float ts = PushTexture(texture.GetTextureID());
 
@@ -140,6 +140,65 @@ namespace Shard
 			m_Buffer++->Color = 0xffffffff;
 
 			m_IndexCount += 6;
+		}
+
+		void SpriteBatch::DrawString(const Maths::Vector3f& position, const std::string& text, FontAtlas& font, uint color)
+		{
+			Maths::Vector3f pos = position;
+			const Maths::Matrix4f& trans = m_TransformationStack.Top();
+
+			float ts = PushTexture(font.GetTextureID());
+
+			for (uint i = 0; i < text.size(); i++)
+			{
+				char ch = text[i];
+				if (ch == ' ')
+				{
+					pos.x += font.GetFontSize() / 5;
+					continue;
+				}
+
+				const CharacterData& charData = font.GetCharacterData(ch);
+
+				float x2 = pos.x + charData.Left;
+				float y2 = pos.y + charData.Top;
+
+				float w = charData.Width;
+				float h = charData.Height;
+
+				m_Buffer->Position = trans * Maths::Vector3f(x2, y2, 0);
+				m_Buffer->TextureID = ts;
+				m_Buffer->UV.x = charData.X_UV;
+				m_Buffer->UV.y = charData.Y_UV2;
+				m_Buffer->Color = color;
+				m_Buffer++;
+
+				m_Buffer->Position = trans * Maths::Vector3f(x2, y2 - h, 0);
+				m_Buffer->TextureID = ts;
+				m_Buffer->UV.x = charData.X_UV;
+				m_Buffer->UV.y = charData.Y_UV;
+				m_Buffer->Color = color;
+				m_Buffer++;
+
+				m_Buffer->Position = trans * Maths::Vector3f(x2 + w, y2 - h, 0);
+				m_Buffer->UV.x = charData.X_UV2;
+				m_Buffer->UV.y = charData.Y_UV;
+				m_Buffer->TextureID = ts;
+				m_Buffer->Color = color;
+				m_Buffer++;
+
+				m_Buffer->Position = trans * Maths::Vector3f(x2 + w, y2, 0);
+				m_Buffer->UV.x = charData.X_UV2;
+				m_Buffer->UV.y = charData.Y_UV2;
+				m_Buffer->TextureID = ts;
+				m_Buffer->Color = color;
+				m_Buffer++;
+
+				pos.x += charData.X_Advance;
+				pos.y += charData.Y_Advance;
+
+				m_IndexCount += 6;
+			}
 		}
 
 		float SpriteBatch::PushTexture(GLuint textureID)

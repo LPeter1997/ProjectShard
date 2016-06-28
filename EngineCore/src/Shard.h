@@ -6,6 +6,7 @@
 #include "Patterns\Static.h"
 #include "Debugging\Logger.h"
 #include "Gfx\Shader\ShaderFactory.h"
+#include "FreeTypeManager.h"
 
 namespace Shard
 {
@@ -33,6 +34,14 @@ namespace Shard
 			FreeImage_Initialise();
 			Debugging::Logger::Log<Debugging::Info>() << "FreeImage initialized successfully!" << std::endl;
 
+			if (!FreeTypeManager::Initialize())
+			{
+				Debugging::Logger::Log<Debugging::Fatal>() << "Could not initialize FreeType!" << std::endl;
+				return false;
+			}
+
+			Debugging::Logger::Log<Debugging::Info>() << "FreeType initialized successfully!" << std::endl;
+
 			s_Initialized = true;
 			return true;
 		}
@@ -50,6 +59,9 @@ namespace Shard
 			
 			FreeImage_DeInitialise();
 			Debugging::Logger::Log<Debugging::Info>() << "FreeImage terminated!" << std::endl;
+
+			FreeTypeManager::Deinitialize();
+			Debugging::Logger::Log<Debugging::Info>() << "FreeType terminated!" << std::endl;
 
 			s_Initialized = false;
 		}

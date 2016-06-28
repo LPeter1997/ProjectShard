@@ -5,7 +5,7 @@ namespace Shard
 	namespace Resources
 	{
 		ContentManager::ContentManager()
-			: m_IDcounter(0), m_Root("")
+			: m_IDcounter(1), m_Root("")
 		{
 			Debugging::Logger::Log<Debugging::Info>() << "ContentManager created with root: '" << m_Root << "'!" << std::endl;
 		}
@@ -66,7 +66,7 @@ namespace Shard
 			m_Resources.clear();
 
 			// No resources, reset counter
-			m_IDcounter = 0;
+			m_IDcounter = 1;
 		}
 	}
 }

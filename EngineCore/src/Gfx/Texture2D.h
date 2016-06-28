@@ -1,11 +1,12 @@
 #pragma once
 
 #include <GL/glew.h>
-#include "Resource.h"
+#include "../Types.h"
+#include "../Resources/Image.h"
 
 namespace Shard
 {
-	namespace Resources
+	namespace Gfx
 	{
 		enum class TextureWrap
 		{
@@ -22,11 +23,8 @@ namespace Shard
 			Nearest = GL_NEAREST
 		};
 
-		class Texture2D : public Resource
+		class Texture2D
 		{
-		private:
-			friend class ContentManager;
-
 		private:
 			static TextureWrap s_WrapMode;
 			static TextureFilter s_FilterMode;
@@ -35,13 +33,14 @@ namespace Shard
 			GLuint m_TextureID;
 			uint m_Width;
 			uint m_Height;
-			uint m_Bits;
 
 		protected:
-			Texture2D(uint id, const std::string& path);
+			Texture2D();
 
-			bool Load() override;
-			void Unload() override;
+		public:
+			Texture2D(const Resources::Image& image);
+
+			virtual ~Texture2D();
 
 		public:
 			inline void Bind() const { glBindTexture(GL_TEXTURE_2D, m_TextureID); }

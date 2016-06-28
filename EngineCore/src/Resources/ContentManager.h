@@ -2,11 +2,14 @@
 
 #include <map>
 #include <string>
+#include <type_traits>
 #include "../Types.h"
 #include "Resource.h"
 #include "../Debugging/Logger.h"
 #include "Text.h"
-#include "Texture2D.h"
+#include "Image.h"
+#include "Font.h"
+#include "../Gfx/Texture2D.h"
 
 namespace Shard
 {
@@ -28,6 +31,10 @@ namespace Shard
 			template <typename T = Resource>
 			T* GetResource(uint id)
 			{
+				// ID 0 is fake resource
+				if (id == 0)
+					return nullptr;
+
 				auto it = m_Resources.find(id);
 				if (it != m_Resources.end())
 				{
@@ -42,7 +49,7 @@ namespace Shard
 			void UnloadAll();
 
 			// Loading methods
-			template <typename T>
+			template <typename T, typename = typename std::enable_if<!(std::is_same<T, Gfx::Texture2D>::value)>::type>
 			T* Load(const std::string& path)
 			{
 				Debugging::Logger::Log<Debugging::Error>() << "Generic Load<T>() cannot be used!" << std::endl;
@@ -66,12 +73,39 @@ namespace Shard
 			}
 
 			template <>
-			Texture2D* Load(const std::string& path)
+			Image* Load(const std::string& path)
 			{
-				Texture2D* texture = new Texture2D(m_IDcounter++, m_Root + path);
-				texture->Load();
-				m_Resources.insert(std::make_pair(texture->GetResourceID(), texture));
-				return texture;
+				Image* img = new Image(m_IDcounter++, m_Root + path);
+				img->Load();
+				m_Resources.insert(std::make_pair(img->GetResourceID(), img));
+				return img;
+			}
+
+			template <>
+			Font* Load(const std::string& path)
+			{
+				Font* font = new Font(m_IDcounter++, m_Root + path);
+				font->Load();
+				m_Resources.insert(std::make_pair(font->GetResourceID(), font));
+				return font;
+			}
+
+			template <typename T, typename = typename std::enable_if<(std::is_same<T, Gfx::Texture2D>::value)>::type>
+			T Load(const std::string& path)
+			{
+				Debugging::Logger::Log<Debugging::Error>() << "Generic Load<T>() cannot be used!" << std::endl;
+				return nullptr;
+			}
+
+			// Special function hiding resource
+			template <>
+			Gfx::Texture2D Load(const std::string& path)
+			{
+				Image* img = new Image(m_IDcounter++, m_Root + path);
+				img->Load();
+				m_Resources.insert(std::make_pair(img->GetResourceID(), img));
+
+				return Gfx::Texture2D(*img);
 			}
 		};
 	}

@@ -58,9 +58,7 @@ void main()
 		*/
 
 		texColor = texture(textures[tid], fs_in.uv);
-		//texColor = vec4(tid * 0.2, tid * 0.2, tid * 0.2, 1.0);
 	}
 
 	color = fs_in.color * texColor;
-	//color = texColor;
 }
