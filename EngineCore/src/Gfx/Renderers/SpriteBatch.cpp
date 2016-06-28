@@ -163,34 +163,27 @@ namespace Shard
 				float x2 = pos.x + charData.Left;
 				float y2 = pos.y + charData.Top;
 
-				float w = charData.Width;
-				float h = charData.Height;
-
 				m_Buffer->Position = trans * Maths::Vector3f(x2, y2, 0);
 				m_Buffer->TextureID = ts;
-				m_Buffer->UV.x = charData.X_UV;
-				m_Buffer->UV.y = charData.Y_UV2;
+				m_Buffer->UV = { charData.X_UV, charData.Y_UV2 };
 				m_Buffer->Color = color;
 				m_Buffer++;
 
-				m_Buffer->Position = trans * Maths::Vector3f(x2, y2 - h, 0);
+				m_Buffer->Position = trans * Maths::Vector3f(x2, y2 - charData.Height, 0);
 				m_Buffer->TextureID = ts;
-				m_Buffer->UV.x = charData.X_UV;
-				m_Buffer->UV.y = charData.Y_UV;
+				m_Buffer->UV = { charData.X_UV, charData.Y_UV };
 				m_Buffer->Color = color;
 				m_Buffer++;
 
-				m_Buffer->Position = trans * Maths::Vector3f(x2 + w, y2 - h, 0);
-				m_Buffer->UV.x = charData.X_UV2;
-				m_Buffer->UV.y = charData.Y_UV;
+				m_Buffer->Position = trans * Maths::Vector3f(x2 + charData.Width, y2 - charData.Height, 0);
 				m_Buffer->TextureID = ts;
+				m_Buffer->UV = { charData.X_UV2, charData.Y_UV };
 				m_Buffer->Color = color;
 				m_Buffer++;
 
-				m_Buffer->Position = trans * Maths::Vector3f(x2 + w, y2, 0);
-				m_Buffer->UV.x = charData.X_UV2;
-				m_Buffer->UV.y = charData.Y_UV2;
+				m_Buffer->Position = trans * Maths::Vector3f(x2 + charData.Width, y2, 0);
 				m_Buffer->TextureID = ts;
+				m_Buffer->UV = { charData.X_UV2, charData.Y_UV2 };
 				m_Buffer->Color = color;
 				m_Buffer++;
 
@@ -199,6 +192,34 @@ namespace Shard
 
 				m_IndexCount += 6;
 			}
+		}
+
+		void SpriteBatch::DrawLine(const Maths::Vector2f& pos1, const Maths::Vector2f& pos2, float thickness, uint color)
+		{
+			const Maths::Matrix4f& trans = m_TransformationStack.Top();
+			Maths::Vector3f& normal = thickness * Maths::Vector3f(pos2.y - pos1.y, -(pos2.x - pos1.x), 0).Normalize();
+
+			m_Buffer->Position = trans * Maths::Vector3f(pos1.x + normal.x, pos1.y + normal.y, 0.0f);
+			m_Buffer->TextureID = 0;
+			m_Buffer->Color = color;
+			m_Buffer++;
+
+			m_Buffer->Position = trans * Maths::Vector3f(pos2.x + normal.x, pos2.y + normal.y, 0.0f);
+			m_Buffer->TextureID = 0;
+			m_Buffer->Color = color;
+			m_Buffer++;
+
+			m_Buffer->Position = trans * Maths::Vector3f(pos2.x - normal.x, pos2.y - normal.y, 0.0f);
+			m_Buffer->TextureID = 0;
+			m_Buffer->Color = color;
+			m_Buffer++;
+
+			m_Buffer->Position = trans * Maths::Vector3f(pos1.x - normal.x, pos1.y - normal.y, 0.0f);
+			m_Buffer->TextureID = 0;
+			m_Buffer->Color = color;
+			m_Buffer++;
+
+			m_IndexCount += 6;
 		}
 
 		float SpriteBatch::PushTexture(GLuint textureID)

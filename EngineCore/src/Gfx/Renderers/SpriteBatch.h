@@ -37,6 +37,8 @@ namespace Shard
 			void Draw(const Maths::Vector3f& position, const Maths::Vector2f& size, uint color);
 			void Draw(const Maths::Vector3f& position, const Texture2D& texture);
 
+			void DrawLine(const Maths::Vector2f& pos1, const Maths::Vector2f& pos2, float thickness, uint color);
+
 			void DrawString(const Maths::Vector3f& position, const std::string& text, FontAtlas& font, uint color);
 
 		private:

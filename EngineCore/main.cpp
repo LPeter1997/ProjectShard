@@ -130,6 +130,7 @@ int main(void)
 		//batch.GetTransformationStack().Push(Matrix4f::Rotation(45, Vector3f(0, 0, 1)));
 		batch.DrawString(Vector3f(20, 80, 0), "Hello, World!", atlas, ColorUtils::RGBATo32IntABGR(Vector4f(1, 1, 1, 1)));
 		batch.DrawString(Vector3f(20, 180, 0), "Some test", atlas, ColorUtils::RGBATo32IntABGR(Vector4f(0, 0, 0, 1)));
+		batch.DrawLine(Vector2f(10, 10), Vector2f(100, 400), 2, 0xff0000ff);
 		//batch.GetTransformationStack().Pop();
 
 		// STACKING ///////////////////////////////////////////////////////////
