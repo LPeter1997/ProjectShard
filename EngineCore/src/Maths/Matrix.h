@@ -89,6 +89,18 @@ namespace Shard
 				return result;
 			}
 
+			// Multiply it with a 3D vector as it was (x, y, z, 0) for 3D matrix only
+			template <typename = typename std::enable_if<(N == M) && (N == 4)>::type>
+			inline Vector3<T> Multiply(const Vector3<T>& other) const
+			{
+				return Vector3<T>
+				(
+					Elements[0] * other.x + Elements[4] * other.y + Elements[8] * other.z + Elements[12],
+					Elements[1] * other.x + Elements[5] * other.y + Elements[9] * other.z + Elements[13],
+					Elements[2] * other.x + Elements[6] * other.y + Elements[10] * other.z + Elements[14]
+				);
+			}
+
 			Matrix<M, N, T> Transposed() const
 			{
 				Matrix<M, N, T> ret;
@@ -139,6 +151,11 @@ namespace Shard
 			inline friend Matrix<N, M, T> operator*(const T scalar, Matrix<N, M, T> left)
 			{
 				return left.Multiply(scalar);
+			}
+
+			inline friend Vector3<T> operator*(const Matrix<4, 4, T>& left, const Vector3<T>& right)
+			{
+				return left.Multiply(right);
 			}
 
 			template <unsigned int K>

@@ -87,20 +87,29 @@ namespace Shard
 
 		void SpriteBatch::Draw(const Maths::Vector3f& position, const Maths::Vector2f& size, uint color)
 		{
-			m_Buffer->TextureID = 0;
-			m_Buffer->Position = { position.x, position.y, position.z };
-			m_Buffer++->Color = color;
+			Maths::Vector3f pos = position;
+			const Maths::Matrix4f& trans_top = m_TransformationStack.Top();
 
 			m_Buffer->TextureID = 0;
-			m_Buffer->Position = { position.x, position.y + size.y, position.z };
+			m_Buffer->Position = trans_top * pos;
 			m_Buffer++->Color = color;
 
-			m_Buffer->TextureID = 0;
-			m_Buffer->Position = { position.x + size.x, position.y + size.y, position.z };
-			m_Buffer++->Color = color;
+			pos.y += size.y;
 
 			m_Buffer->TextureID = 0;
-			m_Buffer->Position = { position.x + size.x, position.y, position.z };
+			m_Buffer->Position = trans_top * pos;
+			m_Buffer++->Color = color;
+
+			pos.x += size.x;
+
+			m_Buffer->TextureID = 0;
+			m_Buffer->Position = trans_top * pos;
+			m_Buffer++->Color = color;
+
+			pos.y -= size.y;
+
+			m_Buffer->TextureID = 0;
+			m_Buffer->Position = trans_top * pos;
 			m_Buffer++->Color = color;
 
 			m_IndexCount += 6;
@@ -135,32 +144,23 @@ namespace Shard
 
 		float SpriteBatch::PushTexture(GLuint textureID)
 		{
-			float ts = 0;
-			bool found = false;
+			// Found
 			for (uint i = 0; i < m_TextureSlots.size(); i++)
 			{
 				if (m_TextureSlots.at(i) == textureID)
-				{
-					ts = (float)(i + 1);
-					found = true;
-					break;
-				}
+					return (float)(i + 1);
 			}
 
-			if (!found)
+			// Not found
+			if (m_TextureSlots.size() >= SPRITEBATCH_TEXTURE_SLOTS)
 			{
-				if (m_TextureSlots.size() >= SPRITEBATCH_TEXTURE_SLOTS)
-				{
-					End();
-					Render();
-					Begin();
-				}
-
-				m_TextureSlots.push_back(textureID);
-				ts = (float)m_TextureSlots.size();
+				End();
+				Render();
+				Begin();
 			}
 
-			return ts;
+			m_TextureSlots.push_back(textureID);
+			return (float)m_TextureSlots.size();
 		}
 	}
 }

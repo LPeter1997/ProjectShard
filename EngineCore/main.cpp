@@ -10,6 +10,7 @@
 #include "src\Gfx\Buffers\VertexArray.h"
 #include "src\Gfx\Buffers\IndexBuffer.h"
 #include "src\Gfx\Renderers\SpriteBatch.h"
+#include "src\Gfx\ColorUtils.h"
 
 #define RANDF() ((float)(static_cast <float> (std::rand()) / static_cast <float> (RAND_MAX)))
 #define RAND_COL_COMP() ((uint)(RANDF() * 255.0f))
@@ -95,6 +96,7 @@ int main(void)
 		}
 #endif
 
+		/*
 		batch.Draw(Vector3f(90, 10, 0), *cloud);
 		batch.Draw(Vector3f(800, 70, 0), *cloud);
 
@@ -116,6 +118,23 @@ int main(void)
 		batch.Draw(Vector3f(896, 384, 0), *grass);
 
 		batch.Draw(Vector3f(192, 256, 0), *player);
+		*/
+
+		// STACKING ///////////////////////////////////////////////////////////
+		batch.GetTransformationStack().Push(Matrix4f::Translation(Vector3f(100, 100, 0)));
+
+		batch.Draw(Vector3f(0, 0, 0), Vector2f(200, 70), ColorUtils::RGBATo32IntABGR(Vector4f(1, 0, 0, 1)));
+
+		batch.GetTransformationStack().Push(Matrix4f::Translation(Vector3f(10, 10, 0)));
+
+		batch.Draw(Vector3f(0, 0, 0), Vector2f(180, 50), ColorUtils::RGBATo32IntABGR(Vector4f(0, 0, 1, 1)));
+
+		batch.GetTransformationStack().Pop();
+
+		batch.Draw(Vector3f(0, 0, 0), Vector2f(20, 20), ColorUtils::RGBATo32IntABGR(Vector4f(0, 1, 0, 1)));
+
+		batch.GetTransformationStack().Pop();
+		////////////////////////////////////////////////////////////////////////
 
 		batch.End();
 		batch.Render();

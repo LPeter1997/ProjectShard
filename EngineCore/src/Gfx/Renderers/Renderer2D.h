@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Shader/GLSLProgram.h"
+#include "../TransformationStack.h"
 
 namespace Shard
 {
@@ -9,6 +9,7 @@ namespace Shard
 		class Renderer2D
 		{
 		protected:
+			TransformationStack m_TransformationStack;
 
 		protected:
 			Renderer2D()
@@ -21,6 +22,8 @@ namespace Shard
 			virtual void Begin() {}
 			virtual void End() {}
 			virtual void Render() = 0;
+
+			inline TransformationStack& GetTransformationStack() { return m_TransformationStack; }
 		};
 	}
 }
