@@ -159,7 +159,7 @@ namespace Shard
 				}
 
 				const CharacterData& charData = font.GetCharacterData(ch);
-
+				
 				float x2 = pos.x + charData.Left;
 				float y2 = pos.y + charData.Top;
 

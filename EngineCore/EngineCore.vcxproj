@@ -169,6 +169,7 @@
     <ClInclude Include="src\Gfx\Shader\Shader.h" />
     <ClInclude Include="src\Gfx\Shader\ShaderFactory.h" />
     <ClInclude Include="src\Gfx\Texture2D.h" />
+    <ClInclude Include="src\Gfx\Packer.h" />
     <ClInclude Include="src\Gfx\TransformationStack.h" />
     <ClInclude Include="src\Gfx\VertexData2D.h" />
     <ClInclude Include="src\Gfx\Window.h" />
@@ -179,6 +180,7 @@
     <ClInclude Include="src\Input\KeyboardState.h" />
     <ClInclude Include="src\Input\Mouse.h" />
     <ClInclude Include="src\Input\MouseState.h" />
+    <ClInclude Include="src\Maths\AABB.h" />
     <ClInclude Include="src\Maths\Constants.h" />
     <ClInclude Include="src\Maths\Matrix.h" />
     <ClInclude Include="src\Maths\Trigonometry.h" />

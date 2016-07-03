@@ -1,6 +1,7 @@
 #include "FontAtlas.h"
 #include "../Types.h"
 #include "../Debugging/Logger.h"
+#include "Packer.h"
 
 namespace Shard
 {
@@ -9,13 +10,15 @@ namespace Shard
 		FontAtlas::FontAtlas(FT_Face face, float size, const std::string& charset)
 			: Texture2D(), m_FontSize(size), m_Face(face)
 		{
+			Packer<char> packer;
+
 			// width = height = size * 64 (size is in 1/64)
 			// 72 DPI
 			//(face, 0, size * 64, 0, 0);
 			FT_Set_Pixel_Sizes(face, 0, size);
 
-			uint width = 0;
-			uint height = 0;
+			//uint width = 0;
+			//uint height = 0;
 
 			for (uint i = 0; i < charset.size(); i++)
 			{
@@ -28,12 +31,16 @@ namespace Shard
 
 				FT_GlyphSlot g = face->glyph;
 
-				width += g->bitmap.width;
-				height = (height < g->bitmap.rows ? g->bitmap.rows : height);
+				//width += g->bitmap.width;
+				//height = (height < g->bitmap.rows ? g->bitmap.rows : height);
+
+				packer.Push(charset[i], g->bitmap.width, g->bitmap.rows);
 			}
 
-			m_Width = width;
-			m_Height = height;
+			packer.Pack();
+
+			m_Width = packer.GetPackWidth();
+			m_Height = packer.GetPackHeight();
 
 			// Generate openGL texture
 			glActiveTexture(GL_TEXTURE0);
@@ -48,9 +55,8 @@ namespace Shard
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_INT, NULL);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_Width, m_Height, 0, GL_RGBA, GL_UNSIGNED_INT, NULL);
 
-			uint x = 0;
 			for (uint i = 0; i < charset.size(); i++)
 			{
 				if (FT_Load_Char(face, charset[i], FT_LOAD_RENDER))
@@ -64,7 +70,9 @@ namespace Shard
 					pixels[j] = g->bitmap.buffer[j] << 24 | 0x00ffffff;
 				}
 
-				glTexSubImage2D(GL_TEXTURE_2D, 0, x, 0, g->bitmap.width, g->bitmap.rows, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+				const PackerResult& res = packer.Get(charset[i]);
+
+				glTexSubImage2D(GL_TEXTURE_2D, 0, res.X, res.Y, g->bitmap.width, g->bitmap.rows, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
 
 				delete[] pixels;
 
@@ -75,14 +83,14 @@ namespace Shard
 				c.Height = (float)g->bitmap.rows;
 				c.Left = (float)g->bitmap_left;
 				c.Top = c.Height - (float)g->bitmap_top;
-				c.X_UV = (float)x / (float)width;
-				c.Y_UV = 0.0f;
-				c.X_UV2 = c.X_UV + c.Width / (float)width;
-				c.Y_UV2 = c.Y_UV + c.Height / (float)height;
+				c.X_UV = (float)res.X / (float)m_Width;
+				c.Y_UV = (float)res.Y / (float)m_Height;
+				c.X_UV2 = c.X_UV + c.Width / (float)m_Width;
+				c.Y_UV2 = c.Y_UV + c.Height / (float)m_Height;
 
 				m_CharList.insert(std::make_pair(charset[i], c));
 
-				x += g->bitmap.width;
+				//x += g->bitmap.width;
 			}
 
 			glBindTexture(GL_TEXTURE_2D, 0);

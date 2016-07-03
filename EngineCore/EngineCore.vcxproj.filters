@@ -209,6 +209,12 @@
     <ClInclude Include="src\Gfx\CharacterSet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Gfx\Packer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Maths\AABB.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="res\basic.vert" />
