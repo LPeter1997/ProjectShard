@@ -5,8 +5,6 @@
 #include "../Buffers/VertexBuffer.h"
 #include "../Buffers/IndexBuffer.h"
 #include "../VertexData2D.h"
-#include "../Texture2D.h"
-#include "../FontAtlas.h"
 
 #define SPRITEBATCH_TEXTURE_SLOTS 32
 
@@ -34,12 +32,12 @@ namespace Shard
 			void End() override;
 			void Render() override;
 
-			void Draw(const Maths::Vector3f& position, const Maths::Vector2f& size, uint color);
-			void Draw(const Maths::Vector3f& position, const Texture2D& texture);
+			void Draw(const Maths::Vector3f& position, const Maths::Vector2f& size, uint color) override;
+			void Draw(const Maths::Vector3f& position, const Texture2D& texture) override;
 
-			void DrawLine(const Maths::Vector2f& pos1, const Maths::Vector2f& pos2, float thickness, uint color);
+			void DrawLine(const Maths::Vector2f& pos1, const Maths::Vector2f& pos2, float thickness, uint color) override;
 
-			void DrawString(const Maths::Vector3f& position, const std::string& text, FontAtlas& font, uint color);
+			void DrawString(const Maths::Vector3f& position, const std::string& text, FontAtlas& font, uint color) override;
 
 		private:
 			float PushTexture(GLuint textureID);
