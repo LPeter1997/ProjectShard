@@ -1,8 +1,9 @@
 #pragma once
 
 #include <vector>
-#include "../Gfx/Renderers/Renderer2D.h"
+#include "Component.h"
 #include "Transform.h"
+#include "../Gfx/Renderers/Renderer2D.h"
 
 namespace Shard
 {
@@ -17,16 +18,9 @@ namespace Shard
 			Transform m_Transform;
 
 		public:
-			Actor(const Maths::Vector3f& pos)
-			{
-				m_Transform.Position = pos;
-			}
+			Actor(const Maths::Vector3f& pos);
 
-			~Actor()
-			{
-				for (Component* c : m_Components)
-					delete c;
-			}
+			~Actor();
 
 			inline Transform& GetTransform() { return m_Transform; }
 

@@ -46,7 +46,7 @@ public:
 
 	inline void Render(Gfx::Renderer2D& renderer) override
 	{
-		renderer.Draw(m_Position.Position, *Texture);
+		renderer.DrawTexture(m_Position.Position, *Texture);
 	}
 };
 

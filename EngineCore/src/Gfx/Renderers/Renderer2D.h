@@ -27,10 +27,11 @@ namespace Shard
 			virtual void End() {}
 			virtual void Render() = 0;
 
-			virtual void Draw(const Maths::Vector3f& position, const Maths::Vector2f& size, uint color) {}
-			virtual void Draw(const Maths::Vector3f& position, const Texture2D& texture) {}
-
+			virtual void DrawRectangle(const Maths::Vector3f& position, const Maths::Vector2f& size, uint color) {}
 			virtual void DrawLine(const Maths::Vector2f& pos1, const Maths::Vector2f& pos2, float thickness, uint color) {}
+
+			virtual void DrawTexture(const Maths::Vector3f& position, const Texture2D& texture) {}
+			virtual void DrawTexture(const Maths::Vector3f& position, const Maths::Vector3f& size, const Texture2D& texture) {}
 
 			virtual void DrawString(const Maths::Vector3f& position, const std::string& text, const FontAtlas& font, uint color) {}
 			virtual void DrawString(const Maths::Vector3f& position, const TextMeasurement& metrics, uint color) {}

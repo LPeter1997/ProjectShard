@@ -132,6 +132,87 @@ namespace Shard
 				return *this;
 			}
 
+			// Self transformation
+			template <typename = typename std::enable_if<(N == M) && (N == 4)>::type>
+			Matrix<N, M, T>& Translate(const Vector3<T>& other)
+			{
+				Elements[0 + 3 * 4] += Elements[0] * other.x + Elements[0 + 1 * 4] * other.y + Elements[0 + 2 * 4] * other.z;
+				Elements[1 + 3 * 4] += Elements[1] * other.x + Elements[1 + 1 * 4] * other.y + Elements[1 + 2 * 4] * other.z;
+				Elements[2 + 3 * 4] += Elements[2] * other.x + Elements[2 + 1 * 4] * other.y + Elements[2 + 2 * 4] * other.z;
+				Elements[3 + 3 * 4] += Elements[3] * other.x + Elements[3 + 1 * 4] * other.y + Elements[3 + 2 * 4] * other.z;
+
+				return *this;
+			}
+
+			template <typename = typename std::enable_if<(N == M) && (N == 4)>::type>
+			Matrix<N, M, T>& Scale(const Vector3<T>& scale)
+			{
+				Elements[0 + 0 * 4] *= scale.x;
+				Elements[1 + 0 * 4] *= scale.x;
+				Elements[2 + 0 * 4] *= scale.x;
+				Elements[3 + 0 * 4] *= scale.x;
+				Elements[0 + 1 * 4] *= scale.y;
+				Elements[1 + 1 * 4] *= scale.y;
+				Elements[2 + 1 * 4] *= scale.y;
+				Elements[3 + 1 * 4] *= scale.y;
+				Elements[0 + 2 * 4] *= scale.z;
+				Elements[1 + 2 * 4] *= scale.z;
+				Elements[2 + 2 * 4] *= scale.z;
+				Elements[3 + 2 * 4] *= scale.z;
+
+				return *this;
+			}
+
+			template <typename = typename std::enable_if<(N == M) && (N == 4)>::type>
+			Matrix<N, M, T>& Rotate(T angle, const Vector3<T>& axis)
+			{
+				double r = ToRadians(angle);
+				double c = cos(r);
+				double s = sin(r);
+				double omc = 1 - c;
+
+				T x = axis.x;
+				T y = axis.y;
+				T z = axis.z;
+
+				T f00 = x * x * omc + c;
+				T f01 = x * y * omc + z * s;
+				T f02 = x * z * omc - y * s;
+
+				T f10 = x * y * omc - z * s;
+				T f11 = y * y * omc + c;
+				T f12 = y * z * omc + x * s;
+
+				T f20 = x * z * omc + y * s;
+				T f21 = y * z * omc - x * s;
+				T f22 = z * z * omc + c;
+
+				T t00 = Elements[0 + 0 * 4] * f00 + Elements[0 + 1 * 4] * f01 + Elements[0 + 2 * 4] * f02;
+				T t01 = Elements[1 + 0 * 4] * f00 + Elements[1 + 1 * 4] * f01 + Elements[1 + 2 * 4] * f02;
+				T t02 = Elements[2 + 0 * 4] * f00 + Elements[2 + 1 * 4] * f01 + Elements[2 + 2 * 4] * f02;
+				T t03 = Elements[3 + 0 * 4] * f00 + Elements[3 + 1 * 4] * f01 + Elements[3 + 2 * 4] * f02;
+				T t10 = Elements[0 + 0 * 4] * f10 + Elements[0 + 1 * 4] * f11 + Elements[0 + 2 * 4] * f12;
+				T t11 = Elements[1 + 0 * 4] * f10 + Elements[1 + 1 * 4] * f11 + Elements[1 + 2 * 4] * f12;
+				T t12 = Elements[2 + 0 * 4] * f10 + Elements[2 + 1 * 4] * f11 + Elements[2 + 2 * 4] * f12;
+				T t13 = Elements[3 + 0 * 4] * f10 + Elements[3 + 1 * 4] * f11 + Elements[3 + 2 * 4] * f12;
+
+				Elements[0 + 2 * 4] = Elements[0 + 0 * 4] * f20 + Elements[0 + 1 * 4] * f21 + Elements[0 + 2 * 4] * f22;
+				Elements[1 + 2 * 4] = Elements[1 + 0 * 4] * f20 + Elements[1 + 1 * 4] * f21 + Elements[1 + 2 * 4] * f22;
+				Elements[2 + 2 * 4] = Elements[2 + 0 * 4] * f20 + Elements[2 + 1 * 4] * f21 + Elements[2 + 2 * 4] * f22;
+				Elements[3 + 2 * 4] = Elements[3 + 0 * 4] * f20 + Elements[3 + 1 * 4] * f21 + Elements[3 + 2 * 4] * f22;
+
+				Elements[0 + 0 * 4] = t00;
+				Elements[1 + 0 * 4] = t01;
+				Elements[2 + 0 * 4] = t02;
+				Elements[3 + 0 * 4] = t03;
+				Elements[0 + 1 * 4] = t10;
+				Elements[1 + 1 * 4] = t11;
+				Elements[2 + 1 * 4] = t12;
+				Elements[3 + 1 * 4] = t13;
+
+				return *this;
+			}
+
 			// Friend operators
 			inline friend Matrix<N, M, T> operator+(Matrix<N, M, T> left, const Matrix<M, N, T>& right)
 			{
@@ -237,7 +318,7 @@ namespace Shard
 			}
 
 			template <typename = typename std::enable_if<(N == M) && (N == 4)>::type>
-			static Matrix<4, 4, T> Scale(const Vector3<T>& scale)
+			static Matrix<4, 4, T> Scaling(const Vector3<T>& scale)
 			{
 				Matrix<4, 4, T> result(1);
 

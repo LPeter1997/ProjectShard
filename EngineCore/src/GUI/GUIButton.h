@@ -38,7 +38,7 @@ namespace Shard
 					else
 						col += 0x00222222;
 				}
-				renderer.Draw(m_Position, m_Size, col);
+				renderer.DrawRectangle(m_Position, m_Size, col);
 				GUIContainer::Render(renderer);
 			}
 		};

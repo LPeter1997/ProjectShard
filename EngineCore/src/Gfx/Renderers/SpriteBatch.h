@@ -32,10 +32,11 @@ namespace Shard
 			void End() override;
 			void Render() override;
 
-			void Draw(const Maths::Vector3f& position, const Maths::Vector2f& size, uint color) override;
-			void Draw(const Maths::Vector3f& position, const Texture2D& texture) override;
-
+			void DrawRectangle(const Maths::Vector3f& position, const Maths::Vector2f& size, uint color) override;
 			void DrawLine(const Maths::Vector2f& pos1, const Maths::Vector2f& pos2, float thickness, uint color) override;
+			
+			void DrawTexture(const Maths::Vector3f& position, const Texture2D& texture) override;
+			void DrawTexture(const Maths::Vector3f& position, const Maths::Vector3f& size, const Texture2D& texture) override;
 
 			void DrawString(const Maths::Vector3f& position, const std::string& text, const FontAtlas& font, uint color) override;
 			void DrawString(const Maths::Vector3f& position, const TextMeasurement& metrics, uint color) override;

@@ -129,6 +129,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="src\Components\Actor.cpp" />
+    <ClCompile Include="src\Components\Component.cpp" />
+    <ClCompile Include="src\Components\Transform.cpp" />
     <ClCompile Include="src\Debugging\Logger.cpp" />
     <ClCompile Include="src\FreeTypeManager.cpp" />
     <ClCompile Include="src\Gfx\Buffers\BufferLayout.cpp" />

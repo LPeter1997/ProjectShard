@@ -14,10 +14,9 @@ namespace Shard
 			Actor& m_Actor;
 
 		public:
-			Component(Actor& actor)
-				: m_Actor(actor)
-			{
-			}
+			Component(Actor& actor);
+
+			virtual ~Component();
 
 			virtual void Update(float delta) {}
 			virtual void Render(Gfx::Renderer2D& render) {}
