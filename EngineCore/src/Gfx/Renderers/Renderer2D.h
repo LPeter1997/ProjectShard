@@ -33,6 +33,7 @@ namespace Shard
 			virtual void DrawLine(const Maths::Vector2f& pos1, const Maths::Vector2f& pos2, float thickness, uint color) {}
 
 			virtual void DrawString(const Maths::Vector3f& position, const std::string& text, const FontAtlas& font, uint color) {}
+			virtual void DrawString(const Maths::Vector3f& position, const TextMeasurement& metrics, uint color) {}
 
 			inline TransformationStack& GetTransformationStack() { return m_TransformationStack; }
 		};

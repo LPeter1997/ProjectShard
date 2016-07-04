@@ -145,6 +145,12 @@ namespace Shard
 		void SpriteBatch::DrawString(const Maths::Vector3f& position, const std::string& text, const FontAtlas& font, uint color)
 		{
 			Maths::Vector3f pos = position;
+
+			Maths::Vector2f st = font.GetFontMetrics().MeasureTextStart(text);
+
+			pos.x -= st.x;
+			pos.y -= st.y;
+			
 			const Maths::Matrix4f& trans = m_TransformationStack.Top();
 
 			float ts = PushTexture(font.GetTextureID());
@@ -152,14 +158,64 @@ namespace Shard
 			for (uint i = 0; i < text.size(); i++)
 			{
 				char ch = text[i];
-				if (ch == ' ')
-				{
-					pos.x += font.GetFontSize() / 5;
-					continue;
-				}
 
 				const CharacterData& charData = font.GetCharacterData(ch);
 				
+				float x2 = pos.x + charData.Left;
+				float y2 = pos.y + charData.Top;
+
+				m_Buffer->Position = trans * Maths::Vector3f(x2, y2, 0);
+				m_Buffer->TextureID = ts;
+				m_Buffer->UV = { charData.X_UV, charData.Y_UV2 };
+				m_Buffer->Color = color;
+				m_Buffer++;
+
+				m_Buffer->Position = trans * Maths::Vector3f(x2, y2 - charData.Height, 0);
+				m_Buffer->TextureID = ts;
+				m_Buffer->UV = { charData.X_UV, charData.Y_UV };
+				m_Buffer->Color = color;
+				m_Buffer++;
+
+				m_Buffer->Position = trans * Maths::Vector3f(x2 + charData.Width, y2 - charData.Height, 0);
+				m_Buffer->TextureID = ts;
+				m_Buffer->UV = { charData.X_UV2, charData.Y_UV };
+				m_Buffer->Color = color;
+				m_Buffer++;
+
+				m_Buffer->Position = trans * Maths::Vector3f(x2 + charData.Width, y2, 0);
+				m_Buffer->TextureID = ts;
+				m_Buffer->UV = { charData.X_UV2, charData.Y_UV2 };
+				m_Buffer->Color = color;
+				m_Buffer++;
+
+				pos.x += charData.X_Advance;
+				pos.y += charData.Y_Advance;
+
+				m_IndexCount += 6;
+			}
+		}
+
+		void SpriteBatch::DrawString(const Maths::Vector3f& position, const TextMeasurement& metrics, uint color)
+		{
+			const FontAtlas& font = metrics.Font;
+			const std::string& text = metrics.Text;
+
+			Maths::Vector3f pos = position;
+			Maths::Vector2f st = metrics.Start;
+
+			pos.x -= st.x;
+			pos.y -= st.y;
+
+			const Maths::Matrix4f& trans = m_TransformationStack.Top();
+
+			float ts = PushTexture(font.GetTextureID());
+
+			for (uint i = 0; i < text.size(); i++)
+			{
+				char ch = text[i];
+
+				const CharacterData& charData = font.GetCharacterData(ch);
+
 				float x2 = pos.x + charData.Left;
 				float y2 = pos.y + charData.Top;
 

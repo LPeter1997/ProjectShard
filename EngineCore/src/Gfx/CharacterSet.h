@@ -8,7 +8,7 @@ namespace Shard
 	{
 		namespace CharacterSet
 		{
-			const std::string ASCII = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+			const std::string ASCII = " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
 			const std::string DEFAULT = ASCII;
 		}
 	}

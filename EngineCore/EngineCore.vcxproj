@@ -136,6 +136,7 @@
     <ClCompile Include="src\Gfx\Buffers\VertexArray.cpp" />
     <ClCompile Include="src\Gfx\Buffers\VertexBuffer.cpp" />
     <ClCompile Include="src\Gfx\FontAtlas.cpp" />
+    <ClCompile Include="src\Gfx\FontMetrics.cpp" />
     <ClCompile Include="src\Gfx\Layer2D.cpp" />
     <ClCompile Include="src\Gfx\Renderers\SpriteBatch.cpp" />
     <ClCompile Include="src\Gfx\Shader\GLSLProgram.cpp" />
@@ -143,6 +144,11 @@
     <ClCompile Include="src\Gfx\Texture2D.cpp" />
     <ClCompile Include="src\Gfx\TransformationStack.cpp" />
     <ClCompile Include="src\Gfx\Window.cpp" />
+    <ClCompile Include="src\GUI\GUIButton.cpp" />
+    <ClCompile Include="src\GUI\GUIComponent.cpp" />
+    <ClCompile Include="src\GUI\GUIContainer.cpp" />
+    <ClCompile Include="src\GUI\GUILabel.cpp" />
+    <ClCompile Include="src\GUI\GUILayer.cpp" />
     <ClCompile Include="src\Input\Keyboard.cpp" />
     <ClCompile Include="src\Input\KeyboardState.cpp" />
     <ClCompile Include="src\Input\Mouse.cpp" />
@@ -161,6 +167,12 @@
     <ClInclude Include="src\Debugging\Logger.h" />
     <ClInclude Include="src\Debugging\LogLevel.h" />
     <ClInclude Include="src\FreeTypeManager.h" />
+    <ClInclude Include="src\Gfx\FontMetrics.h" />
+    <ClInclude Include="src\GUI\GUIButton.h" />
+    <ClInclude Include="src\GUI\GUIComponent.h" />
+    <ClInclude Include="src\GUI\GUIContainer.h" />
+    <ClInclude Include="src\GUI\GUILabel.h" />
+    <ClInclude Include="src\GUI\GUILayer.h" />
     <ClInclude Include="src\Logic\GameState.h" />
     <ClInclude Include="src\Logic\GameStateManager.h" />
     <ClInclude Include="src\Gfx\Buffers\BufferLayout.h" />

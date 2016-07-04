@@ -2,6 +2,7 @@
 
 #include <vector>
 #include "GUIComponent.h"
+#include "../Maths/Matrix.h"
 
 namespace Shard
 {
@@ -11,6 +12,7 @@ namespace Shard
 		{
 		protected:
 			std::vector<GUIComponent*> m_Children;
+			Maths::Matrix4f m_Transform;
 
 		public:
 			GUIContainer(GUIComponent* parent, const Maths::Vector2f& pos, const Maths::Vector2f& size);
@@ -32,8 +34,12 @@ namespace Shard
 
 			virtual inline void Render(Gfx::Renderer2D& renderer) override
 			{
+				renderer.GetTransformationStack().Push(m_Transform);
+
 				for (GUIComponent* c : m_Children)
 					c->Render(renderer);
+
+				renderer.GetTransformationStack().Pop();
 			}
 		};
 	}

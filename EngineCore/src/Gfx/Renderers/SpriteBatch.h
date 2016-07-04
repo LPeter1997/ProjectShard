@@ -38,6 +38,7 @@ namespace Shard
 			void DrawLine(const Maths::Vector2f& pos1, const Maths::Vector2f& pos2, float thickness, uint color) override;
 
 			void DrawString(const Maths::Vector3f& position, const std::string& text, const FontAtlas& font, uint color) override;
+			void DrawString(const Maths::Vector3f& position, const TextMeasurement& metrics, uint color) override;
 
 		private:
 			float PushTexture(GLuint textureID);

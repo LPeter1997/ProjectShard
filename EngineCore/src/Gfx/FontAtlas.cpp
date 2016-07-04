@@ -17,9 +17,6 @@ namespace Shard
 			//(face, 0, size * 64, 0, 0);
 			FT_Set_Pixel_Sizes(face, 0, size);
 
-			//uint width = 0;
-			//uint height = 0;
-
 			for (uint i = 0; i < charset.size(); i++)
 			{
 				if (FT_Load_Char(face, charset[i], FT_LOAD_RENDER))
@@ -30,9 +27,6 @@ namespace Shard
 				}
 
 				FT_GlyphSlot g = face->glyph;
-
-				//width += g->bitmap.width;
-				//height = (height < g->bitmap.rows ? g->bitmap.rows : height);
 
 				packer.Push(charset[i], g->bitmap.width, g->bitmap.rows);
 			}
@@ -89,15 +83,16 @@ namespace Shard
 				c.Y_UV2 = c.Y_UV + c.Height / (float)m_Height;
 
 				m_CharList.insert(std::make_pair(charset[i], c));
-
-				//x += g->bitmap.width;
 			}
 
 			glBindTexture(GL_TEXTURE_2D, 0);
+
+			m_FontMetrics = new FontMetrics(*this);
 		}
 		
 		FontAtlas::~FontAtlas()
 		{
+			delete m_FontMetrics;
 		}
 	}
 }

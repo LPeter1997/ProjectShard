@@ -26,6 +26,8 @@ namespace Shard
 
 			virtual void Update(float delta) {}
 			virtual void Render(Gfx::Renderer2D& renderer) {}
+
+			inline const Maths::Vector2f& GetSize() const { return m_Size; }
 		};
 	}
 }

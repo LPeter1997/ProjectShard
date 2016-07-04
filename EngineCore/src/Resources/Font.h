@@ -28,7 +28,7 @@ namespace Shard
 			void Unload() override;
 
 		public:
-			inline Gfx::FontAtlas RenderAtlas(float size, const std::string& charset = Gfx::CharacterSet::DEFAULT) const { return Gfx::FontAtlas(m_Face, size, charset); }
+			inline Gfx::FontAtlas* RenderAtlas(float size, const std::string& charset = Gfx::CharacterSet::DEFAULT) const { return new Gfx::FontAtlas(m_Face, size, charset); }
 		};
 	}
 }
