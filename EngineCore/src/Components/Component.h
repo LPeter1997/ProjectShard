@@ -19,7 +19,7 @@ namespace Shard
 			{
 			}
 
-			virtual void Update() {}
+			virtual void Update(float delta) {}
 			virtual void Render(Gfx::Renderer2D& render) {}
 		};
 	}

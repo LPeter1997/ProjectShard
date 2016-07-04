@@ -41,5 +41,11 @@ namespace Shard
 			m_Renderer->Render();
 			m_Shader.Disable();
 		}
+
+		void Layer2D::Update(float delta)
+		{
+			for (Components::Actor* c : m_Renderables)
+				c->Update(delta);
+		}
 	}
 }

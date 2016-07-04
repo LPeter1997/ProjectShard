@@ -5,8 +5,7 @@ namespace Shard
 	namespace Input
 	{
 		Button Mouse::s_Buttons[(unsigned int)Buttons::__NumButtons];
-		double Mouse::s_PosX;
-		double Mouse::s_PosY;
+		Maths::Vector2d Mouse::s_Position;
 
 		void Mouse::Update()
 		{
@@ -69,8 +68,8 @@ namespace Shard
 
 		void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 		{
-			Mouse::s_PosX = xpos;
-			Mouse::s_PosY = ypos;
+			Mouse::s_Position.x = xpos;
+			Mouse::s_Position.y = ypos;
 		}
 	}
 }

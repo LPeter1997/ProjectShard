@@ -23,6 +23,7 @@ namespace Shard
 			virtual ~Layer2D();
 
 			void Render();
+			void Update(float delta);
 
 			inline void Add(Components::Actor* renderable)
 			{

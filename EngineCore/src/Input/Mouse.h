@@ -2,6 +2,7 @@
 
 #include "Button.h"
 #include "MouseState.h"
+#include "../Maths/Vector2.h"
 
 namespace Shard
 {
@@ -11,8 +12,7 @@ namespace Shard
 		{
 		private:
 			static Button s_Buttons[(unsigned int)Buttons::__NumButtons];
-			static double s_PosX;
-			static double s_PosY;
+			static Maths::Vector2d s_Position;
 
 		private:
 			Mouse() {}
@@ -27,8 +27,9 @@ namespace Shard
 			static bool IsButtonReleased(Buttons button);
 			static bool IsButtonDown(Buttons button);
 
-			static inline double GetX() { return s_PosX; }
-			static inline double GetY() { return s_PosY; }
+			static inline double GetX() { return s_Position.x; }
+			static inline double GetY() { return s_Position.y; }
+			static inline const Maths::Vector2d& GetPosition() { return s_Position; }
 
 			static inline MouseState Mouse::GetState()
 			{

@@ -49,7 +49,7 @@ namespace Shard
 			void UnloadAll();
 
 			// Loading methods
-			template <typename T, typename = typename std::enable_if<!(std::is_same<T, Gfx::Texture2D>::value)>::type>
+			template <typename T>
 			T* Load(const std::string& path)
 			{
 				Debugging::Logger::Log<Debugging::Error>() << "Generic Load<T>() cannot be used!" << std::endl;
@@ -90,22 +90,15 @@ namespace Shard
 				return font;
 			}
 
-			template <typename T, typename = typename std::enable_if<(std::is_same<T, Gfx::Texture2D>::value)>::type>
-			T Load(const std::string& path)
-			{
-				Debugging::Logger::Log<Debugging::Error>() << "Generic Load<T>() cannot be used!" << std::endl;
-				return nullptr;
-			}
-
 			// Special function hiding resource
 			template <>
-			Gfx::Texture2D Load(const std::string& path)
+			Gfx::Texture2D* Load(const std::string& path)
 			{
 				Image* img = new Image(m_IDcounter++, m_Root + path);
 				img->Load();
 				m_Resources.insert(std::make_pair(img->GetResourceID(), img));
 
-				return Gfx::Texture2D(*img);
+				return new Gfx::Texture2D(*img);
 			}
 		};
 	}

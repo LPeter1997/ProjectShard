@@ -142,7 +142,7 @@ namespace Shard
 			m_IndexCount += 6;
 		}
 
-		void SpriteBatch::DrawString(const Maths::Vector3f& position, const std::string& text, FontAtlas& font, uint color)
+		void SpriteBatch::DrawString(const Maths::Vector3f& position, const std::string& text, const FontAtlas& font, uint color)
 		{
 			Maths::Vector3f pos = position;
 			const Maths::Matrix4f& trans = m_TransformationStack.Top();

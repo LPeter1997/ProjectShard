@@ -36,6 +36,12 @@ namespace Shard
 					c->Render(renderer);
 			}
 
+			inline void Update(float delta)
+			{
+				for (Component* c : m_Components)
+					c->Update(delta);
+			}
+
 			template <typename T>
 			inline T* AddComponent()
 			{

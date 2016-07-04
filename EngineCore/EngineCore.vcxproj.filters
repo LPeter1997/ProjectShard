@@ -84,6 +84,9 @@
     <ClCompile Include="src\Gfx\Layer2D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Logic\GameStateManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Debugging\Logger.h">
@@ -230,7 +233,13 @@
     <ClInclude Include="src\Gfx\Layer2D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Components\DrawSpriteComponent.h">
+    <ClInclude Include="src\Logic\GameState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Logic\GameStateManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Logic\Timer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
