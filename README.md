@@ -1,5 +1,5 @@
 # ProjectShard
-![alt tag]https://github.com/LPeter1997/ProjectShard/blob/master/shardlogo.png?raw=true
+![Alt text](/shardlogo.png?raw=true "Title")
 An open-source C++ game engine!
 I've created this project for learning purposes at first but I hope it will become something much more in the future.
 Facebook page: [link](https://www.facebook.com/theprojectshard)
