@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
@@ -37,10 +36,6 @@ class TestState : public GameState
 private:
 	ContentManager* content;
 	Layer2D* layer;
-	FontAtlas* atlas;
-	GUILayer* gui;
-	Sound* song;
-	SoundEffect* sf;
 
 public:
 	TestState() {}
@@ -53,19 +48,10 @@ protected:
 		Text* file1 = content->Load<Text>("basic.vert");
 		Text* file2 = content->Load<Text>("basic.frag");
 
-		Font* fnt = content->Load<Font>("font1.ttf");
-		atlas = fnt->RenderAtlas(72);
-
 		GLSLProgram& shader = ShaderFactory::CreateShader(file1->GetText(), file2->GetText());
 		Matrix4f ortho = Matrix4f::Orthographic(0.0f, 960.0f, 540.0f, 0.0f, -1.0f, 1.0f);
 
 		layer = new Layer2D(new SpriteBatch(10000), shader, ortho);
-
-		GLSLProgram& shader2 = ShaderFactory::CreateShader(file1->GetText(), file2->GetText());
-		gui = new GUILayer(new SpriteBatch(10000), shader2, ortho);
-
-		song = content->Load<Sound>("Akon.wav");
-		sf = new SoundEffect3D(*song);
 	}
 
 	inline void Tick() override
@@ -76,24 +62,16 @@ protected:
 	inline void Update(float delta) override
 	{
 		layer->Update(delta);
-		gui->Update(delta);
-
-		if (Keyboard::IsKeyPressed(Keys::P))
-		{
-			sf->Play();
-		}
 	}
 
 	inline void Render() override
 	{
 		layer->Render();
-		gui->Render();
 	}
 
 	void Deinitialize() override
 	{
 		content->UnloadAll();
-		delete sf;
 		delete content;
 	}
 };
