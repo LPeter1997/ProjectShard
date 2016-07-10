@@ -3,6 +3,7 @@
 #include <GL/glew.h>
 #include "../Types.h"
 #include "../Resources/Image.h"
+#include "GraphicsResource.h"
 
 namespace Shard
 {
@@ -23,7 +24,7 @@ namespace Shard
 			Nearest = GL_NEAREST
 		};
 
-		class Texture2D
+		class Texture2D : public GraphicsResource
 		{
 		private:
 			static TextureWrap s_WrapMode;
@@ -49,6 +50,8 @@ namespace Shard
 			inline GLuint GetTextureID() const { return m_TextureID; }
 			inline uint GetWidth() const { return m_Width; }
 			inline uint GetHeight() const { return m_Height; }
+
+			void Dispose() override;
 
 		public:
 			static inline void SetWrapMode(TextureWrap mode) { s_WrapMode = mode; }

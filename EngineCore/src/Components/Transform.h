@@ -12,16 +12,24 @@ namespace Shard
 		private:
 			Maths::Matrix4f m_Transform;
 
-		public:
-			Maths::Vector3f Position;
-			Maths::Vector3f Scale;
-			Maths::Vector3f Rotation;
+		private:
+			Maths::Vector3f m_Position;
+			Maths::Vector3f m_Scale;
+			Maths::Vector3f m_Rotation;
 
 		public:
 			Transform();
 			Transform(const Maths::Vector3f& position);
 
-			inline const Maths::Matrix4f& GetTransformationMatrix() { RecalculateTransformationMatrix(); return m_Transform; }
+			inline const Maths::Matrix4f& GetTransformationMatrix() { return m_Transform; }
+
+			inline void SetPosition(const Maths::Vector3f& pos) { m_Position = pos; RecalculateTransformationMatrix(); }
+			inline void SetScale(const Maths::Vector3f& scl) { m_Scale = scl; RecalculateTransformationMatrix(); }
+			inline void SetRotation(const Maths::Vector3f& rot) { m_Rotation = rot; RecalculateTransformationMatrix(); }
+
+			inline void AddPosition(const Maths::Vector3f& pos) { m_Position += pos; m_Transform.Translate(pos); }
+			inline void AddScale(const Maths::Vector3f& scl) { m_Scale += scl; m_Transform.Scale(scl); }
+			inline void AddRotation(const Maths::Vector3f& rot) { m_Rotation += rot; m_Transform.Rotate(m_Rotation.x, Maths::Vector3f(1, 0, 0)).Rotate(m_Rotation.y, Maths::Vector3f(0, 1, 0)).Rotate(m_Rotation.z, Maths::Vector3f(0, 0, 1)); }
 
 		private:
 			void RecalculateTransformationMatrix();

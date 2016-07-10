@@ -8,9 +8,8 @@ namespace Shard
 	namespace Gfx
 	{
 		GLSLProgram::GLSLProgram()
-			: m_Linked(false)
+			: m_Linked(false), m_ProgramID(glCreateProgram())
 		{
-			m_ProgramID = glCreateProgram();
 		}
 
 		GLSLProgram::~GLSLProgram()

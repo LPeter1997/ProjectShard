@@ -96,13 +96,7 @@
     <ClCompile Include="src\GUI\GUIContainer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\GUI\GUILabel.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\GUI\GUILayer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\GUI\GUIButton.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Components\Actor.cpp">
@@ -112,6 +106,18 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Components\Transform.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Resources\Sound.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sfx\SoundEffect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sfx\SoundEffect3D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sfx\AudioListener.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -278,13 +284,25 @@
     <ClInclude Include="src\GUI\GUIContainer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\GUI\GUILabel.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\GUI\GUILayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\GUI\GUIButton.h">
+    <ClInclude Include="src\Resources\Sound.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Gfx\GraphicsResource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sfx\SoundEffect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sfx\SoundEffect3D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sfx\AudioListener.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Maths\Orientation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -7,7 +7,7 @@ namespace Shard
 	namespace Resources
 	{
 		Image::Image(uint id, const std::string& path)
-			: Resource(id, ResourceType::Texture, path)
+			: Resource(id, ResourceType::Image, path)
 		{
 		}
 

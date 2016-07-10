@@ -69,12 +69,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\FreeImage\include;$(SolutionDir)Dependencies\FreeType\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Dependencies\GLFW\lib;$(SolutionDir)Dependencies\GLEW\lib;$(SolutionDir)Dependencies\FreeImage\lib;$(SolutionDir)Dependencies\FreeType\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\FreeImage\include;$(SolutionDir)Dependencies\FreeType\include;$(SolutionDir)Dependencies\OpenAL\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Dependencies\GLFW\lib;$(SolutionDir)Dependencies\GLEW\lib;$(SolutionDir)Dependencies\FreeImage\lib;$(SolutionDir)Dependencies\FreeType\lib;$(SolutionDir)Dependencies\OpenAL\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\FreeImage\include;$(SolutionDir)Dependencies\FreeType\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Dependencies\GLFW\lib;$(SolutionDir)Dependencies\GLEW\lib;$(SolutionDir)Dependencies\FreeImage\lib;$(SolutionDir)Dependencies\FreeType\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\FreeImage\include;$(SolutionDir)Dependencies\FreeType\include;$(SolutionDir)Dependencies\OpenAL\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Dependencies\GLFW\lib;$(SolutionDir)Dependencies\GLEW\lib;$(SolutionDir)Dependencies\FreeImage\lib;$(SolutionDir)Dependencies\FreeType\lib;$(SolutionDir)Dependencies\OpenAL\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -84,7 +84,7 @@
       <PreprocessorDefinitions>GLEW_STATIC;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>glfw3.lib;glew32s.lib;opengl32.lib;FreeImage.lib;FreeType.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;glew32s.lib;opengl32.lib;FreeImage.lib;FreeType.lib;OpenAL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -111,7 +111,7 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>glfw3.lib;glew32s.lib;opengl32.lib;FreeImage.lib;FreeType.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;glew32s.lib;opengl32.lib;FreeImage.lib;FreeType.lib;OpenAL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -147,10 +147,8 @@
     <ClCompile Include="src\Gfx\Texture2D.cpp" />
     <ClCompile Include="src\Gfx\TransformationStack.cpp" />
     <ClCompile Include="src\Gfx\Window.cpp" />
-    <ClCompile Include="src\GUI\GUIButton.cpp" />
     <ClCompile Include="src\GUI\GUIComponent.cpp" />
     <ClCompile Include="src\GUI\GUIContainer.cpp" />
-    <ClCompile Include="src\GUI\GUILabel.cpp" />
     <ClCompile Include="src\GUI\GUILayer.cpp" />
     <ClCompile Include="src\Input\Keyboard.cpp" />
     <ClCompile Include="src\Input\KeyboardState.cpp" />
@@ -159,8 +157,12 @@
     <ClCompile Include="src\Logic\GameStateManager.cpp" />
     <ClCompile Include="src\Resources\ContentManager.cpp" />
     <ClCompile Include="src\Resources\Font.cpp" />
+    <ClCompile Include="src\Resources\Sound.cpp" />
     <ClCompile Include="src\Resources\Text.cpp" />
     <ClCompile Include="src\Resources\Image.cpp" />
+    <ClCompile Include="src\Sfx\AudioListener.cpp" />
+    <ClCompile Include="src\Sfx\SoundEffect.cpp" />
+    <ClCompile Include="src\Sfx\SoundEffect3D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Components\Actor.h" />
@@ -171,10 +173,9 @@
     <ClInclude Include="src\Debugging\LogLevel.h" />
     <ClInclude Include="src\FreeTypeManager.h" />
     <ClInclude Include="src\Gfx\FontMetrics.h" />
-    <ClInclude Include="src\GUI\GUIButton.h" />
+    <ClInclude Include="src\Gfx\GraphicsResource.h" />
     <ClInclude Include="src\GUI\GUIComponent.h" />
     <ClInclude Include="src\GUI\GUIContainer.h" />
-    <ClInclude Include="src\GUI\GUILabel.h" />
     <ClInclude Include="src\GUI\GUILayer.h" />
     <ClInclude Include="src\Logic\GameState.h" />
     <ClInclude Include="src\Logic\GameStateManager.h" />
@@ -207,6 +208,7 @@
     <ClInclude Include="src\Maths\AABB.h" />
     <ClInclude Include="src\Maths\Constants.h" />
     <ClInclude Include="src\Maths\Matrix.h" />
+    <ClInclude Include="src\Maths\Orientation.h" />
     <ClInclude Include="src\Maths\Trigonometry.h" />
     <ClInclude Include="src\Maths\Vector2.h" />
     <ClInclude Include="src\Maths\Vector3.h" />
@@ -216,8 +218,12 @@
     <ClInclude Include="src\Resources\ContentManager.h" />
     <ClInclude Include="src\Resources\Font.h" />
     <ClInclude Include="src\Resources\Resource.h" />
+    <ClInclude Include="src\Resources\Sound.h" />
     <ClInclude Include="src\Resources\Text.h" />
     <ClInclude Include="src\Resources\Image.h" />
+    <ClInclude Include="src\Sfx\AudioListener.h" />
+    <ClInclude Include="src\Sfx\SoundEffect.h" />
+    <ClInclude Include="src\Sfx\SoundEffect3D.h" />
     <ClInclude Include="src\Shard.h" />
     <ClInclude Include="src\Types.h" />
   </ItemGroup>

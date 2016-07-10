@@ -3,6 +3,8 @@
 #include <GL\glew.h>
 #include <GLFW\glfw3.h>
 #include <FreeImage.h>
+#include <OpenAL\al.h>
+#include <OpenAL\alc.h>
 #include "Patterns\Static.h"
 #include "Debugging\Logger.h"
 #include "Gfx\Shader\ShaderFactory.h"
@@ -14,6 +16,8 @@ namespace Shard
 	{
 	private:
 		static bool s_Initialized;
+		static ALCdevice* s_ALDevice;
+		static ALCcontext* s_ALContext;
 
 	public:
 		static inline bool Initialize()
@@ -42,6 +46,27 @@ namespace Shard
 
 			Debugging::Logger::Log<Debugging::Info>() << "FreeType initialized successfully!" << std::endl;
 
+			s_ALDevice = alcOpenDevice(nullptr);
+			if (!s_ALDevice)
+			{
+				Debugging::Logger::Log<Debugging::Fatal>() << "Could not initialize OpenAL!" << std::endl;
+				return false;
+			}
+
+			Debugging::Logger::Log<Debugging::Info>() << "OpenAL initialized successfully!" << std::endl;
+
+			s_ALContext = alcCreateContext(s_ALDevice, nullptr);
+
+			if (!s_ALContext)
+			{
+				Debugging::Logger::Log<Debugging::Fatal>() << "Could not create OpenAL context!" << std::endl;
+				return false;
+			}
+
+			Debugging::Logger::Log<Debugging::Info>() << "OpenAL context created successfully!" << std::endl;
+
+			alcMakeContextCurrent(s_ALContext);
+
 			s_Initialized = true;
 			return true;
 		}
@@ -63,6 +88,11 @@ namespace Shard
 			FreeTypeManager::Deinitialize();
 			Debugging::Logger::Log<Debugging::Info>() << "FreeType terminated!" << std::endl;
 
+			alcMakeContextCurrent(nullptr);
+			alcDestroyContext(s_ALContext);
+			alcCloseDevice(s_ALDevice);
+			Debugging::Logger::Log<Debugging::Info>() << "OpenAL terminated!" << std::endl;
+
 			s_Initialized = false;
 		}
 
@@ -73,4 +103,6 @@ namespace Shard
 	};
 
 	bool Core::s_Initialized = false;
+	ALCdevice* Core::s_ALDevice = nullptr;
+	ALCcontext* Core::s_ALContext = nullptr;
 }

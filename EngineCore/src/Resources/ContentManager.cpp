@@ -65,6 +65,14 @@ namespace Shard
 
 			m_Resources.clear();
 
+			for (Gfx::GraphicsResource* res : m_GraphicsResources)
+			{
+				res->Dispose();
+				delete res;
+			}
+
+			m_GraphicsResources.clear();
+
 			// No resources, reset counter
 			m_IDcounter = 1;
 		}

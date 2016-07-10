@@ -18,8 +18,9 @@
 #include "src\Logic\GameStateManager.h"
 #include "src\Logic\GameState.h"
 #include "src\GUI\GUILayer.h"
-#include "src\GUI\GUILabel.h"
-#include "src\GUI\GUIButton.h"
+#include "src\Sfx\AudioListener.h"
+#include "src\Sfx\SoundEffect.h"
+#include "src\Sfx\SoundEffect3D.h"
 
 using namespace Shard;
 using namespace Gfx;
@@ -29,73 +30,17 @@ using namespace Resources;
 using namespace Components;
 using namespace Logic;
 using namespace GUI;
-
-class DrawSpriteComponent : public Component
-{
-protected:
-	Transform& m_Position;
-
-public:
-	Gfx::Texture2D* Texture;
-
-public:
-	DrawSpriteComponent(Actor& a)
-		: Component(a), m_Position(m_Actor.GetTransform()), Texture(nullptr)
-	{
-	}
-
-	inline void Render(Gfx::Renderer2D& renderer) override
-	{
-		renderer.DrawTexture(m_Position.Position, *Texture);
-	}
-};
-
-class PlayerInputComponent : public Component
-{
-protected:
-	Transform& m_Position;
-
-public:
-	PlayerInputComponent(Actor& a)
-		: Component(a), m_Position(m_Actor.GetTransform())
-	{
-	}
-
-	inline void Update(float delta) override
-	{
-		float dx = 0;
-		float dy = 0;
-
-		if (Keyboard::IsKeyDown(Keys::Up)) dy -= 100;
-		if (Keyboard::IsKeyDown(Keys::Down)) dy += 100;
-		if (Keyboard::IsKeyDown(Keys::Left)) dx -= 100;
-		if (Keyboard::IsKeyDown(Keys::Right)) dx += 100;
-
-		m_Position.Position.x += dx * delta;
-		m_Position.Position.y += dy * delta;
-	}
-};
-
-Actor* MakeSprite(float x, float y, Texture2D& tex)
-{
-	Actor* a = new Actor(Vector3f(x, y, 0));
-	DrawSpriteComponent* ds = a->AddComponent<DrawSpriteComponent>();
-	ds->Texture = &tex;
-	return a;
-}
+using namespace Sfx;
 
 class TestState : public GameState
 {
 private:
 	ContentManager* content;
 	Layer2D* layer;
-	Texture2D* player;
-	Texture2D* cloud;
-	Texture2D* grass;
-	Texture2D* ground;
 	FontAtlas* atlas;
 	GUILayer* gui;
-	GUILabel* fpsCounter;
+	Sound* song;
+	SoundEffect* sf;
 
 public:
 	TestState() {}
@@ -108,11 +53,6 @@ protected:
 		Text* file1 = content->Load<Text>("basic.vert");
 		Text* file2 = content->Load<Text>("basic.frag");
 
-		player = content->Load<Texture2D>("sprite1.png");
-		ground = content->Load<Texture2D>("sprite2.png");
-		cloud = content->Load<Texture2D>("sprite3.png");
-		grass = content->Load<Texture2D>("sprite4.png");
-
 		Font* fnt = content->Load<Font>("font1.ttf");
 		atlas = fnt->RenderAtlas(72);
 
@@ -121,47 +61,27 @@ protected:
 
 		layer = new Layer2D(new SpriteBatch(10000), shader, ortho);
 
-		layer->Add(MakeSprite(90, 10, *cloud));
-		layer->Add(MakeSprite(800, 70, *cloud));
-
-		layer->Add(MakeSprite(0, 384, *ground));
-		layer->Add(MakeSprite(128, 384, *ground));
-		layer->Add(MakeSprite(256, 384, *ground));
-		layer->Add(MakeSprite(384, 384, *ground));
-		layer->Add(MakeSprite(384, 512, *ground));
-		layer->Add(MakeSprite(512, 512, *ground));
-		layer->Add(MakeSprite(640, 512, *ground));
-		layer->Add(MakeSprite(768, 512, *ground));
-		layer->Add(MakeSprite(896, 512, *ground));
-
-		layer->Add(MakeSprite(0, 256, *grass));
-		layer->Add(MakeSprite(384, 256, *grass));
-		layer->Add(MakeSprite(512, 384, *grass));
-		layer->Add(MakeSprite(640, 384, *grass));
-		layer->Add(MakeSprite(768, 384, *grass));
-		layer->Add(MakeSprite(896, 384, *grass));
-
-		Actor* pa = MakeSprite(192, 256, *player);
-		pa->AddComponent<PlayerInputComponent>();
-		layer->Add(pa);
-
 		GLSLProgram& shader2 = ShaderFactory::CreateShader(file1->GetText(), file2->GetText());
 		gui = new GUILayer(new SpriteBatch(10000), shader2, ortho);
-		fpsCounter = new GUILabel(Vector2f(10, 10), *atlas, Vector4f(0, 0, 1, 1), "FPS:");
-		gui->Add(fpsCounter);
-		GUILabel* btnl = new GUILabel(Vector2f(0, 0), *atlas, Vector4f(1, 1, 1, 1), "Press Me");
-		gui->Add(new GUIButton(Vector2f(500, 20), Vector4f(0.6f, 0, 0, 1), btnl));
+
+		song = content->Load<Sound>("Akon.wav");
+		sf = new SoundEffect3D(*song);
 	}
 
 	inline void Tick() override
 	{
-		fpsCounter->SetText("FPS: " + std::to_string(m_FPS));
+		std::cout << "FPS: " << m_FPS << std::endl;
 	}
 
 	inline void Update(float delta) override
 	{
 		layer->Update(delta);
 		gui->Update(delta);
+
+		if (Keyboard::IsKeyPressed(Keys::P))
+		{
+			sf->Play();
+		}
 	}
 
 	inline void Render() override
@@ -173,10 +93,7 @@ protected:
 	void Deinitialize() override
 	{
 		content->UnloadAll();
-		delete player;
-		delete grass;
-		delete ground;
-		delete cloud;
+		delete sf;
 		delete content;
 	}
 };

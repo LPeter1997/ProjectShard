@@ -9,7 +9,7 @@ namespace Shard
 	{
 		enum class ResourceType
 		{
-			Text, Texture
+			Text, Image, Sound
 		};
 
 		class Resource

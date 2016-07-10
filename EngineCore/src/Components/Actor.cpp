@@ -6,7 +6,7 @@ namespace Shard
 	{
 		Actor::Actor(const Maths::Vector3f& pos)
 		{
-			m_Transform.Position = pos;
+			m_Transform.SetPosition(pos);
 		}
 
 		Actor::~Actor()

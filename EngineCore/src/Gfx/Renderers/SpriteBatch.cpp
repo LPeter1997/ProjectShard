@@ -146,25 +146,26 @@ namespace Shard
 		void SpriteBatch::DrawTexture(const Maths::Vector3f& position, const Texture2D& texture)
 		{
 			const float ts = PushTexture(texture.GetTextureID());
+			const Maths::Matrix4f& trans = m_TransformationStack.Top();
 
 			m_Buffer->TextureID = ts;
 			m_Buffer->UV = { 0, 1 };
-			m_Buffer->Position = { position.x, position.y, position.z };
+			m_Buffer->Position = trans * Maths::Vector3f(position.x, position.y, position.z);
 			m_Buffer++->Color = 0xffffffff;
 
 			m_Buffer->TextureID = ts;
 			m_Buffer->UV = { 0, 0 };
-			m_Buffer->Position = { position.x, position.y + texture.GetHeight(), position.z };
+			m_Buffer->Position = trans * Maths::Vector3f(position.x, position.y + texture.GetHeight(), position.z);
 			m_Buffer++->Color = 0xffffffff;
 
 			m_Buffer->TextureID = ts;
 			m_Buffer->UV = { 1, 0 };
-			m_Buffer->Position = { position.x + texture.GetWidth(), position.y + texture.GetHeight(), position.z };
+			m_Buffer->Position = trans * Maths::Vector3f(position.x + texture.GetWidth(), position.y + texture.GetHeight(), position.z);
 			m_Buffer++->Color = 0xffffffff;
 
 			m_Buffer->TextureID = ts;
 			m_Buffer->UV = { 1, 1 };
-			m_Buffer->Position = { position.x + texture.GetWidth(), position.y, position.z };
+			m_Buffer->Position = trans * Maths::Vector3f(position.x + texture.GetWidth(), position.y, position.z);
 			m_Buffer++->Color = 0xffffffff;
 
 			m_IndexCount += 6;

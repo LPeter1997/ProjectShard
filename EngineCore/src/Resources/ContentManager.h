@@ -1,6 +1,7 @@
 #pragma once
 
 #include <map>
+#include <vector>
 #include <string>
 #include <type_traits>
 #include "../Types.h"
@@ -9,6 +10,7 @@
 #include "Text.h"
 #include "Image.h"
 #include "Font.h"
+#include "Sound.h"
 #include "../Gfx/Texture2D.h"
 
 namespace Shard
@@ -19,6 +21,7 @@ namespace Shard
 		{
 		private:
 			std::map<uint, Resource*> m_Resources;
+			std::vector<Gfx::GraphicsResource*> m_GraphicsResources;
 			uint m_IDcounter;
 			std::string m_Root;
 
@@ -90,15 +93,32 @@ namespace Shard
 				return font;
 			}
 
+			template <>
+			Sound* Load(const std::string& path)
+			{
+				Sound* snd = new Sound(m_IDcounter++, m_Root + path);
+				snd->Load();
+				m_Resources.insert(std::make_pair(snd->GetResourceID(), snd));
+				return snd;
+			}
+
 			// Special function hiding resource
 			template <>
 			Gfx::Texture2D* Load(const std::string& path)
 			{
 				Image* img = new Image(m_IDcounter++, m_Root + path);
 				img->Load();
-				m_Resources.insert(std::make_pair(img->GetResourceID(), img));
+				
+				if (img->IsLoaded())
+				{
+					m_Resources.insert(std::make_pair(img->GetResourceID(), img));
 
-				return new Gfx::Texture2D(*img);
+					Gfx::Texture2D* tex = new Gfx::Texture2D(*img);
+					m_GraphicsResources.push_back(tex);
+					return tex;
+				}
+
+				return nullptr;
 			}
 		};
 	}

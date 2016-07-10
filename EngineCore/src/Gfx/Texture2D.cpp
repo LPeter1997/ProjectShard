@@ -33,6 +33,11 @@ namespace Shard
 
 		Texture2D::~Texture2D()
 		{
+			Dispose();
+		}
+
+		void Texture2D::Dispose()
+		{
 			glDeleteTextures(1, &m_TextureID);
 		}
 	}
