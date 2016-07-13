@@ -700,8 +700,10 @@ RigidBody* CreateCircle(int x, int y, int r, PhysicsScene& scene)
 
 static Vector2f rot(const Vector2f& a, float angle)
 {
-	float xnew = a.x * std::cos(angle) - a.y * std::sin(angle);
-	float ynew = a.x * std::sin(angle) + a.y * std::cos(angle);
+	float s = std::sin(angle);
+	float c = std::cos(angle);
+	float xnew = a.x * c - a.y * s;
+	float ynew = a.x * s + a.y * c;
 	return Vector2f(xnew, ynew);
 }
 
@@ -737,9 +739,11 @@ int main(void)
 	shader.SetUniform1iv("textures", texIDs, 32);
 	shader.Disable();
 
-	SpriteBatch batch(1000);
+	std::srand(std::time(NULL));
 
-	PhysicsScene scene(Maths::Vector2f(0, 600.0f));
+	SpriteBatch batch(10000);
+
+	PhysicsScene scene(Maths::Vector2f(0, 100.0f));
 	std::vector<RigidBody*> bodies;
 	
 	RigidBody* platform = CreateBox(500, 400, 600, 64, scene);
@@ -811,6 +815,12 @@ int main(void)
 					p0 = p;
 					glVertex2f(p.x, p.y);
 				}
+
+				p0.x = circle->Radius;
+				p0.y = 0;
+
+				Maths::Vector2f end = rot(p0, b->Orientation);
+				batch.DrawLine(end + b->Position, b->Position, 3, 0xff0000ff);
 			}
 			else
 			{
@@ -839,7 +849,7 @@ int main(void)
 
 		if (t.GetElapsedTime() > 1)
 		{
-			//std::cout << "FPS: " << frames << std::endl;
+			std::cout << "FPS: " << frames << std::endl;
 			frames = 0;
 			t.Reset();
 		}

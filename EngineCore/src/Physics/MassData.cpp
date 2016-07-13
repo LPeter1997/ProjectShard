@@ -12,15 +12,9 @@ namespace Shard
 				InvMass = 1.0f / mass;
 
 			if (in == 0)
-			{
-				Inertia = 0.0f;
 				InvInertia = 0.0f;
-			}
 			else
-			{
-				Inertia = in;
 				InvInertia = 1.0f / in;
-			}
 		}
 
 		MassData::MassData(float mass)

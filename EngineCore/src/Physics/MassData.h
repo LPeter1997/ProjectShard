@@ -8,7 +8,6 @@ namespace Shard
 		{
 		public:
 			float InvMass;
-			float Inertia;
 			float InvInertia;
 
 		public:

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "RigidBody.h"
+#include <iostream>
 
 namespace Shard
 {
@@ -8,14 +9,9 @@ namespace Shard
 	{
 		namespace ForceIntegrator
 		{
-			static inline bool equal(float a, float b)
-			{
-				return std::fabsf(a - b) <= 0.0001f;
-			}
-
 			inline void IntegrateForces(RigidBody* body, const Maths::Vector2f& gravity, float delta)
 			{
-				if (equal(body->BodyMass.InvMass, 0.0f))
+				if (body->BodyMass.InvMass == 0.0f)
 					return;
 
 				Maths::Vector2f f(body->BodyMass.InvMass * body->Force.x, body->BodyMass.InvMass * body->Force.y);
@@ -26,7 +22,7 @@ namespace Shard
 
 			inline void IntegrateVelocity(RigidBody* body, const Maths::Vector2f& gravity, float delta)
 			{
-				if (equal(body->BodyMass.InvMass, 0.0f))
+				if (body->BodyMass.InvMass == 0.0f)
 					return;
 
 				body->Position += Maths::Vector2f(delta * body->Velocity.x, delta * body->Velocity.y);

@@ -42,6 +42,7 @@ namespace Shard
 			inline void ApplyImpulse(const Maths::Vector2f& impulse, const Maths::Vector2f& contact)
 			{
 				Velocity += Maths::Vector2f(BodyMass.InvMass * impulse.x, BodyMass.InvMass * impulse.y);
+				AngularVelocity += BodyMass.InvInertia * Maths::Vector2f::CrossProduct(contact, impulse);
 			}
 
 			inline void SetOrientation(float radians)
