@@ -761,23 +761,36 @@ int main(void)
 	Timer deltat;
 	deltat.Start();
 
+	float sz = 0.0f;
+	float ori = 0.0f;
+
 	while (!display.IsCloseRequested())
 	{
-
 		float delta = deltat.Reset();
 		scene.Update(delta);
 
-		if (Mouse::IsButtonPressed(Buttons::Left))
+		if (Mouse::IsButtonDown(Buttons::Left) || Mouse::IsButtonDown(Buttons::Right))
 		{
-			RigidBody* box = CreateBox(Mouse::GetX(), Mouse::GetY(), 64, 64, scene);
-			box->SetOrientation((float)std::rand() / (float)RAND_MAX);
-			bodies.push_back(box);
+			if (sz == 0)
+			{
+				ori = (float)std::rand() / (float)RAND_MAX;
+			}
+			sz += delta * 50.0f;
 		}
-		else if (Mouse::IsButtonPressed(Buttons::Right))
+
+		if (Mouse::IsButtonReleased(Buttons::Left))
 		{
-			RigidBody* box = CreateCircle(Mouse::GetX(), Mouse::GetY(), 32, scene);
+			RigidBody* box = CreateBox(Mouse::GetX(), Mouse::GetY(), sz, sz, scene);
+			box->SetOrientation(ori);
+			bodies.push_back(box);
+			sz = 0.0f;
+		}
+		else if (Mouse::IsButtonReleased(Buttons::Right))
+		{
+			RigidBody* box = CreateCircle(Mouse::GetX(), Mouse::GetY(), sz / 2, scene);
 			box->SetOrientation((float)std::rand() / (float)RAND_MAX);
 			bodies.push_back(box);
+			sz = 0.0f;
 		}
 		
 		InputDevices::Update();
@@ -794,7 +807,6 @@ int main(void)
 				const uint k_segments = 20;
 				float theta = b->Orientation;
 				float inc = Constants::Pi * 2.0f / (float)k_segments;
-				bool predone = false;
 				Maths::Vector2f p0;
 				for (uint i = 0; i < k_segments + 1; ++i)
 				{
@@ -803,17 +815,10 @@ int main(void)
 					p *= Maths::Vector2f(circle->Radius, circle->Radius);
 					p += b->Position;
 
-					if (predone)
-					{
+					if (i > 0)
 						batch.DrawLine(p, p0, 3, 0xff000000);
-					}
-					else
-					{
-						predone = true;
-					}
 
 					p0 = p;
-					glVertex2f(p.x, p.y);
 				}
 
 				p0.x = circle->Radius;
@@ -839,6 +844,46 @@ int main(void)
 				//batch.DrawRectangle(Vector3f(poly->Position.x, sh.Position.y, 0), sh.Size, 0xff0000ff);
 			}
 		}
+
+		if (sz > 0)
+		{
+			Vector2d mp = Mouse::GetPosition();
+			if (Mouse::IsButtonDown(Buttons::Right))
+			{
+				// Circle
+				const uint k_segments = 20;
+				float theta = 0.0f;
+				float inc = Constants::Pi * 2.0f / (float)k_segments;
+				Maths::Vector2f p0;
+				for (uint i = 0; i < k_segments + 1; ++i)
+				{
+					theta += inc;
+					Maths::Vector2f p(std::cos(theta), std::sin(theta));
+					p *= Maths::Vector2f(sz / 2, sz / 2);
+					p += Maths::Vector2f((float)mp.x, (float)mp.y);
+
+					if (i > 0)
+						batch.DrawLine(p, p0, 3, 0xff00ff00);
+
+					p0 = p;
+				}
+			}
+			else
+			{
+				Maths::Vector2f ampe((float)mp.x, (float)mp.y);
+				
+				Maths::Vector2f a(ampe - rot(Maths::Vector2f(sz / 2, sz / 2), ori));
+				Maths::Vector2f b(ampe - rot(Maths::Vector2f(-sz / 2, sz / 2), ori));
+				Maths::Vector2f c(ampe - rot(Maths::Vector2f(-sz / 2, -sz / 2), ori));
+				Maths::Vector2f d(ampe - rot(Maths::Vector2f(sz / 2, -sz / 2), ori));
+
+				batch.DrawLine(a, b, 3, 0xff00ff00);
+				batch.DrawLine(b, c, 3, 0xff00ff00);
+				batch.DrawLine(c, d, 3, 0xff00ff00);
+				batch.DrawLine(d, a, 3, 0xff00ff00);
+			}
+		}
+
 		batch.End();
 		shader.Enable();
 		batch.Render();
