@@ -99,7 +99,7 @@ namespace Shard
 				Maths::Vector2f correction(factor * mf->Normal.x, factor * mf->Normal.y);
 
 				mf->A->Position -= Maths::Vector2f(mf->A->BodyMass.InvMass * correction.x, mf->A->BodyMass.InvMass * correction.y);
-				mf->A->Position += Maths::Vector2f(mf->B->BodyMass.InvMass * correction.x, mf->B->BodyMass.InvMass * correction.y);
+				mf->B->Position += Maths::Vector2f(mf->B->BodyMass.InvMass * correction.x, mf->B->BodyMass.InvMass * correction.y);
 			}
 
 			void InfiniteMassCorrection(Mainfold* mf)

@@ -13,8 +13,6 @@ namespace Shard
 			__Size__
 		};
 
-		struct AABB;
-
 		struct Shape
 		{
 		public:

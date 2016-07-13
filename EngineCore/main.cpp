@@ -690,6 +690,21 @@ RigidBody* CreateBox(int x, int y, int w, int h, PhysicsScene& scene)
 	return body;
 }
 
+RigidBody* CreateCircle(int x, int y, int r, PhysicsScene& scene)
+{
+	Material mat(1.0f, 0.2f, 0.5f, 0.3f);
+	Circle* sh = new Circle(r);
+	RigidBody* body = scene.Add(Maths::Vector2f(x, y), sh, mat);
+	return body;
+}
+
+static Vector2f rot(const Vector2f& a, float angle)
+{
+	float xnew = a.x * std::cos(angle) - a.y * std::sin(angle);
+	float ynew = a.x * std::sin(angle) + a.y * std::cos(angle);
+	return Vector2f(xnew, ynew);
+}
+
 int main(void)
 {
 	Core::Initialize();
@@ -724,12 +739,14 @@ int main(void)
 
 	SpriteBatch batch(1000);
 
-	PhysicsScene scene(Maths::Vector2f(0, 50.0f));
+	PhysicsScene scene(Maths::Vector2f(0, 600.0f));
 	std::vector<RigidBody*> bodies;
 	
-	RigidBody* platform = CreateBox(100, 400, 400, 64, scene);
+	RigidBody* platform = CreateBox(500, 400, 600, 64, scene);
 	platform->SetStatic();
 	bodies.push_back(platform);
+
+	//bodies.push_back(CreateCircle(400, 200, 64, scene));
 
 	NarrowCollision::Initialize();
 
@@ -742,9 +759,25 @@ int main(void)
 
 	while (!display.IsCloseRequested())
 	{
+
 		float delta = deltat.Reset();
 		scene.Update(delta);
+
+		if (Mouse::IsButtonPressed(Buttons::Left))
+		{
+			RigidBody* box = CreateBox(Mouse::GetX(), Mouse::GetY(), 64, 64, scene);
+			box->SetOrientation((float)std::rand() / (float)RAND_MAX);
+			bodies.push_back(box);
+		}
+		else if (Mouse::IsButtonPressed(Buttons::Right))
+		{
+			RigidBody* box = CreateCircle(Mouse::GetX(), Mouse::GetY(), 32, scene);
+			box->SetOrientation((float)std::rand() / (float)RAND_MAX);
+			bodies.push_back(box);
+		}
 		
+		InputDevices::Update();
+
 		// Draw the bodies
 		display.Clear();
 		
@@ -753,9 +786,31 @@ int main(void)
 		{
 			if (b->BodyShape->Type == ShapeType::Circle)
 			{
-				//AABB sh = b->BodyShape->ComputeAABB();
-				//batch.DrawRectangle(Vector3f(sh.Position.x, sh.Position.y, 0), sh.Size, 0xff0000ff);
-				//batch.DrawTexture(Vector3f(sh.Position.x, sh.Position.y, 0), *ball);
+				Circle* circle = (Circle*)b->BodyShape;
+				const uint k_segments = 20;
+				float theta = b->Orientation;
+				float inc = Constants::Pi * 2.0f / (float)k_segments;
+				bool predone = false;
+				Maths::Vector2f p0;
+				for (uint i = 0; i < k_segments + 1; ++i)
+				{
+					theta += inc;
+					Maths::Vector2f p(std::cos(theta), std::sin(theta));
+					p *= Maths::Vector2f(circle->Radius, circle->Radius);
+					p += b->Position;
+
+					if (predone)
+					{
+						batch.DrawLine(p, p0, 3, 0xff000000);
+					}
+					else
+					{
+						predone = true;
+					}
+
+					p0 = p;
+					glVertex2f(p.x, p.y);
+				}
 			}
 			else
 			{
@@ -765,9 +820,11 @@ int main(void)
 				for (uint i = 0; i < poly->Vertices.size(); i++)
 				{
 					uint j = i + 1 < poly->Vertices.size() ? i + 1 : 0;
-					Vector2f& a = poly->Vertices.at(i);
-					Vector2f& b = poly->Vertices.at(j);
-					batch.DrawLine(a, b, 3, 0xff000000);
+
+					Vector2f& av = rot(poly->Vertices.at(i), b->Orientation);
+					Vector2f& bv = rot(poly->Vertices.at(j), b->Orientation);
+					Vector2f del = Maths::Vector2f(b->Position.x, b->Position.y);
+					batch.DrawLine(av + del, bv + del, 3, 0xff000000);
 				}
 				//batch.DrawRectangle(Vector3f(poly->Position.x, sh.Position.y, 0), sh.Size, 0xff0000ff);
 			}

@@ -27,7 +27,7 @@ namespace Shard
 			{
 				RigidBody* A = m_Bodies.at(i);
 
-				for (uint j = i + 1; j < m_Bodies.size(); i++)
+				for (uint j = i + 1; j < m_Bodies.size(); j++)
 				{
 					RigidBody* B = m_Bodies[j];
 					if (A->BodyMass.InvMass == 0 && B->BodyMass.InvMass == 0)

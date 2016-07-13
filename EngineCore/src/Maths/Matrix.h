@@ -109,7 +109,7 @@ namespace Shard
 				return Vector2<T>
 				(
 					Elements[0] * other.x + Elements[1] * other.y,
-					Elements[2] * other.x + Elements[3] * other.y,
+					Elements[2] * other.x + Elements[3] * other.y
 				);
 			}
 
@@ -246,18 +246,18 @@ namespace Shard
 				return left.Multiply(scalar);
 			}
 
-			template <unsigned int SN = N, unsigned int SM = M>
+			template <typename ST = T>
 			inline friend
-				typename std::enable_if<SN == SM && SN == 4, Vector3<T>>::type
-			operator*(const Matrix<4, 4, T>& left, const Vector3<T>& right)
+			typename std::enable_if<(N == M) && (N == 4), Vector3<ST>>::type
+			operator*(const Matrix<4, 4, ST>& left, const Vector3<ST>& right)
 			{
 				return left.Multiply(right);
 			}
 
-			template <unsigned int SN = N, unsigned int SM = M>
+			template <typename ST = T>
 			inline friend
-				typename std::enable_if<SN == SM && SN == 2, Vector2<T>>::type
-			operator*(const Matrix<2, 2, T>& left, const Vector2<T>& right)
+			typename std::enable_if<(N == M) && (N == 2), Vector2<ST>>::type
+			operator*(const Matrix<2, 2, ST>& left, const Vector2<ST>& right)
 			{
 				return left.Multiply(right);
 			}

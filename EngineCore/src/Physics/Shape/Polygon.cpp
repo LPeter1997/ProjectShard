@@ -6,7 +6,7 @@ namespace Shard
 	namespace Physics
 	{
 		Polygon::Polygon()
-			: Shape(ShapeType::Polygon)
+			: Shape(ShapeType::Polygon), Transform(Maths::Matrix2f(1.0f))
 		{
 		}
 

@@ -36,7 +36,7 @@ namespace Shard
 				Circle* A = (Circle*)mainfold->A->BodyShape;
 				Circle* B = (Circle*)mainfold->B->BodyShape;
 
-				Maths::Vector2f normal = B->Origin - A->Origin;
+				Maths::Vector2f normal = mainfold->B->Position - mainfold->A->Position;
 
 				float distSqr = normal.x * normal.x + normal.y * normal.y;
 				float radius = A->Radius + B->Radius;
@@ -73,7 +73,7 @@ namespace Shard
 				Circle* A = (Circle*)mainfold->A->BodyShape;
 				Polygon* B = (Polygon*)mainfold->B->BodyShape;
 
-				Maths::Vector2f center = A->Origin;
+				Maths::Vector2f center = mainfold->A->Position;
 				// Transpose circle to polygon's model space
 				center = B->Transform.Transposed() * (center - mainfold->B->Position);
 

@@ -118,7 +118,7 @@ namespace Shard
 		void SpriteBatch::DrawLine(const Maths::Vector2f& pos1, const Maths::Vector2f& pos2, float thickness, uint color)
 		{
 			const Maths::Matrix4f& trans = m_TransformationStack.Top();
-			Maths::Vector3f& normal = thickness * Maths::Vector3f(pos2.y - pos1.y, -(pos2.x - pos1.x), 0).Normalize();
+			Maths::Vector3f normal = Maths::Vector3f(thickness * (pos2.y - pos1.y), -thickness * (pos2.x - pos1.x), 0).Normalize();
 
 			m_Buffer->Position = trans * Maths::Vector3f(pos1.x + normal.x, pos1.y + normal.y, 0.0f);
 			m_Buffer->TextureID = 0;

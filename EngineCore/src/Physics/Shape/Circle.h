@@ -12,10 +12,8 @@ namespace Shard
 		{
 		public:
 			float Radius;
-			Maths::Vector2f Origin;
 
 		public:
-			Circle(const Maths::Vector2f& orig, float rad);
 			Circle(float rad);
 
 			inline MassData ComputeMass(const Material& mat) override
