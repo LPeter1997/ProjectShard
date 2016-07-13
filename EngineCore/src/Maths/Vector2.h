@@ -62,6 +62,16 @@ namespace Shard
 				return x * other.x + y * other.y;
 			}
 
+			static inline T DotProduct(const Vector2& a, const Vector2& b)
+			{
+				return a.x * b.x + a.y * b.y;
+			}
+
+			static inline T CrossProduct(const Vector2& a, const Vector2& b)
+			{
+				return a.x * b.y - a.y * b.x;
+			}
+
 			inline T Length() const
 			{
 				return std::sqrt(x * x + y * y);

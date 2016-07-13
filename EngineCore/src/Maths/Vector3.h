@@ -66,6 +66,32 @@ namespace Shard
 				return x * other.x + y * other.y + z * other.z;
 			}
 
+			static inline T DotProduct(const Vector3& a, const Vector3& b)
+			{
+				return a.x * b.x + a.y * b.y + a.z * b.z;
+			}
+
+			inline Vector3& Cross(const Vector3& other)
+			{
+				T _x = y * other.z - z * other.y;
+				T _y = z * other.x - x * other.z;
+				T _z = x * other.y - y * other.x;
+				x = _x;
+				y = _y;
+				z = _z;
+				return *this;
+			}
+
+			inline Vector3 Crossed(const Vector3& other) const
+			{
+				return Vector3(y * other.z - z * other.y, z * other.x - x * other.z, x * other.y - y * other.x);
+			}
+
+			static inline Vector3 CrossProduct(const Vector3& a, const Vector3& b)
+			{
+				return Vector3(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x);
+			}
+
 			inline T Length() const
 			{
 				return std::sqrt(x * x + y * y + z * z);

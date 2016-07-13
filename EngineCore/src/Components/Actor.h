@@ -26,8 +26,12 @@ namespace Shard
 
 			inline void Render(Gfx::Renderer2D& renderer)
 			{
+				renderer.GetTransformationStack().Push(m_Transform.GetTransformationMatrix());
+
 				for (Component* c : m_Components)
 					c->Render(renderer);
+
+				renderer.GetTransformationStack().Pop();
 			}
 
 			inline void Update(float delta)

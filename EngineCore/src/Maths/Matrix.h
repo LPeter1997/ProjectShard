@@ -46,7 +46,7 @@ namespace Shard
 			}
 
 			// Member operations
-			Matrix<N, M, T>& Add(const Matrix<N, M, T>& other)
+			inline Matrix<N, M, T>& Add(const Matrix<N, M, T>& other)
 			{
 				for (uint i = 0; i < N * M; i++)
 					Elements[i] += other.Elements[i];
@@ -54,7 +54,7 @@ namespace Shard
 				return *this;
 			}
 
-			Matrix<N, M, T>& Subtract(const Matrix<N, M, T>& other)
+			inline Matrix<N, M, T>& Subtract(const Matrix<N, M, T>& other)
 			{
 				for (uint i = 0; i < N * M; i++)
 					Elements[i] -= other.Elements[i];
@@ -62,7 +62,7 @@ namespace Shard
 				return *this;
 			}
 
-			Matrix<N, M, T>& Multiply(const T scalar)
+			inline Matrix<N, M, T>& Multiply(const T scalar)
 			{
 				for (uint i = 0; i < N * M; i++)
 					Elements[i] *= scalar;
@@ -71,7 +71,7 @@ namespace Shard
 			}
 
 			template <uint K>
-			Matrix<M, K, T> Multiply(const Matrix<K, N, T>& other) const
+			inline Matrix<M, K, T> Multiply(const Matrix<K, N, T>& other) const
 			{
 				Matrix<M, K, T> result;
 				for (uint y = 0; y < M; y++)
@@ -98,6 +98,17 @@ namespace Shard
 					Elements[0] * other.x + Elements[4] * other.y + Elements[8] * other.z + Elements[12],
 					Elements[1] * other.x + Elements[5] * other.y + Elements[9] * other.z + Elements[13],
 					Elements[2] * other.x + Elements[6] * other.y + Elements[10] * other.z + Elements[14]
+				);
+			}
+
+			// Multiply it with a 2D vector for 2D 2x2 matrix only
+			template <typename = typename std::enable_if<(N == M) && (N == 2)>::type>
+			inline Vector2<T> Multiply(const Vector2<T>& other) const
+			{
+				return Vector2<T>
+				(
+					Elements[0] * other.x + Elements[1] * other.y,
+					Elements[2] * other.x + Elements[3] * other.y,
 				);
 			}
 
@@ -234,7 +245,14 @@ namespace Shard
 				return left.Multiply(scalar);
 			}
 
+			template <typename = typename std::enable_if<(N == M) && (N == 4)>::type>
 			inline friend Vector3<T> operator*(const Matrix<4, 4, T>& left, const Vector3<T>& right)
+			{
+				return left.Multiply(right);
+			}
+
+			template <typename = typename std::enable_if<(N == M) && (N == 2)>::type>
+			inline friend Vector2<T> operator*(const Matrix<2, 2, T>& left, const Vector2<T>& right)
 			{
 				return left.Multiply(right);
 			}
@@ -325,6 +343,23 @@ namespace Shard
 				result.Elements[0 + 0 * 4] = scale.x;
 				result.Elements[1 + 1 * 4] = scale.y;
 				result.Elements[2 + 2 * 4] = scale.z;
+
+				return result;
+			}
+
+			// 2D rotation
+			template <typename = typename std::enable_if<(N == M) && (N == 2)>::type>
+			static Matrix<2, 2, T> Rotation2D(T radians)
+			{
+				Matrix<2, 2, T> result;
+
+				float c = std::cos(radians);
+				float s = std::sin(radians);
+
+				result.Elements[0] = c;
+				result.Elements[1] = -s;
+				result.Elements[2] = s;
+				result.Elements[3] = c;
 
 				return result;
 			}

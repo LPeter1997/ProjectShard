@@ -31,6 +31,10 @@ namespace Shard
 			inline void AddScale(const Maths::Vector3f& scl) { m_Scale += scl; m_Transform.Scale(scl); }
 			inline void AddRotation(const Maths::Vector3f& rot) { m_Rotation += rot; m_Transform.Rotate(m_Rotation.x, Maths::Vector3f(1, 0, 0)).Rotate(m_Rotation.y, Maths::Vector3f(0, 1, 0)).Rotate(m_Rotation.z, Maths::Vector3f(0, 0, 1)); }
 
+			inline const Maths::Vector3f& GetPosition() const { return m_Position; }
+			inline const Maths::Vector3f& GetScale() const { return m_Scale; }
+			inline const Maths::Vector3f& GetRotation() const { return m_Rotation; }
+
 		private:
 			void RecalculateTransformationMatrix();
 		};
