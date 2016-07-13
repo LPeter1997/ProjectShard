@@ -129,16 +129,28 @@
     <ClCompile Include="src\Physics\RigidBody.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Physics\Shape\AABB.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Physics\BroadPhase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Physics\NarrowPhase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Physics\CollisionResolver.cpp">
+    <ClCompile Include="src\Physics\Shape\Polygon.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physics\MassData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physics\Material.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physics\Mainfold.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physics\ImpulseIntegrator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physics\PhysicsScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -338,16 +350,28 @@
     <ClInclude Include="src\Physics\BroadPhase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Physics\Shape\AABB.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Physics\PrimitiveIntersection.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Physics\NarrowPhase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Physics\CollisionResolver.h">
+    <ClInclude Include="src\Physics\Shape\Polygon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\MassData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\Mainfold.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\ImpulseIntegrator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\PhysicsScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\ForceIntegrator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

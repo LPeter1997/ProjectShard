@@ -1,4 +1,4 @@
-#pragma once
+/*#pragma once
 
 #include <vector>
 #include "RigidBody.h"
@@ -25,4 +25,4 @@ namespace Shard
 			std::vector<ColliderPair> GenerateColliderPairs(std::vector<RigidBody*>& bodies);
 		}
 	}
-}
+}*/

@@ -22,8 +22,9 @@
 #include "src\Sfx\SoundEffect3D.h"
 #include "src\Physics\BroadPhase.h"
 #include "src\Physics\NarrowPhase.h"
-#include "src\Physics\CollisionResolver.h"
 #include "src\Physics\Shape\Circle.h"
+#include "src\Physics\Shape\Polygon.h"
+#include "src\Physics\PhysicsScene.h"
 
 using namespace Shard;
 using namespace Gfx;
@@ -680,18 +681,13 @@ int main(void)
 }
 #endif
 
-RigidBody* CreateCircle(int x, int y)
+RigidBody* CreateBox(int x, int y, int w, int h, PhysicsScene& scene)
 {
-	Material mat(0.1f, 0.7f, 0.8f, 0.6f);
-	RigidBody* bdy = new RigidBody(Maths::Vector2f(x, y), new Circle(Maths::Vector2f(x, y), 32), mat);
-	return bdy;
-}
-
-RigidBody* CreateBox(int x, int y, int w, int h)
-{
-	Material mat(0.1f, 0.7f, 0.2f, 0.1f);
-	RigidBody* bdy = new RigidBody(Maths::Vector2f(x, y), new AABB(Maths::Vector2f(x, y), Maths::Vector2f(w, h)), mat);
-	return bdy;
+	Material mat(1.0f, 0.2f, 0.5f, 0.3f);
+	Polygon* sh = new Polygon();
+	sh->SetBox(w, h);
+	RigidBody* body = scene.Add(Maths::Vector2f(x, y), sh, mat);
+	return body;
 }
 
 int main(void)
@@ -728,36 +724,13 @@ int main(void)
 
 	SpriteBatch batch(1000);
 
+	PhysicsScene scene(Maths::Vector2f(0, 50.0f));
 	std::vector<RigidBody*> bodies;
 	
-	//bodies.push_back(CreateBox(0, 0, 10, 540, true));
-	//bodies.push_back(CreateBox(0, 0, 960, 10, true));
-	//bodies.push_back(CreateBox(950, 0, 10, 540, true));
-	//bodies.push_back(CreateBox(0, 530, 960, 10, true));
+	RigidBody* platform = CreateBox(100, 400, 400, 64, scene);
+	platform->SetStatic();
+	bodies.push_back(platform);
 
-	//uint sz = bodies.size();
-	//for (uint i = sz; i < sz + 6; i++) {
-		//bodies.push_back(CreateBox(70 + i * 70, 70 + i * 70, 64, 64));
-		//bodies[i]->Velocity = Vector2f(((0.01f + (i % 5) * 0.3f) * (i % 2 ? 1 : -1)) * 1000.0f, ((0.01f + (i % 5) * 0.3f) * (i >> 1 % 2 ? 1 : -1)) * 1000.0f);
-	//}
-
-	bodies.push_back(CreateBox(600, 140, 64, 64));
-	bodies.push_back(CreateBox(300, 400, 500, 80));
-
-	bodies[0]->Velocity.x = 0;
-	bodies[0]->Velocity.y = 0;
-
-	bodies[1]->BodyMaterial.Restitution = 0.0f;
-	bodies[1]->BodyMaterial.StaticFriction = 0.4f;
-	bodies[1]->BodyMaterial.DynamicFriction = 0.1f;
-	bodies[1]->SetInfiniteMass();
-
-	//bodies.push_back(CreateCircle(100, 100));
-	//bodies.push_back(CreateCircle(400, 100));
-	//bodies.push_back(CreateCircle(100, 100, 0.01f));
-	//bodies.push_back(CreateCircle(400, 100, 0.1f));
-
-	//bodies[0]->Velocity.x = 0.01f;
 	NarrowCollision::Initialize();
 
 	uint frames = 0;
@@ -769,47 +742,9 @@ int main(void)
 
 	while (!display.IsCloseRequested())
 	{
-		// Gravity
-		bodies[0]->Velocity += Maths::Vector2f(0, 0.0098f);
-
-		// Collision
-		std::vector<BroadCollision::ColliderPair> colliders = BroadCollision::GenerateColliderPairs(bodies);
-		for (BroadCollision::ColliderPair cp : colliders)
-		{
-			NarrowCollision::Mainfold mf;
-			mf.A = cp.A;
-			mf.B = cp.B;
-			
-			if (NarrowCollision::Collide(&mf))
-			{
-				std::cout << "COLLISION " << mf.Penetration << " " << mf.Normal << std::endl;
-				CollisionResolver::ResolveCollision(&mf);
-				CollisionResolver::PositionalCorrection(&mf);
-			}
-		}
-
-		// Integration
 		float delta = deltat.Reset();
-		for (RigidBody* b : bodies)
-		{
-			b->Position += Vector2f(delta * b->Velocity.x, delta * b->Velocity.y);
-			if (b->BodyShape->Type == ShapeType::Circle)
-				((Circle*)b->BodyShape)->Origin = b->Position;
-			else
-				((AABB*)b->BodyShape)->Position = b->Position;
-
-			// Bounds
-			if (b->Position.x < 0 && b->Velocity.x < 0)
-				b->Velocity = Maths::Vector2f(-b->Velocity.x, b->Velocity.y);
-			else if (b->Position.x >= 960 - 64 && b->Velocity.x > 0)
-				b->Velocity = Maths::Vector2f(-b->Velocity.x, b->Velocity.y);
-
-			if (b->Position.y < 0 && b->Velocity.y < 0)
-				b->Velocity = Maths::Vector2f(b->Velocity.x, -b->Velocity.y);
-			else if (b->Position.y >= 540 - 64 && b->Velocity.y > 0)
-				b->Velocity = Maths::Vector2f(b->Velocity.x, -b->Velocity.y);
-		}
-
+		scene.Update(delta);
+		
 		// Draw the bodies
 		display.Clear();
 		
@@ -818,16 +753,23 @@ int main(void)
 		{
 			if (b->BodyShape->Type == ShapeType::Circle)
 			{
-				AABB sh = b->BodyShape->ComputeAABB();
+				//AABB sh = b->BodyShape->ComputeAABB();
 				//batch.DrawRectangle(Vector3f(sh.Position.x, sh.Position.y, 0), sh.Size, 0xff0000ff);
-				batch.DrawTexture(Vector3f(sh.Position.x, sh.Position.y, 0), *ball);
+				//batch.DrawTexture(Vector3f(sh.Position.x, sh.Position.y, 0), *ball);
 			}
 			else
 			{
-				// Rect
-				AABB sh = b->BodyShape->ComputeAABB();
-				//batch.DrawRectangle(Vector3f(sh.Position.x, sh.Position.y, 0), sh.Size, 0xff0000ff);
-				batch.DrawRectangle(Vector3f(sh.Position.x, sh.Position.y, 0), sh.Size, 0xff0000ff);
+				// Poly
+				Polygon* poly = (Polygon*)b->BodyShape;
+				// Draw line loop
+				for (uint i = 0; i < poly->Vertices.size(); i++)
+				{
+					uint j = i + 1 < poly->Vertices.size() ? i + 1 : 0;
+					Vector2f& a = poly->Vertices.at(i);
+					Vector2f& b = poly->Vertices.at(j);
+					batch.DrawLine(a, b, 3, 0xff000000);
+				}
+				//batch.DrawRectangle(Vector3f(poly->Position.x, sh.Position.y, 0), sh.Size, 0xff0000ff);
 			}
 		}
 		batch.End();

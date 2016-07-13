@@ -3,6 +3,7 @@
 #include <type_traits>
 #include <ostream>
 #include "../Types.h"
+#include "Vector2.h"
 #include "Vector3.h"
 #include "Trigonometry.h"
 
@@ -245,14 +246,18 @@ namespace Shard
 				return left.Multiply(scalar);
 			}
 
-			template <typename = typename std::enable_if<(N == M) && (N == 4)>::type>
-			inline friend Vector3<T> operator*(const Matrix<4, 4, T>& left, const Vector3<T>& right)
+			template <unsigned int SN = N, unsigned int SM = M>
+			inline friend
+				typename std::enable_if<SN == SM && SN == 4, Vector3<T>>::type
+			operator*(const Matrix<4, 4, T>& left, const Vector3<T>& right)
 			{
 				return left.Multiply(right);
 			}
 
-			template <typename = typename std::enable_if<(N == M) && (N == 2)>::type>
-			inline friend Vector2<T> operator*(const Matrix<2, 2, T>& left, const Vector2<T>& right)
+			template <unsigned int SN = N, unsigned int SM = M>
+			inline friend
+				typename std::enable_if<SN == SM && SN == 2, Vector2<T>>::type
+			operator*(const Matrix<2, 2, T>& left, const Vector2<T>& right)
 			{
 				return left.Multiply(right);
 			}
@@ -429,6 +434,9 @@ namespace Shard
 				return result;
 			}
 		};
+
+		template <typename T>
+
 
 		template <unsigned int N, unsigned int M> using Matrixi = Matrix<N, M, int>;
 		template <unsigned int N, unsigned int M> using Matrixf = Matrix<N, M, float>;

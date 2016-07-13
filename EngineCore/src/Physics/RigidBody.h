@@ -47,11 +47,11 @@ namespace Shard
 			inline void SetOrientation(float radians)
 			{
 				Orientation = radians;
-				//BodyShape->SetOrientation(radians);
+				BodyShape->SetOrientation(radians);
 			}
 
 		private:
-			static MassData ComputeMass(const Shape* sh, const Material& mat);
+			static MassData ComputeMass(Shape* sh, const Material& mat);
 		};
 	}
 }

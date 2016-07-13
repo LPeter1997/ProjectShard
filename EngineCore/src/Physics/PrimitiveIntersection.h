@@ -1,7 +1,6 @@
 #pragma once
 
-#include "Shape\AABB.h"
-
+/*
 namespace Shard
 {
 	namespace Physics
@@ -16,4 +15,4 @@ namespace Shard
 			}
 		}
 	}
-}
+}*/

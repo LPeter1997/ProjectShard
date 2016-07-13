@@ -25,7 +25,7 @@ namespace Shard
 		public:
 			Mainfold(RigidBody* a, RigidBody* b);
 
-			void PreCompute();
+			void PreCompute(float delta, const Maths::Vector2f& gravity);
 		};
 	}
 }

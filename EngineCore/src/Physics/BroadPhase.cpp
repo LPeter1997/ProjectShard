@@ -1,3 +1,4 @@
+/*
 #include "BroadPhase.h"
 #include "Shape\AABB.h"
 #include "PrimitiveIntersection.h"
@@ -38,4 +39,4 @@ namespace Shard
 			}
 		}
 	}
-}
+}*/
