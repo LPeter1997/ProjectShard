@@ -7,11 +7,6 @@ namespace Shard
 	{
 		namespace ImpulseIntegrator
 		{
-			static inline float pythagoreanSolve(float a, float b)
-			{
-				return std::sqrtf(a * a + b * b);
-			}
-
 			static inline bool equal(float a, float b)
 			{
 				return std::fabsf(a - b) <= 0.0001f;
@@ -81,9 +76,9 @@ namespace Shard
 					// Coulomb's Law
 					Maths::Vector2f tangentImpulse;
 					if (std::fabsf(jt) < j * mf->SF)
-						tangentImpulse = Maths::Vector2f(jt * t.x, jt * t.y);
+						tangentImpulse = Maths::Vector2f(jt * t.x, jt * t.y);					// Static friction
 					else
-						tangentImpulse = Maths::Vector2f(-j * mf->DF * t.x, -j * mf->DF * t.y);
+						tangentImpulse = Maths::Vector2f(-j * mf->DF * t.x, -j * mf->DF * t.y);	// Dynamic friction
 
 					// Apply friction impulse
 					A->ApplyImpulse(Maths::Vector2f(-tangentImpulse.x, -tangentImpulse.y), ra);
