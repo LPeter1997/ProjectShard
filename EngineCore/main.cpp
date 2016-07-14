@@ -26,6 +26,7 @@
 #include "src\Physics\PhysicsScene.h"
 #include "src\Gfx\Particles\ParticleEmitter.h"
 #include "src\Gfx\SpriteSheet.h"
+#include "src\Gfx\SheetAnimation.h"
 
 using namespace Shard;
 using namespace Gfx;
@@ -727,6 +728,7 @@ int main(void)
 	Texture2D* tex2 = content.Load<Texture2D>("sprite1.png");
 
 	SpriteSheet sheet(*tex, 2, 2);
+	SheetAnimation anim(sheet, 1);
 
 	GLSLProgram& shader = ShaderFactory::CreateShader(file1->GetText(), file2->GetText());
 	Matrix4f ortho = Matrix4f::Orthographic(0.0f, 960.0f, 540.0f, 0.0f, -1.0f, 1.0f);
@@ -783,6 +785,7 @@ int main(void)
 	{
 		float delta = deltat.Reset();
 		scene.Update(delta);
+		anim.Update(delta);
 		//emitter.Update(delta);
 		Maths::Vector2d __mp = Mouse::GetPosition();
 		//emitter.SetPosition(Maths::Vector2f(__mp.x, __mp.y));
@@ -901,11 +904,6 @@ int main(void)
 				batch.DrawLine(d, a, 3, 0xff00ff00);
 			}
 		}
-
-		//batch.DrawRectangle(Maths::Vector3f(100, 100, 0), Maths::Vector2f(100, 100), 0xffffffff);
-		rots += delta;
-		//for (uint i = 0; i < 4000;i++)
-		batch.DrawTexture(Maths::Vector3f(100, 100, 0), Maths::Vector2f(32, 32), rots, sheet, sheet.GetSectionBounds(1, 1));
 
 		batch.End();
 		shader.Enable();

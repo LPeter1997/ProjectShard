@@ -18,13 +18,14 @@ namespace Shard
 			SpriteSheet(const Texture2D& texture, uint xp, uint yp);
 			~SpriteSheet();
 
-			inline const Maths::AABBf& GetSectionBounds(uint x, uint y)
+			inline const Maths::AABBf& GetSectionBounds(uint x, uint y) const
 			{
 				return m_Bounds[x + y * m_HorizontalSections];
 			}
 
 			inline uint GetHorizontalSections() const { return m_HorizontalSections; }
 			inline uint GetVerticalSections() const { return m_VerticalSections; }
+			inline uint GetSectionCount() const { return m_HorizontalSections * m_VerticalSections; }
 		};
 	}
 }
