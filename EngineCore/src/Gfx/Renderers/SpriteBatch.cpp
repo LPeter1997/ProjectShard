@@ -115,6 +115,45 @@ namespace Shard
 			m_IndexCount += 6;
 		}
 
+		void SpriteBatch::DrawRectangle(const Maths::Vector3f& position, const Maths::Vector2f& size, float rot, uint color)
+		{
+			Maths::Vector3f pos = position;
+			const Maths::Matrix4f& trans_top = m_TransformationStack.Top();
+
+			float s = std::sinf(rot);
+			float c = std::cosf(rot);
+
+			float xs = size.x * s;
+			float yc = size.y * c;
+
+			m_Buffer->TextureID = 0;
+			m_Buffer->Position = trans_top * pos;
+			m_Buffer++->Color = color;
+
+			pos.x += xs;
+			pos.y += yc;
+
+			m_Buffer->TextureID = 0;
+			m_Buffer->Position = trans_top * pos;
+			m_Buffer++->Color = color;
+
+			pos.x += size.x * c;
+			pos.y -= size.y * s;
+
+			m_Buffer->TextureID = 0;
+			m_Buffer->Position = trans_top * pos;
+			m_Buffer++->Color = color;
+
+			pos.x -= xs;
+			pos.y -= yc;
+
+			m_Buffer->TextureID = 0;
+			m_Buffer->Position = trans_top * pos;
+			m_Buffer++->Color = color;
+
+			m_IndexCount += 6;
+		}
+
 		void SpriteBatch::DrawLine(const Maths::Vector2f& pos1, const Maths::Vector2f& pos2, float thickness, uint color)
 		{
 			const Maths::Matrix4f& trans = m_TransformationStack.Top();
@@ -171,6 +210,42 @@ namespace Shard
 			m_IndexCount += 6;
 		}
 
+		void SpriteBatch::DrawTexture(const Maths::Vector3f& position, float rot, const Texture2D& texture)
+		{
+			const float ts = PushTexture(texture.GetTextureID());
+			const Maths::Matrix4f& trans = m_TransformationStack.Top();
+
+			float s = std::sinf(rot);
+			float c = std::cosf(rot);
+
+			float xs = (float)texture.GetWidth() * s;
+			float yc = (float)texture.GetHeight() * c;
+			float xc = (float)texture.GetWidth() * c;
+			float ys = (float)texture.GetHeight() * s;
+
+			m_Buffer->TextureID = ts;
+			m_Buffer->UV = { 0, 1 };
+			m_Buffer->Position = trans * Maths::Vector3f(position.x, position.y, position.z);
+			m_Buffer++->Color = 0xffffffff;
+
+			m_Buffer->TextureID = ts;
+			m_Buffer->UV = { 0, 0 };
+			m_Buffer->Position = trans * Maths::Vector3f(position.x + xs, position.y + yc, position.z);
+			m_Buffer++->Color = 0xffffffff;
+
+			m_Buffer->TextureID = ts;
+			m_Buffer->UV = { 1, 0 };
+			m_Buffer->Position = trans * Maths::Vector3f(position.x + xs + xc, position.y + yc - ys, position.z);
+			m_Buffer++->Color = 0xffffffff;
+
+			m_Buffer->TextureID = ts;
+			m_Buffer->UV = { 1, 1 };
+			m_Buffer->Position = trans * Maths::Vector3f(position.x + xc, position.y - ys, position.z);
+			m_Buffer++->Color = 0xffffffff;
+
+			m_IndexCount += 6;
+		}
+
 		void SpriteBatch::DrawTexture(const Maths::Vector3f& position, const Texture2D& texture, const Maths::AABBf& UVs)
 		{
 			const float ts = PushTexture(texture.GetTextureID());
@@ -202,55 +277,168 @@ namespace Shard
 			m_IndexCount += 6;
 		}
 
-		void SpriteBatch::DrawTexture(const Maths::Vector3f& position, const Maths::Vector3f& size, const Texture2D& texture)
+		void SpriteBatch::DrawTexture(const Maths::Vector3f& position, float rot, const Texture2D& texture, const Maths::AABBf& UVs)
 		{
 			const float ts = PushTexture(texture.GetTextureID());
+			const Maths::Matrix4f& trans = m_TransformationStack.Top();
+
+			float size_x = texture.GetWidth() * UVs.Size.x;
+			float size_y = texture.GetHeight() * UVs.Size.y;
+
+			float s = std::sinf(rot);
+			float c = std::cosf(rot);
+
+			float xs = (float)size_x * s;
+			float yc = (float)size_y * c;
+			float xc = (float)size_x * c;
+			float ys = (float)size_y * s;
 
 			m_Buffer->TextureID = ts;
-			m_Buffer->UV = { 0, 1 };
-			m_Buffer->Position = { position.x, position.y, position.z };
+			m_Buffer->UV = { UVs.Position.x, 1.0f - UVs.Position.y };
+			m_Buffer->Position = trans * Maths::Vector3f(position.x, position.y, position.z);
 			m_Buffer++->Color = 0xffffffff;
 
 			m_Buffer->TextureID = ts;
-			m_Buffer->UV = { 0, 0 };
-			m_Buffer->Position = { position.x, position.y + size.y, position.z };
+			m_Buffer->UV = { UVs.Position.x, 1.0f - UVs.Position.y - UVs.Size.y };
+			m_Buffer->Position = trans * Maths::Vector3f(position.x + xs, position.y + yc, position.z);
 			m_Buffer++->Color = 0xffffffff;
 
 			m_Buffer->TextureID = ts;
-			m_Buffer->UV = { 1, 0 };
-			m_Buffer->Position = { position.x + size.x, position.y + size.y, position.z };
+			m_Buffer->UV = { UVs.Position.x + UVs.Size.x, 1.0f - UVs.Position.y - UVs.Size.y };
+			m_Buffer->Position = trans * Maths::Vector3f(position.x + xs + xc, position.y + yc - ys, position.z);
 			m_Buffer++->Color = 0xffffffff;
 
 			m_Buffer->TextureID = ts;
-			m_Buffer->UV = { 1, 1 };
-			m_Buffer->Position = { position.x + size.x, position.y, position.z };
+			m_Buffer->UV = { UVs.Position.x + UVs.Size.x, 1.0f - UVs.Position.y };
+			m_Buffer->Position = trans * Maths::Vector3f(position.x + xc, position.y - ys, position.z);
 			m_Buffer++->Color = 0xffffffff;
 
 			m_IndexCount += 6;
 		}
 
-		void SpriteBatch::DrawTexture(const Maths::Vector3f& position, const Maths::Vector3f& size, const Texture2D& texture, const Maths::AABBf& UVs)
+		void SpriteBatch::DrawTexture(const Maths::Vector3f& position, const Maths::Vector2f& size, const Texture2D& texture)
 		{
 			const float ts = PushTexture(texture.GetTextureID());
+			const Maths::Matrix4f& trans = m_TransformationStack.Top();
 
 			m_Buffer->TextureID = ts;
-			m_Buffer->UV = { UVs.Position.x, UVs.Position.y + UVs.Size.y };
-			m_Buffer->Position = { position.x, position.y, position.z };
+			m_Buffer->UV = { 0, 1 };
+			m_Buffer->Position = trans * Maths::Vector3f(position.x, position.y, position.z);
 			m_Buffer++->Color = 0xffffffff;
 
 			m_Buffer->TextureID = ts;
-			m_Buffer->UV = { UVs.Position.x, UVs.Position.y };
-			m_Buffer->Position = { position.x, position.y + size.y, position.z };
+			m_Buffer->UV = { 0, 0 };
+			m_Buffer->Position = trans * Maths::Vector3f(position.x, position.y + size.y, position.z);
 			m_Buffer++->Color = 0xffffffff;
 
 			m_Buffer->TextureID = ts;
-			m_Buffer->UV = { UVs.Position.x + UVs.Size.x, UVs.Position.y };
-			m_Buffer->Position = { position.x + size.x, position.y + size.y, position.z };
+			m_Buffer->UV = { 1, 0 };
+			m_Buffer->Position = trans * Maths::Vector3f(position.x + size.x, position.y + size.y, position.z);
 			m_Buffer++->Color = 0xffffffff;
 
 			m_Buffer->TextureID = ts;
-			m_Buffer->UV = { UVs.Position.x + UVs.Size.x, UVs.Position.y + UVs.Size.y };
-			m_Buffer->Position = { position.x + size.x, position.y, position.z };
+			m_Buffer->UV = { 1, 1 };
+			m_Buffer->Position = trans * Maths::Vector3f(position.x + size.x, position.y, position.z);
+			m_Buffer++->Color = 0xffffffff;
+
+			m_IndexCount += 6;
+		}
+
+		void SpriteBatch::DrawTexture(const Maths::Vector3f& position, const Maths::Vector2f& size, float rot, const Texture2D& texture)
+		{
+			const float ts = PushTexture(texture.GetTextureID());
+			const Maths::Matrix4f& trans = m_TransformationStack.Top();
+
+			float s = std::sinf(rot);
+			float c = std::cosf(rot);
+
+			float xs = (float)size.x * s;
+			float yc = (float)size.y * c;
+			float xc = (float)size.x * c;
+			float ys = (float)size.y * s;
+
+			m_Buffer->TextureID = ts;
+			m_Buffer->UV = { 0, 1 };
+			m_Buffer->Position = trans * Maths::Vector3f(position.x, position.y, position.z);
+			m_Buffer++->Color = 0xffffffff;
+
+			m_Buffer->TextureID = ts;
+			m_Buffer->UV = { 0, 0 };
+			m_Buffer->Position = trans * Maths::Vector3f(position.x + xs, position.y + yc, position.z);
+			m_Buffer++->Color = 0xffffffff;
+
+			m_Buffer->TextureID = ts;
+			m_Buffer->UV = { 1, 0 };
+			m_Buffer->Position = trans * Maths::Vector3f(position.x + xs + xc, position.y + yc - ys, position.z);
+			m_Buffer++->Color = 0xffffffff;
+
+			m_Buffer->TextureID = ts;
+			m_Buffer->UV = { 1, 1 };
+			m_Buffer->Position = trans * Maths::Vector3f(position.x + xc, position.y - ys, position.z);
+			m_Buffer++->Color = 0xffffffff;
+
+			m_IndexCount += 6;
+		}
+
+		void SpriteBatch::DrawTexture(const Maths::Vector3f& position, const Maths::Vector2f& size, const Texture2D& texture, const Maths::AABBf& UVs)
+		{
+			const float ts = PushTexture(texture.GetTextureID());
+			const Maths::Matrix4f& trans = m_TransformationStack.Top();
+
+			m_Buffer->TextureID = ts;
+			m_Buffer->UV = { UVs.Position.x, 1.0f - UVs.Position.y };
+			m_Buffer->Position = trans * Maths::Vector3f(position.x, position.y, position.z);
+			m_Buffer++->Color = 0xffffffff;
+
+			m_Buffer->TextureID = ts;
+			m_Buffer->UV = { UVs.Position.x, 1.0f - UVs.Position.y - UVs.Size.y };
+			m_Buffer->Position = trans * Maths::Vector3f(position.x, position.y + size.y, position.z);
+			m_Buffer++->Color = 0xffffffff;
+
+			m_Buffer->TextureID = ts;
+			m_Buffer->UV = { UVs.Position.x + UVs.Size.x, 1.0f - UVs.Position.y - UVs.Size.y };
+			m_Buffer->Position = trans * Maths::Vector3f(position.x + size.x, position.y + size.y, position.z);
+			m_Buffer++->Color = 0xffffffff;
+
+			m_Buffer->TextureID = ts;
+			m_Buffer->UV = { UVs.Position.x + UVs.Size.x, 1.0f - UVs.Position.y };
+			m_Buffer->Position = trans * Maths::Vector3f(position.x + size.x, position.y, position.z);
+			m_Buffer++->Color = 0xffffffff;
+
+			m_IndexCount += 6;
+		}
+
+		void SpriteBatch::DrawTexture(const Maths::Vector3f& position, const Maths::Vector2f& size, float rot, const Texture2D& texture, const Maths::AABBf& UVs)
+		{
+			const float ts = PushTexture(texture.GetTextureID());
+			const Maths::Matrix4f& trans = m_TransformationStack.Top();
+
+			float s = std::sinf(rot);
+			float c = std::cosf(rot);
+
+			float xs = (float)size.x * s;
+			float yc = (float)size.y * c;
+			float xc = (float)size.x * c;
+			float ys = (float)size.y * s;
+
+			m_Buffer->TextureID = ts;
+			m_Buffer->UV = { UVs.Position.x, 1.0f - UVs.Position.y };
+			m_Buffer->Position = trans * Maths::Vector3f(position.x, position.y, position.z);
+			m_Buffer++->Color = 0xffffffff;
+
+			m_Buffer->TextureID = ts;
+			m_Buffer->UV = { UVs.Position.x, 1.0f - UVs.Position.y - UVs.Size.y };
+			m_Buffer->Position = trans * Maths::Vector3f(position.x + xs, position.y + yc, position.z);
+			m_Buffer++->Color = 0xffffffff;
+
+			m_Buffer->TextureID = ts;
+			m_Buffer->UV = { UVs.Position.x + UVs.Size.x, 1.0f - UVs.Position.y - UVs.Size.y };
+			m_Buffer->Position = trans * Maths::Vector3f(position.x + xs + xc, position.y + yc - ys, position.z);
+			m_Buffer++->Color = 0xffffffff;
+
+			m_Buffer->TextureID = ts;
+			m_Buffer->UV = { UVs.Position.x + UVs.Size.x, 1.0f - UVs.Position.y };
+			m_Buffer->Position = trans * Maths::Vector3f(position.x + xc, position.y - ys, position.z);
 			m_Buffer++->Color = 0xffffffff;
 
 			m_IndexCount += 6;

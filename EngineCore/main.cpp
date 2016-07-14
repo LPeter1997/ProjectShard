@@ -754,7 +754,13 @@ int main(void)
 	platform->SetStatic();
 	bodies.push_back(platform);
 
-	//bodies.push_back(CreateCircle(400, 200, 64, scene));
+	//bodies.push_back(CreateCircle(400, 400 - 32, 32, scene));
+	//bodies.push_back(CreateCircle(400 + 32, 400 - 32, 32, scene));
+	//bodies.push_back(CreateCircle(400 + 64, 400 - 32, 32, scene));
+
+	//RigidBody* abdd = CreateCircle(400 + 256, 400 - 32, 32, scene);
+	//abdd->ApplyImpulse(Maths::Vector2f(-10000, 0), Maths::Vector2f(0, -32));
+	//bodies.push_back(abdd);
 
 	NarrowCollision::Initialize();
 
@@ -768,6 +774,8 @@ int main(void)
 	float sz = 0.0f;
 	float ori = 0.0f;
 
+	float rots = 0;
+
 	// Particles
 	ParticleEmitter emitter(Maths::Vector2f(300, 300), 1000, 200, 1);
 
@@ -775,9 +783,9 @@ int main(void)
 	{
 		float delta = deltat.Reset();
 		scene.Update(delta);
-		emitter.Update(delta);
+		//emitter.Update(delta);
 		Maths::Vector2d __mp = Mouse::GetPosition();
-		emitter.SetPosition(Maths::Vector2f(__mp.x, __mp.y));
+		//emitter.SetPosition(Maths::Vector2f(__mp.x, __mp.y));
 
 		if (Mouse::IsButtonDown(Buttons::Left) || Mouse::IsButtonDown(Buttons::Right))
 		{
@@ -894,14 +902,15 @@ int main(void)
 			}
 		}
 
-		batch.DrawTexture(Maths::Vector3f(100, 100, 0), sheet, sheet.GetSectionBounds(0, 0));
-		batch.DrawTexture(Maths::Vector3f(200, 200, 0), sheet, sheet.GetSectionBounds(1, 1));
-		batch.DrawTexture(Maths::Vector3f(300, 300, 0), *tex2);
+		//batch.DrawRectangle(Maths::Vector3f(100, 100, 0), Maths::Vector2f(100, 100), 0xffffffff);
+		rots += delta;
+		//for (uint i = 0; i < 4000;i++)
+		batch.DrawTexture(Maths::Vector3f(100, 100, 0), Maths::Vector2f(32, 32), rots, sheet, sheet.GetSectionBounds(1, 1));
 
 		batch.End();
 		shader.Enable();
 		batch.Render();
-		emitter.Render();
+		//emitter.Render();
 		shader.Disable();
 
 		display.Update();
