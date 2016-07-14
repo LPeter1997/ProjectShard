@@ -714,9 +714,10 @@ int main(void)
 	Core::Initialize();
 
 	Window display("Shard Engine", 960, 540);
-	glClearColor(0.5f, 0.5f, 1.0f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glDisable(GL_DEPTH_TEST);
 
 	ContentManager content("res");
@@ -726,6 +727,7 @@ int main(void)
 
 	Texture2D* tex = content.Load<Texture2D>("tatlas.png");
 	Texture2D* tex2 = content.Load<Texture2D>("sprite1.png");
+	Texture2D* texp = content.Load<Texture2D>("part.png");
 
 	SpriteSheet sheet(*tex, 2, 2);
 	SheetAnimation anim(sheet, 1);
@@ -779,16 +781,16 @@ int main(void)
 	float rots = 0;
 
 	// Particles
-	ParticleEmitter emitter(Maths::Vector2f(300, 300), 1000, 200, 1);
+	ParticleEmitter emitter(Maths::Vector2f(300, 300), 200, 200, 1, *texp);
 
 	while (!display.IsCloseRequested())
 	{
 		float delta = deltat.Reset();
 		scene.Update(delta);
 		anim.Update(delta);
-		//emitter.Update(delta);
+		emitter.Update(delta);
 		Maths::Vector2d __mp = Mouse::GetPosition();
-		//emitter.SetPosition(Maths::Vector2f(__mp.x, __mp.y));
+		emitter.SetPosition(Maths::Vector2f(__mp.x, __mp.y));
 
 		if (Mouse::IsButtonDown(Buttons::Left) || Mouse::IsButtonDown(Buttons::Right))
 		{
@@ -905,10 +907,13 @@ int main(void)
 			}
 		}
 
+		//for (uint i = 0; i < 4000; i++)
+			//batch.DrawTexture(Maths::Vector3f(100, 100, 0), *tex);
+
 		batch.End();
 		shader.Enable();
 		batch.Render();
-		//emitter.Render();
+		emitter.Render();
 		shader.Disable();
 
 		display.Update();

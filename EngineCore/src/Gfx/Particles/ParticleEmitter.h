@@ -19,9 +19,10 @@ namespace Shard
 			float m_ParticlesPerSec;
 			float m_ParticleSpeed;
 			float m_ParticleLifeLength;
+			Texture2D& m_ParticleTexture;
 
 		public:
-			ParticleEmitter(const Maths::Vector2f& pos, float pps, float pspeed, float plife);
+			ParticleEmitter(const Maths::Vector2f& pos, float pps, float pspeed, float plife, Texture2D& tex);
 			~ParticleEmitter();
 
 			void Update(float delta);

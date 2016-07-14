@@ -37,10 +37,10 @@ namespace Shard
 
 		protected:
 			Texture2D();
-			Texture2D(const Texture2D& texture);
 
 		public:
 			Texture2D(const Resources::Image& image);
+			Texture2D(const Texture2D& texture);
 
 			virtual ~Texture2D();
 
