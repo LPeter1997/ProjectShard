@@ -171,6 +171,37 @@ namespace Shard
 			m_IndexCount += 6;
 		}
 
+		void SpriteBatch::DrawTexture(const Maths::Vector3f& position, const Texture2D& texture, const Maths::AABBf& UVs)
+		{
+			const float ts = PushTexture(texture.GetTextureID());
+			const Maths::Matrix4f& trans = m_TransformationStack.Top();
+
+			float size_x = texture.GetWidth() * UVs.Size.x;
+			float size_y = texture.GetHeight() * UVs.Size.y;
+
+			m_Buffer->TextureID = ts;
+			m_Buffer->UV = { UVs.Position.x, 1.0f - UVs.Position.y };
+			m_Buffer->Position = trans * Maths::Vector3f(position.x, position.y, position.z);
+			m_Buffer++->Color = 0xffffffff;
+
+			m_Buffer->TextureID = ts;
+			m_Buffer->UV = { UVs.Position.x, 1.0f - UVs.Position.y - UVs.Size.y };
+			m_Buffer->Position = trans * Maths::Vector3f(position.x, position.y + size_y, position.z);
+			m_Buffer++->Color = 0xffffffff;
+
+			m_Buffer->TextureID = ts;
+			m_Buffer->UV = { UVs.Position.x + UVs.Size.x, 1.0f - UVs.Position.y - UVs.Size.y };
+			m_Buffer->Position = trans * Maths::Vector3f(position.x + size_x, position.y + size_y, position.z);
+			m_Buffer++->Color = 0xffffffff;
+
+			m_Buffer->TextureID = ts;
+			m_Buffer->UV = { UVs.Position.x + UVs.Size.x, 1.0f - UVs.Position.y };
+			m_Buffer->Position = trans * Maths::Vector3f(position.x + size_x, position.y, position.z);
+			m_Buffer++->Color = 0xffffffff;
+
+			m_IndexCount += 6;
+		}
+
 		void SpriteBatch::DrawTexture(const Maths::Vector3f& position, const Maths::Vector3f& size, const Texture2D& texture)
 		{
 			const float ts = PushTexture(texture.GetTextureID());
@@ -192,6 +223,33 @@ namespace Shard
 
 			m_Buffer->TextureID = ts;
 			m_Buffer->UV = { 1, 1 };
+			m_Buffer->Position = { position.x + size.x, position.y, position.z };
+			m_Buffer++->Color = 0xffffffff;
+
+			m_IndexCount += 6;
+		}
+
+		void SpriteBatch::DrawTexture(const Maths::Vector3f& position, const Maths::Vector3f& size, const Texture2D& texture, const Maths::AABBf& UVs)
+		{
+			const float ts = PushTexture(texture.GetTextureID());
+
+			m_Buffer->TextureID = ts;
+			m_Buffer->UV = { UVs.Position.x, UVs.Position.y + UVs.Size.y };
+			m_Buffer->Position = { position.x, position.y, position.z };
+			m_Buffer++->Color = 0xffffffff;
+
+			m_Buffer->TextureID = ts;
+			m_Buffer->UV = { UVs.Position.x, UVs.Position.y };
+			m_Buffer->Position = { position.x, position.y + size.y, position.z };
+			m_Buffer++->Color = 0xffffffff;
+
+			m_Buffer->TextureID = ts;
+			m_Buffer->UV = { UVs.Position.x + UVs.Size.x, UVs.Position.y };
+			m_Buffer->Position = { position.x + size.x, position.y + size.y, position.z };
+			m_Buffer++->Color = 0xffffffff;
+
+			m_Buffer->TextureID = ts;
+			m_Buffer->UV = { UVs.Position.x + UVs.Size.x, UVs.Position.y + UVs.Size.y };
 			m_Buffer->Position = { position.x + size.x, position.y, position.z };
 			m_Buffer++->Color = 0xffffffff;
 

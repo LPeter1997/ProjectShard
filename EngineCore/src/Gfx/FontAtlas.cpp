@@ -8,7 +8,7 @@ namespace Shard
 	namespace Gfx
 	{
 		FontAtlas::FontAtlas(FT_Face face, float size, const std::string& charset)
-			: Texture2D(), m_FontSize(size), m_Face(face)
+			: Texture2D(), m_FontSize(size), m_Face(face), m_FontMetrics(*this)
 		{
 			Packer<char> packer;
 
@@ -86,13 +86,10 @@ namespace Shard
 			}
 
 			glBindTexture(GL_TEXTURE_2D, 0);
-
-			m_FontMetrics = new FontMetrics(*this);
 		}
 		
 		FontAtlas::~FontAtlas()
 		{
-			delete m_FontMetrics;
 		}
 	}
 }

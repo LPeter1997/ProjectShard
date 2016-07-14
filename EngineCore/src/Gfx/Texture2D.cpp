@@ -31,6 +31,11 @@ namespace Shard
 		{
 		}
 
+		Texture2D::Texture2D(const Texture2D& texture)
+			: m_Width(texture.GetWidth()), m_Height(texture.GetHeight()), m_TextureID(texture.GetTextureID())
+		{
+		}
+
 		Texture2D::~Texture2D()
 		{
 			Dispose();

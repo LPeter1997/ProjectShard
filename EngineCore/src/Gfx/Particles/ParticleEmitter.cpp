@@ -1,13 +1,14 @@
 #include "ParticleEmitter.h"
 #include "../../Types.h"
 #include "../Renderers/SpriteBatch.h"
+#include "../ColorUtils.h"
 
 namespace Shard
 {
 	namespace Gfx
 	{
 		ParticleEmitter::ParticleEmitter(const Maths::Vector2f& pos, float pps, float pspeed, float plife)
-			: m_Renderer(new SpriteBatch(5000)), m_Position(pos), m_ParticlesPerSec(pps), m_ParticleSpeed(pspeed), m_ParticleLifeLength(plife), m_Leftover(0)
+			: m_Renderer(new SpriteBatch((uint)(pps * plife) + 1)), m_Position(pos), m_ParticlesPerSec(pps), m_ParticleSpeed(pspeed), m_ParticleLifeLength(plife), m_Leftover(0)
 		{
 		}
 
@@ -36,7 +37,7 @@ namespace Shard
 			m_Renderer->Begin();
 			for (Particle& p : m_Particles)
 			{
-				m_Renderer->DrawRectangle(Maths::Vector3f(p.Position.x, p.Position.y, 0), Maths::Vector2f(10, 10), 0xffffffff);
+				m_Renderer->DrawRectangle(Maths::Vector3f(p.Position.x, p.Position.y, 0), Maths::Vector2f(10 * p.Scale, 10 * p.Scale), p.Color);
 			}
 			m_Renderer->End();
 			m_Renderer->Render();
@@ -58,10 +59,17 @@ namespace Shard
 			float xspeed = (float)std::rand() / (float)RAND_MAX - 0.5f;
 			float yspeed = (float)std::rand() / (float)RAND_MAX - 0.5f;
 
+			float r = (float)std::rand() / (float)RAND_MAX;
+			float g = (float)std::rand() / (float)RAND_MAX;
+			float b = (float)std::rand() / (float)RAND_MAX;
+
+			float s = (float)std::rand() / (float)RAND_MAX + 0.5f;
+
+
 			Maths::Vector2f sp(xspeed, yspeed);
 			sp.Normalize();
 			sp = Maths::Vector2f(m_ParticleSpeed * sp.x, m_ParticleSpeed * sp.y);
-			m_Particles.push_back(Particle(m_Position, sp, m_ParticleLifeLength, 0.0f, 1.0f));
+			m_Particles.push_back(Particle(m_Position, sp, m_ParticleLifeLength, Maths::Vector4f(r, g, b, 1), 0.0f, s));
 		}
 	}
 }

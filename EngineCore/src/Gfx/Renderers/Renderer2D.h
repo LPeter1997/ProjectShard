@@ -4,6 +4,7 @@
 #include "../Texture2D.h"
 #include "../FontAtlas.h"
 #include "../../Maths/Vector2.h"
+#include "../../Maths/AABB.h"
 
 namespace Shard
 {
@@ -31,7 +32,9 @@ namespace Shard
 			virtual void DrawLine(const Maths::Vector2f& pos1, const Maths::Vector2f& pos2, float thickness, uint color) {}
 
 			virtual void DrawTexture(const Maths::Vector3f& position, const Texture2D& texture) {}
+			virtual void DrawTexture(const Maths::Vector3f& position, const Texture2D& texture, const Maths::AABBf& UVs) {}
 			virtual void DrawTexture(const Maths::Vector3f& position, const Maths::Vector3f& size, const Texture2D& texture) {}
+			virtual void DrawTexture(const Maths::Vector3f& position, const Maths::Vector3f& size, const Texture2D& texture, const Maths::AABBf& UVs) {}
 
 			virtual void DrawString(const Maths::Vector3f& position, const std::string& text, const FontAtlas& font, uint color) {}
 			virtual void DrawString(const Maths::Vector3f& position, const TextMeasurement& metrics, uint color) {}

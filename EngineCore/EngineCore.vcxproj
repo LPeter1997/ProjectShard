@@ -148,6 +148,7 @@
     <ClCompile Include="src\Gfx\Renderers\SpriteBatch.cpp" />
     <ClCompile Include="src\Gfx\Shader\GLSLProgram.cpp" />
     <ClCompile Include="src\Gfx\Shader\ShaderFactory.cpp" />
+    <ClCompile Include="src\Gfx\SpriteSheet.cpp" />
     <ClCompile Include="src\Gfx\Texture2D.cpp" />
     <ClCompile Include="src\Gfx\TransformationStack.cpp" />
     <ClCompile Include="src\Gfx\Window.cpp" />
@@ -190,6 +191,7 @@
     <ClInclude Include="src\Gfx\GraphicsResource.h" />
     <ClInclude Include="src\Gfx\Particles\Particle.h" />
     <ClInclude Include="src\Gfx\Particles\ParticleEmitter.h" />
+    <ClInclude Include="src\Gfx\SpriteSheet.h" />
     <ClInclude Include="src\GUI\GUIComponent.h" />
     <ClInclude Include="src\GUI\GUIContainer.h" />
     <ClInclude Include="src\GUI\GUILayer.h" />
@@ -221,6 +223,7 @@
     <ClInclude Include="src\Input\Mouse.h" />
     <ClInclude Include="src\Input\MouseState.h" />
     <ClInclude Include="src\Logic\Timer.h" />
+    <ClInclude Include="src\Maths\AABB.h" />
     <ClInclude Include="src\Maths\Constants.h" />
     <ClInclude Include="src\Maths\Matrix.h" />
     <ClInclude Include="src\Maths\Orientation.h" />

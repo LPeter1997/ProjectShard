@@ -43,7 +43,7 @@ namespace Shard
 			FT_Face m_Face;
 			std::map<char, CharacterData> m_CharList;
 			float m_FontSize;
-			FontMetrics* m_FontMetrics;
+			FontMetrics m_FontMetrics;
 
 		private:
 			FontAtlas(FT_Face face, float size, const std::string& charset);
@@ -53,7 +53,7 @@ namespace Shard
 
 			inline const CharacterData& GetCharacterData(char c) const { return m_CharList.find(c)->second; }
 			inline float GetFontSize() const { return m_FontSize; }
-			inline const FontMetrics& GetFontMetrics() const { return *m_FontMetrics; }
+			inline const FontMetrics& GetFontMetrics() const { return m_FontMetrics; }
 		};
 	}
 }

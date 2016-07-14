@@ -27,6 +27,8 @@ namespace Shard
 			void Update(float delta);
 			void Render();
 
+			inline void SetPosition(const Maths::Vector2f& pos) { m_Position = pos; }
+
 		private:
 			void GenerateParticles(float delta);
 			void EmitParticle();

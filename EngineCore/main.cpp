@@ -20,11 +20,12 @@
 #include "src\Sfx\AudioListener.h"
 #include "src\Sfx\SoundEffect.h"
 #include "src\Sfx\SoundEffect3D.h"
-#include "src\Physics\BroadPhase.h"
 #include "src\Physics\NarrowPhase.h"
 #include "src\Physics\Shape\Circle.h"
 #include "src\Physics\Shape\Polygon.h"
 #include "src\Physics\PhysicsScene.h"
+#include "src\Gfx\Particles\ParticleEmitter.h"
+#include "src\Gfx\SpriteSheet.h"
 
 using namespace Shard;
 using namespace Gfx;
@@ -683,7 +684,7 @@ int main(void)
 
 RigidBody* CreateBox(int x, int y, int w, int h, PhysicsScene& scene)
 {
-	Material mat(1.0f, 0.2f, 0.5f, 0.3f);
+	Material mat(0.01f, 0.2f, 0.5f, 0.3f);
 	Polygon* sh = new Polygon();
 	sh->SetBox(w, h);
 	RigidBody* body = scene.Add(Maths::Vector2f(x, y), sh, mat);
@@ -692,7 +693,7 @@ RigidBody* CreateBox(int x, int y, int w, int h, PhysicsScene& scene)
 
 RigidBody* CreateCircle(int x, int y, int r, PhysicsScene& scene)
 {
-	Material mat(1.0f, 0.2f, 0.5f, 0.3f);
+	Material mat(0.01f, 0.2f, 0.5f, 0.3f);
 	Circle* sh = new Circle(r);
 	RigidBody* body = scene.Add(Maths::Vector2f(x, y), sh, mat);
 	return body;
@@ -722,7 +723,10 @@ int main(void)
 	Text* file1 = content.Load<Text>("basic.vert");  // Builtin shaders
 	Text* file2 = content.Load<Text>("basic.frag");
 
-	Texture2D* ball = content.Load<Texture2D>("circle.png");
+	Texture2D* tex = content.Load<Texture2D>("tatlas.png");
+	Texture2D* tex2 = content.Load<Texture2D>("sprite1.png");
+
+	SpriteSheet sheet(*tex, 2, 2);
 
 	GLSLProgram& shader = ShaderFactory::CreateShader(file1->GetText(), file2->GetText());
 	Matrix4f ortho = Matrix4f::Orthographic(0.0f, 960.0f, 540.0f, 0.0f, -1.0f, 1.0f);
@@ -743,7 +747,7 @@ int main(void)
 
 	SpriteBatch batch(10000);
 
-	PhysicsScene scene(Maths::Vector2f(0, 100.0f));
+	PhysicsScene scene(Maths::Vector2f(0, 500.0f));
 	std::vector<RigidBody*> bodies;
 	
 	RigidBody* platform = CreateBox(500, 400, 600, 64, scene);
@@ -764,10 +768,16 @@ int main(void)
 	float sz = 0.0f;
 	float ori = 0.0f;
 
+	// Particles
+	ParticleEmitter emitter(Maths::Vector2f(300, 300), 1000, 200, 1);
+
 	while (!display.IsCloseRequested())
 	{
 		float delta = deltat.Reset();
 		scene.Update(delta);
+		emitter.Update(delta);
+		Maths::Vector2d __mp = Mouse::GetPosition();
+		emitter.SetPosition(Maths::Vector2f(__mp.x, __mp.y));
 
 		if (Mouse::IsButtonDown(Buttons::Left) || Mouse::IsButtonDown(Buttons::Right))
 		{
@@ -884,9 +894,14 @@ int main(void)
 			}
 		}
 
+		batch.DrawTexture(Maths::Vector3f(100, 100, 0), sheet, sheet.GetSectionBounds(0, 0));
+		batch.DrawTexture(Maths::Vector3f(200, 200, 0), sheet, sheet.GetSectionBounds(1, 1));
+		batch.DrawTexture(Maths::Vector3f(300, 300, 0), *tex2);
+
 		batch.End();
 		shader.Enable();
 		batch.Render();
+		emitter.Render();
 		shader.Disable();
 
 		display.Update();
