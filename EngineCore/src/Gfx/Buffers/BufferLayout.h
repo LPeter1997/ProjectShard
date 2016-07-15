@@ -21,6 +21,7 @@ namespace Shard
 			uint Count;
 			uint Offset;
 			bool Normalized;
+			bool PerInstance;
 		};
 
 		class BufferLayout
@@ -37,50 +38,50 @@ namespace Shard
 
 			// Pushing layout elements
 			template <typename T>
-			inline void Push(const std::string& name, uint count = 1, bool normalized = false)
+			inline void Push(const std::string& name, uint count = 1, bool normalized = false, bool perInstance = false)
 			{
 				Debugging::Logger::Log<Debugging::Error>() << "Wrong type specifier for Push<T>()!" << std::endl;
 			}
 
 			template<>
-			inline void Push<float>(const std::string& name, uint count, bool normalized)
+			inline void Push<float>(const std::string& name, uint count, bool normalized, bool perInstance)
 			{
-				Push(name, GL_FLOAT, sizeof(float) * count, count, normalized);
+				Push(name, GL_FLOAT, sizeof(float) * count, count, normalized, perInstance);
 			}
 
 			template<>
-			inline void Push<uint>(const std::string& name, uint count, bool normalized)
+			inline void Push<uint>(const std::string& name, uint count, bool normalized, bool perInstance)
 			{
-				Push(name, GL_UNSIGNED_INT, sizeof(uint) * count, count, normalized);
+				Push(name, GL_UNSIGNED_INT, sizeof(uint) * count, count, normalized, perInstance);
 			}
 
 			template<>
-			inline void Push<byte>(const std::string& name, uint count, bool normalized)
+			inline void Push<byte>(const std::string& name, uint count, bool normalized, bool perInstance)
 			{
-				Push(name, GL_UNSIGNED_BYTE, sizeof(byte) * count, count, normalized);
+				Push(name, GL_UNSIGNED_BYTE, sizeof(byte) * count, count, normalized, perInstance);
 			}
 
 			template<>
-			inline void Push<Maths::Vector2f>(const std::string& name, uint count, bool normalized)
+			inline void Push<Maths::Vector2f>(const std::string& name, uint count, bool normalized, bool perInstance)
 			{
-				Push(name, GL_FLOAT, sizeof(Maths::Vector2f) * count, 2 * count, normalized);
+				Push(name, GL_FLOAT, sizeof(Maths::Vector2f) * count, 2 * count, normalized, perInstance);
 			}
 
 			template<>
-			inline void Push<Maths::Vector3f>(const std::string& name, uint count, bool normalized)
+			inline void Push<Maths::Vector3f>(const std::string& name, uint count, bool normalized, bool perInstance)
 			{
-				Push(name, GL_FLOAT, sizeof(Maths::Vector3f) * count, 3 * count, normalized);
+				Push(name, GL_FLOAT, sizeof(Maths::Vector3f) * count, 3 * count, normalized, perInstance);
 			}
 
 			template<>
-			inline void Push<Maths::Vector4f>(const std::string& name, uint count, bool normalized)
+			inline void Push<Maths::Vector4f>(const std::string& name, uint count, bool normalized, bool perInstance)
 			{
-				Push(name, GL_FLOAT, sizeof(Maths::Vector4f) * count, 4 * count, normalized);
+				Push(name, GL_FLOAT, sizeof(Maths::Vector4f) * count, 4 * count, normalized, perInstance);
 			}
 
 		private:
 			// The generic Push()
-			void Push(const std::string& name, uint type, uint size, uint count, bool normalized);
+			void Push(const std::string& name, uint type, uint size, uint count, bool normalized, bool perInstance);
 		};
 	}
 }

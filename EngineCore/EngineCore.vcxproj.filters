@@ -260,9 +260,6 @@
     <ClInclude Include="src\Gfx\ColorUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Gfx\Renderers\Renderer2D.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Gfx\Renderers\SpriteBatch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -398,9 +395,17 @@
     <ClInclude Include="src\Gfx\SheetAnimation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Gfx\Renderers\Renderer2D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="res\basic.vert" />
     <Text Include="res\basic.frag" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\Gfx\Shader\Shaders\SpriteShader.vert" />
+    <None Include="src\Gfx\Shader\Shaders\SpriteShader.frag" />
+    <None Include="src\Gfx\Shader\Shaders\ParticleShader.vert" />
   </ItemGroup>
 </Project>

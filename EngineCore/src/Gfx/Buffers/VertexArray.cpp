@@ -26,6 +26,10 @@ namespace Shard
 			{
 				glEnableVertexAttribArray(i);
 				glVertexAttribPointer(i, layout[i].Count, layout[i].Type, (uint)layout[i].Normalized, buffer->GetLayout().GetStride(), (const GLvoid*)layout[i].Offset);
+				if (layout[i].PerInstance)
+				{
+					glVertexAttribDivisor(i, 1);
+				}
 			}
 		}
 	}

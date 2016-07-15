@@ -24,6 +24,8 @@ namespace Shard
 			virtual ~Renderer2D() {}
 
 		public:
+			inline TransformationStack& GetTransformationStack() { return m_TransformationStack; }
+
 			virtual void Begin() {}
 			virtual void End() {}
 			virtual void Render() = 0;
@@ -44,8 +46,6 @@ namespace Shard
 
 			virtual void DrawString(const Maths::Vector3f& position, const std::string& text, const FontAtlas& font, uint color) {}
 			virtual void DrawString(const Maths::Vector3f& position, const TextMeasurement& metrics, uint color) {}
-
-			inline TransformationStack& GetTransformationStack() { return m_TransformationStack; }
 		};
 	}
 }

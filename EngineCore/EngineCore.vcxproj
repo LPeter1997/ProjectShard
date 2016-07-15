@@ -193,6 +193,7 @@
     <ClInclude Include="src\Gfx\GraphicsResource.h" />
     <ClInclude Include="src\Gfx\Particles\Particle.h" />
     <ClInclude Include="src\Gfx\Particles\ParticleEmitter.h" />
+    <ClInclude Include="src\Gfx\Renderers\Renderer2D.h" />
     <ClInclude Include="src\Gfx\SheetAnimation.h" />
     <ClInclude Include="src\Gfx\SpriteSheet.h" />
     <ClInclude Include="src\GUI\GUIComponent.h" />
@@ -208,7 +209,6 @@
     <ClInclude Include="src\Gfx\ColorUtils.h" />
     <ClInclude Include="src\Gfx\FontAtlas.h" />
     <ClInclude Include="src\Gfx\Layer2D.h" />
-    <ClInclude Include="src\Gfx\Renderers\Renderer2D.h" />
     <ClInclude Include="src\Gfx\Renderers\SpriteBatch.h" />
     <ClInclude Include="src\Gfx\Shader\GLSLProgram.h" />
     <ClInclude Include="src\Gfx\Shader\Shader.h" />
@@ -263,6 +263,11 @@
   <ItemGroup>
     <Text Include="res\basic.vert" />
     <Text Include="res\basic.frag" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\Gfx\Shader\Shaders\ParticleShader.vert" />
+    <None Include="src\Gfx\Shader\Shaders\SpriteShader.frag" />
+    <None Include="src\Gfx\Shader\Shaders\SpriteShader.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

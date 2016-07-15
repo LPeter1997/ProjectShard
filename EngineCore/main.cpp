@@ -781,7 +781,7 @@ int main(void)
 	float rots = 0;
 
 	// Particles
-	ParticleEmitter emitter(Maths::Vector2f(300, 300), 200, 200, 1, *texp);
+	ParticleEmitter emitter(Maths::Vector2f(300, 300), 1000, 200, 1, *texp);
 
 	while (!display.IsCloseRequested())
 	{

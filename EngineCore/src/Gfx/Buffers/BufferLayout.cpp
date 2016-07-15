@@ -8,9 +8,9 @@ namespace Shard
 		{
 		}
 
-		void BufferLayout::Push(const std::string& name, uint type, uint size, uint count, bool normalized)
+		void BufferLayout::Push(const std::string& name, uint type, uint size, uint count, bool normalized, bool perInstance)
 		{
-			m_Elements.push_back({name, type, size, count, 0, normalized});
+			m_Elements.push_back({name, type, size, count, 0, normalized, perInstance});
 			BufferLayoutElement& element = m_Elements.back();
 			if (m_Elements.size() > 1)
 			{
