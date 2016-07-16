@@ -26,5 +26,10 @@ namespace Shard
 			m_Size = size;
 			glBufferData(m_Target, size, data, m_Usage);
 		}
+
+		void VertexBuffer::SetSubData(uint offset, uint size, const void* data)
+		{
+			glBufferSubData(m_Target, offset, size, data);
+		}
 	}
 }

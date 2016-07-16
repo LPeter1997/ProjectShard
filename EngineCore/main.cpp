@@ -24,9 +24,18 @@
 #include "src\Physics\Shape\Circle.h"
 #include "src\Physics\Shape\Polygon.h"
 #include "src\Physics\PhysicsScene.h"
-#include "src\Gfx\Particles\ParticleEmitter.h"
+#include "src\Gfx\Particles\ParticleSystem.h"
+#include "src\Gfx\Particles\BasicParticleRenderer.h"
 #include "src\Gfx\SpriteSheet.h"
 #include "src\Gfx\SheetAnimation.h"
+#include "src\Gfx\Particles\Generators\BasicColorGenerator.h"
+#include "src\Gfx\Particles\Generators\BasicTimeGenerator.h"
+#include "src\Gfx\Particles\Generators\BasicVelocityGenerator.h"
+#include "src\Gfx\Particles\Generators\LineGenerator.h"
+#include "src\Gfx\Particles\Updaters\BasicTimeUpdater.h"
+#include "src\Gfx\Particles\Updaters\EulerUpdater.h"
+#include "src\Gfx\Particles\Updaters\AttractorUpdater.h"
+#include "src\Gfx\Particles\Updaters\BasicColorUpdater.h"
 
 using namespace Shard;
 using namespace Gfx;
@@ -714,59 +723,34 @@ int main(void)
 	Core::Initialize();
 
 	Window display("Shard Engine", 960, 540);
+	//glEnable(GL_BLEND);
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+	//glDisable(GL_DEPTH_TEST);
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glDisable(GL_DEPTH_TEST);
-
+	
 	ContentManager content("res");
 
 	Text* file1 = content.Load<Text>("basic.vert");  // Builtin shaders
 	Text* file2 = content.Load<Text>("basic.frag");
 
-	Texture2D* tex = content.Load<Texture2D>("tatlas.png");
-	Texture2D* tex2 = content.Load<Texture2D>("sprite1.png");
-	Texture2D* texp = content.Load<Texture2D>("part.png");
+	Text* file3 = content.Load<Text>("ParticleShader.vert");  // Builtin shaders
+	Text* file4 = content.Load<Text>("ParticleShader.frag");
 
-	SpriteSheet sheet(*tex, 2, 2);
-	SheetAnimation anim(sheet, 1);
+	Texture2D* part = content.Load<Texture2D>("part.png");
 
-	GLSLProgram& shader = ShaderFactory::CreateShader(file1->GetText(), file2->GetText());
 	Matrix4f ortho = Matrix4f::Orthographic(0.0f, 960.0f, 540.0f, 0.0f, -1.0f, 1.0f);
 
-	shader.Enable();
-	shader.SetUniformMat4f("pr_matrix", ortho);
-	static int texIDs[] =
-	{
-		0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
-		10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
-		20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
-		30, 31
-	};
-	shader.SetUniform1iv("textures", texIDs, 32);
-	shader.Disable();
+	GLSLProgram& particleShader = ShaderFactory::CreateShader(file3->GetText(), file4->GetText());
+	particleShader.Enable();
+	particleShader.SetUniformMat4f("pr_matrix", ortho);
+	//particleShader.SetUniform1i("tex", 0);
+	particleShader.Disable();
 
 	std::srand(std::time(NULL));
-
-	SpriteBatch batch(10000);
-
-	PhysicsScene scene(Maths::Vector2f(0, 500.0f));
-	std::vector<RigidBody*> bodies;
-	
-	RigidBody* platform = CreateBox(500, 400, 600, 64, scene);
-	platform->SetStatic();
-	bodies.push_back(platform);
-
-	//bodies.push_back(CreateCircle(400, 400 - 32, 32, scene));
-	//bodies.push_back(CreateCircle(400 + 32, 400 - 32, 32, scene));
-	//bodies.push_back(CreateCircle(400 + 64, 400 - 32, 32, scene));
-
-	//RigidBody* abdd = CreateCircle(400 + 256, 400 - 32, 32, scene);
-	//abdd->ApplyImpulse(Maths::Vector2f(-10000, 0), Maths::Vector2f(0, -32));
-	//bodies.push_back(abdd);
-
-	NarrowCollision::Initialize();
 
 	uint frames = 0;
 	Timer t;
@@ -775,146 +759,89 @@ int main(void)
 	Timer deltat;
 	deltat.Start();
 
-	float sz = 0.0f;
-	float ori = 0.0f;
-
-	float rots = 0;
-
 	// Particles
-	ParticleEmitter emitter(Maths::Vector2f(300, 300), 1000, 200, 1, *texp);
+	ParticleSystem psys(5000);
+
+	ParticleEmitter emitter(800.0f);
+	
+	ParticleGenerators::LineGenerator lineGen;
+	lineGen.Start = Maths::Vector4f(100, 400, 0, 0);
+	lineGen.End = Maths::Vector4f(500, 400, 0, 0);
+
+	ParticleGenerators::BasicColorGenerator colorGen;
+	
+	colorGen.MinStartColor = Maths::Vector4f(0.2f, 0.2f, 0.8f, 1.0f);
+	colorGen.MaxStartColor = Maths::Vector4f(0.5f, 0.5f, 1.0f, 1.0f);
+	colorGen.MinEndColor = Maths::Vector4f(0.2f, 0.8f, 0.2f, 1.0f);
+	colorGen.MaxEndColor = Maths::Vector4f(0.5f, 1.0f, 0.4f, 1.0f);
+	//colorGen.MinStartColor = Maths::Vector4f(0.0f, 0.0f, 0.0f, 1.0f);
+	//colorGen.MaxStartColor = Maths::Vector4f(1.0f, 1.0f, 1.0f, 1.0f);
+	//colorGen.MinEndColor = Maths::Vector4f(0.0f, 0.0f, 0.0f, 1.0f);
+	//colorGen.MaxEndColor = Maths::Vector4f(1.0f, 1.0f, 1.0f, 1.0f);
+
+	ParticleGenerators::BasicTimeGenerator timeGen;
+	timeGen.MinTime = 5.0f;
+	timeGen.MaxTime = 8.0f;
+
+	ParticleGenerators::BasicVelocityGenerator velGen;
+	velGen.MinVel = Maths::Vector4f(0, 0, 0, 0);
+	velGen.MaxVel = Maths::Vector4f(0, 0, 0, 0);
+
+	emitter.AddParticleGenerator(&lineGen);
+	emitter.AddParticleGenerator(&colorGen);
+	emitter.AddParticleGenerator(&timeGen);
+	emitter.AddParticleGenerator(&velGen);
+
+	psys.AddEmitter(&emitter);
+	
+	ParticleUpdaters::EulerUpdater eup;
+	eup.GlobalAcceleration = Maths::Vector4f(0.0f, 0.0f, 0.0f, 0.0f);
+
+	ParticleUpdaters::BasicTimeUpdater btu;
+
+	ParticleUpdaters::AttractorUpdater attru;
+	attru.AddAttractor(Maths::Vector4f(0, 0, 0, 100));
+
+	ParticleUpdaters::BasicColorUpdater ccupp;
+
+	psys.AddUpdater(&attru);
+	psys.AddUpdater(&eup);
+	psys.AddUpdater(&btu);
+	psys.AddUpdater(&ccupp);
+
+	BasicParticleRenderer prenderer;
+	prenderer.Generate(&psys);
 
 	while (!display.IsCloseRequested())
 	{
 		float delta = deltat.Reset();
-		scene.Update(delta);
-		anim.Update(delta);
-		emitter.Update(delta);
-		Maths::Vector2d __mp = Mouse::GetPosition();
-		emitter.SetPosition(Maths::Vector2f(__mp.x, __mp.y));
 
-		if (Mouse::IsButtonDown(Buttons::Left) || Mouse::IsButtonDown(Buttons::Right))
-		{
-			if (sz == 0)
-			{
-				ori = (float)std::rand() / (float)RAND_MAX;
-			}
-			sz += delta * 50.0f;
-		}
-
-		if (Mouse::IsButtonReleased(Buttons::Left))
-		{
-			RigidBody* box = CreateBox(Mouse::GetX(), Mouse::GetY(), sz, sz, scene);
-			box->SetOrientation(ori);
-			bodies.push_back(box);
-			sz = 0.0f;
-		}
-		else if (Mouse::IsButtonReleased(Buttons::Right))
-		{
-			RigidBody* box = CreateCircle(Mouse::GetX(), Mouse::GetY(), sz / 2, scene);
-			box->SetOrientation((float)std::rand() / (float)RAND_MAX);
-			bodies.push_back(box);
-			sz = 0.0f;
-		}
-		
 		InputDevices::Update();
 
-		// Draw the bodies
+		Maths::Vector2d mp = Mouse::GetPosition();
+		Maths::Vector4f attr((float)mp.x, (float)mp.y, 0.0f, 5000.0f);
+		attru.GetAttractor(0) = attr;
+		//std::cout << attru.GetAttractor(0) << std::endl;
+
 		display.Clear();
-		
-		batch.Begin();
-		for (RigidBody* b : bodies)
-		{
-			if (b->BodyShape->Type == ShapeType::Circle)
-			{
-				Circle* circle = (Circle*)b->BodyShape;
-				const uint k_segments = 20;
-				float theta = b->Orientation;
-				float inc = Constants::Pi * 2.0f / (float)k_segments;
-				Maths::Vector2f p0;
-				for (uint i = 0; i < k_segments + 1; ++i)
-				{
-					theta += inc;
-					Maths::Vector2f p(std::cos(theta), std::sin(theta));
-					p *= Maths::Vector2f(circle->Radius, circle->Radius);
-					p += b->Position;
 
-					if (i > 0)
-						batch.DrawLine(p, p0, 3, 0xff000000);
+		// Particle rendering
+		psys.Update(delta);
+		prenderer.Update();
+		//prenderer.Generate(&psys);
 
-					p0 = p;
-				}
+		//glEnable(GL_PROGRAM_POINT_SIZE);
+		glEnable(GL_TEXTURE_2D);
+		glEnable(GL_POINT_SPRITE);
+		glActiveTexture(GL_TEXTURE0);
+		glEnable(GL_PROGRAM_POINT_SIZE);
+		glBindTexture(GL_TEXTURE_2D, part->GetTextureID());
+		particleShader.Enable();
+		prenderer.Render();
+		particleShader.Disable();
+		////////////////////////
 
-				p0.x = circle->Radius;
-				p0.y = 0;
-
-				Maths::Vector2f end = rot(p0, b->Orientation);
-				batch.DrawLine(end + b->Position, b->Position, 3, 0xff0000ff);
-			}
-			else
-			{
-				// Poly
-				Polygon* poly = (Polygon*)b->BodyShape;
-				// Draw line loop
-				for (uint i = 0; i < poly->Vertices.size(); i++)
-				{
-					uint j = i + 1 < poly->Vertices.size() ? i + 1 : 0;
-
-					Vector2f& av = rot(poly->Vertices.at(i), b->Orientation);
-					Vector2f& bv = rot(poly->Vertices.at(j), b->Orientation);
-					Vector2f del = Maths::Vector2f(b->Position.x, b->Position.y);
-					batch.DrawLine(av + del, bv + del, 3, 0xff000000);
-				}
-				//batch.DrawRectangle(Vector3f(poly->Position.x, sh.Position.y, 0), sh.Size, 0xff0000ff);
-			}
-		}
-
-		if (sz > 0)
-		{
-			Vector2d mp = Mouse::GetPosition();
-			if (Mouse::IsButtonDown(Buttons::Right))
-			{
-				// Circle
-				const uint k_segments = 20;
-				float theta = 0.0f;
-				float inc = Constants::Pi * 2.0f / (float)k_segments;
-				Maths::Vector2f p0;
-				for (uint i = 0; i < k_segments + 1; ++i)
-				{
-					theta += inc;
-					Maths::Vector2f p(std::cos(theta), std::sin(theta));
-					p *= Maths::Vector2f(sz / 2, sz / 2);
-					p += Maths::Vector2f((float)mp.x, (float)mp.y);
-
-					if (i > 0)
-						batch.DrawLine(p, p0, 3, 0xff00ff00);
-
-					p0 = p;
-				}
-			}
-			else
-			{
-				Maths::Vector2f ampe((float)mp.x, (float)mp.y);
-				
-				Maths::Vector2f a(ampe - rot(Maths::Vector2f(sz / 2, sz / 2), ori));
-				Maths::Vector2f b(ampe - rot(Maths::Vector2f(-sz / 2, sz / 2), ori));
-				Maths::Vector2f c(ampe - rot(Maths::Vector2f(-sz / 2, -sz / 2), ori));
-				Maths::Vector2f d(ampe - rot(Maths::Vector2f(sz / 2, -sz / 2), ori));
-
-				batch.DrawLine(a, b, 3, 0xff00ff00);
-				batch.DrawLine(b, c, 3, 0xff00ff00);
-				batch.DrawLine(c, d, 3, 0xff00ff00);
-				batch.DrawLine(d, a, 3, 0xff00ff00);
-			}
-		}
-
-		//for (uint i = 0; i < 4000; i++)
-			//batch.DrawTexture(Maths::Vector3f(100, 100, 0), *tex);
-
-		batch.End();
-		shader.Enable();
-		batch.Render();
-		emitter.Render();
-		shader.Disable();
+		particleShader.Disable();
 
 		display.Update();
 		frames++;

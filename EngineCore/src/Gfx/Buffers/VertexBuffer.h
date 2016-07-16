@@ -28,6 +28,7 @@ namespace Shard
 
 			void Resize(uint size);
 			void SetData(uint size, const void* data);
+			void SetSubData(uint offset, uint size, const void* data);
 
 			template <typename T>
 			inline T* GetPointer(uint flags = GL_WRITE_ONLY) const

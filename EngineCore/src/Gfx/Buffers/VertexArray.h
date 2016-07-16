@@ -14,6 +14,7 @@ namespace Shard
 		private:
 			GLuint m_ArrayID;
 			std::vector<VertexBuffer*> m_Buffers;
+			uint m_AttribCount;
 
 		public:
 			VertexArray();

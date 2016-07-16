@@ -143,8 +143,18 @@
     <ClCompile Include="src\Gfx\FontAtlas.cpp" />
     <ClCompile Include="src\Gfx\FontMetrics.cpp" />
     <ClCompile Include="src\Gfx\Layer2D.cpp" />
-    <ClCompile Include="src\Gfx\Particles\Particle.cpp" />
+    <ClCompile Include="src\Gfx\Particles\Generators\BasicColorGenerator.cpp" />
+    <ClCompile Include="src\Gfx\Particles\Generators\BasicTimeGenerator.cpp" />
+    <ClCompile Include="src\Gfx\Particles\Generators\BasicVelocityGenerator.cpp" />
+    <ClCompile Include="src\Gfx\Particles\Generators\LineGenerator.cpp" />
+    <ClCompile Include="src\Gfx\Particles\ParticleArray.cpp" />
     <ClCompile Include="src\Gfx\Particles\ParticleEmitter.cpp" />
+    <ClCompile Include="src\Gfx\Particles\BasicParticleRenderer.cpp" />
+    <ClCompile Include="src\Gfx\Particles\ParticleSystem.cpp" />
+    <ClCompile Include="src\Gfx\Particles\Updaters\AttractorUpdater.cpp" />
+    <ClCompile Include="src\Gfx\Particles\Updaters\BasicColorUpdater.cpp" />
+    <ClCompile Include="src\Gfx\Particles\Updaters\BasicTimeUpdater.cpp" />
+    <ClCompile Include="src\Gfx\Particles\Updaters\EulerUpdater.cpp" />
     <ClCompile Include="src\Gfx\Renderers\SpriteBatch.cpp" />
     <ClCompile Include="src\Gfx\Shader\GLSLProgram.cpp" />
     <ClCompile Include="src\Gfx\Shader\ShaderFactory.cpp" />
@@ -191,8 +201,21 @@
     <ClInclude Include="src\Gfx\Animation.h" />
     <ClInclude Include="src\Gfx\FontMetrics.h" />
     <ClInclude Include="src\Gfx\GraphicsResource.h" />
-    <ClInclude Include="src\Gfx\Particles\Particle.h" />
+    <ClInclude Include="src\Gfx\Particles\BasicParticleRenderer.h" />
+    <ClInclude Include="src\Gfx\Particles\Generators\BasicColorGenerator.h" />
+    <ClInclude Include="src\Gfx\Particles\Generators\BasicTimeGenerator.h" />
+    <ClInclude Include="src\Gfx\Particles\Generators\BasicVelocityGenerator.h" />
+    <ClInclude Include="src\Gfx\Particles\Generators\LineGenerator.h" />
+    <ClInclude Include="src\Gfx\Particles\Updaters\AttractorUpdater.h" />
+    <ClInclude Include="src\Gfx\Particles\Updaters\BasicColorUpdater.h" />
+    <ClInclude Include="src\Gfx\Particles\Updaters\BasicTimeUpdater.h" />
+    <ClInclude Include="src\Gfx\Particles\Updaters\EulerUpdater.h" />
+    <ClInclude Include="src\Gfx\Particles\ParticleArray.h" />
     <ClInclude Include="src\Gfx\Particles\ParticleEmitter.h" />
+    <ClInclude Include="src\Gfx\Particles\ParticleGenerator.h" />
+    <ClInclude Include="src\Gfx\Particles\ParticleRenderer.h" />
+    <ClInclude Include="src\Gfx\Particles\ParticleSystem.h" />
+    <ClInclude Include="src\Gfx\Particles\ParticleUpdater.h" />
     <ClInclude Include="src\Gfx\Renderers\Renderer2D.h" />
     <ClInclude Include="src\Gfx\SheetAnimation.h" />
     <ClInclude Include="src\Gfx\SpriteSheet.h" />
@@ -265,6 +288,9 @@
     <Text Include="res\basic.frag" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="res\ParticleShader.frag" />
+    <None Include="res\ParticleShader.vert" />
+    <None Include="src\Gfx\Shader\Shaders\ParticleShader.frag" />
     <None Include="src\Gfx\Shader\Shaders\ParticleShader.vert" />
     <None Include="src\Gfx\Shader\Shaders\SpriteShader.frag" />
     <None Include="src\Gfx\Shader\Shaders\SpriteShader.vert" />
