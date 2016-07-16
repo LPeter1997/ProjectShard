@@ -760,9 +760,9 @@ int main(void)
 	deltat.Start();
 
 	// Particles
-	ParticleSystem psys(5000);
+	ParticleSystem psys(500000);
 
-	ParticleEmitter emitter(800.0f);
+	ParticleEmitter emitter(80000.0f);
 	
 	ParticleGenerators::LineGenerator lineGen;
 	lineGen.Start = Maths::Vector4f(100, 400, 0, 0);

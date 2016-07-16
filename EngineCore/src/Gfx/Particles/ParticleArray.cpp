@@ -53,14 +53,22 @@ namespace Shard
 		void ParticleArray::Swap(uint a, uint b)
 		{
 			// Full swap not needed!
-			std::swap(Positions[a], Positions[b]);
+			/*std::swap(Positions[a], Positions[b]);
 			std::swap(Colors[a], Colors[b]);
 			std::swap(StartColors[a], StartColors[b]);
 			std::swap(EndColors[a], EndColors[b]);
 			std::swap(Velocities[a], Velocities[b]);
 			std::swap(Accelerations[a], Accelerations[b]);
 			std::swap(Times[a], Times[b]);
-			std::swap(Alives[a], Alives[b]);
+			std::swap(Alives[a], Alives[b]);*/
+			Positions[a] = Positions[b];
+			Colors[a] = Colors[b];
+			StartColors[a] = StartColors[b];
+			EndColors[a] = EndColors[b];
+			Velocities[a] = Velocities[b];
+			Accelerations[a] = Accelerations[b];
+			Times[a] = Times[b];
+			Alives[a] = Alives[b];
 		}
 	}
 }
