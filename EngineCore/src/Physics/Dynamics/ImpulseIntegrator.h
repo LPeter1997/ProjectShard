@@ -1,6 +1,6 @@
 #pragma once
 
-#include "NarrowPhase.h"
+#include "../Collision/NarrowPhase.h"
 
 namespace Shard
 {

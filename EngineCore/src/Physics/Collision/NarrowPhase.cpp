@@ -2,7 +2,7 @@
 #include "NarrowPhase.h"
 #include "Shape\Circle.h"
 #include "Shape\Polygon.h"
-#include "../Types.h"
+#include "../../Types.h"
 
 namespace Shard
 {

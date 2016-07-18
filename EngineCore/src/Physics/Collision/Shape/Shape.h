@@ -1,7 +1,9 @@
 #pragma once
 
-#include "../Material.h"
-#include "../MassData.h"
+#include "../../Dynamics/Material.h"
+#include "../../Dynamics/MassData.h"
+#include "../../../Maths/AABB.h"
+#include "../../../Maths/Matrix.h"
 
 namespace Shard
 {
@@ -17,13 +19,18 @@ namespace Shard
 		{
 		public:
 			ShapeType Type;
+			Maths::Matrix2f Transform;
 
 		public:
 			Shape(ShapeType t);
 			virtual ~Shape();
 
 			virtual MassData ComputeMass(const Material& mat) = 0;
-			virtual void SetOrientation(float radians) { };
+			
+			inline void SetOrientation(float radians)
+			{
+				Transform = Maths::Matrix2f::Rotation2D(radians);
+			}
 		};
 	}
 }

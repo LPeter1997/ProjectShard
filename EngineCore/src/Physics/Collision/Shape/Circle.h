@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Shape.h"
-#include "../../Maths/Vector2.h"
-#include "../../Maths/Constants.h"
+#include "../../../Maths/Vector2.h"
+#include "../../../Maths/Constants.h"
 
 namespace Shard
 {

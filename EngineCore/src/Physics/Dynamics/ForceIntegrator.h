@@ -1,7 +1,6 @@
 #pragma once
 
 #include "RigidBody.h"
-#include <iostream>
 
 namespace Shard
 {

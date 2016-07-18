@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../Types.h"
-#include "RigidBody.h"
+#include "../../Types.h"
+#include "../Dynamics/RigidBody.h"
 
 namespace Shard
 {

@@ -1,5 +1,4 @@
 #include "ImpulseIntegrator.h"
-#include <iostream>
 
 namespace Shard
 {

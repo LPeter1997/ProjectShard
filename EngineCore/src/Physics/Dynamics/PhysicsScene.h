@@ -2,7 +2,7 @@
 
 #include <vector>
 #include "RigidBody.h"
-#include "Mainfold.h"
+#include "../Collision/Mainfold.h"
 
 namespace Shard
 {
@@ -12,15 +12,17 @@ namespace Shard
 		{
 		private:
 			std::vector<RigidBody*> m_Bodies;
-			Maths::Vector2f m_Gravity;
+			std::vector<Joint*> m_Joints;
 			std::vector<Mainfold> m_Contacts;
+			Maths::Vector2f m_Gravity;
 
 		public:
 			PhysicsScene(const Maths::Vector2f& grav);
 			~PhysicsScene();
 
 			void Update(float delta);
-			RigidBody* Add(const Maths::Vector2f& pos, Shape* shape, const Material& mat);
+			RigidBody* AddRigidBody(const Maths::Vector2f& pos, Shape* shape, const Material& mat);
+			void AddJoind(Joint* jnt);
 		};
 	}
 }

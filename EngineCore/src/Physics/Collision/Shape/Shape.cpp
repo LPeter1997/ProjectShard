@@ -5,7 +5,7 @@ namespace Shard
 	namespace Physics
 	{
 		Shape::Shape(ShapeType t)
-			: Type(t)
+			: Type(t), Transform(Maths::Matrix2f(1.0f))
 		{
 		}
 

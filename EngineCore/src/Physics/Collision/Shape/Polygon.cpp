@@ -1,12 +1,12 @@
 #include "Polygon.h"
-#include "../../Types.h"
+#include "../../../Types.h"
 
 namespace Shard
 {
 	namespace Physics
 	{
 		Polygon::Polygon()
-			: Shape(ShapeType::Polygon), Transform(Maths::Matrix2f(1.0f))
+			: Shape(ShapeType::Polygon)
 		{
 		}
 

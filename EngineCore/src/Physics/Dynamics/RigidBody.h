@@ -1,14 +1,17 @@
 #pragma once
 
-#include "Shape\Shape.h"
+#include <vector>
 #include "Material.h"
 #include "MassData.h"
-#include "../Maths/Vector2.h"
+#include "../Collision/Shape/Shape.h"
+#include "../../Maths/Vector2.h"
 
 namespace Shard
 {
 	namespace Physics
 	{
+		class Joint;
+
 		class RigidBody
 		{
 		public:
@@ -24,6 +27,8 @@ namespace Shard
 			float Orientation;
 			float AngularVelocity;
 			float Torque;
+			// Array of joints
+			std::vector<Joint*> Joints;
 
 		public:
 			RigidBody(const Maths::Vector2f& pos, Shape* shape, const Material& mat);
@@ -45,10 +50,22 @@ namespace Shard
 				AngularVelocity += BodyMass.InvInertia * Maths::Vector2f::CrossProduct(contact, impulse);
 			}
 
+			inline void ApplyImpulseInstant(const Maths::Vector2f& impulse, const Maths::Vector2f& contact)
+			{
+				Position += Maths::Vector2f(BodyMass.InvMass * impulse.x, BodyMass.InvMass * impulse.y);
+				Orientation += BodyMass.InvInertia * Maths::Vector2f::CrossProduct(contact, impulse);
+				SetOrientation(Orientation);
+			}
+
 			inline void SetOrientation(float radians)
 			{
 				Orientation = radians;
 				BodyShape->SetOrientation(radians);
+			}
+
+			inline void AddJoint(Joint* jnt)
+			{
+				Joints.push_back(jnt);
 			}
 
 		private:
