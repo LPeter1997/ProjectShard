@@ -939,13 +939,13 @@ int main(void)
 	platform->SetStatic();
 	bodies.push_back(platform);
 
-	RigidBody* a = CreateCircle(600, 300, 48, scene);
+	RigidBody* a = CreateCircle(600, 300, 32, scene);
 	bodies.push_back(a);
 
 	RigidBody* b = CreateBox(700, 300, 196, 32, scene);
 	bodies.push_back(b);
 
-	RigidBody* c = CreateCircle(500, 300, 48, scene);
+	RigidBody* c = CreateCircle(500, 300, 32, scene);
 	bodies.push_back(c);
 
 	RevoluteJoint* jnt = new RevoluteJoint(a, b, Maths::Vector2f(0, 0), Maths::Vector2f(70, 0));

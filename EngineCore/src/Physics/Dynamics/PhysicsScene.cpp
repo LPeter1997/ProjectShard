@@ -56,17 +56,17 @@ namespace Shard
 				}
 			}
 
-			// Integrate forces
+			// Integrate gravity
 			for (uint i = 0; i < m_Bodies.size(); i++)
 				ForceIntegrator::IntegrateForces(m_Bodies.at(i), m_Gravity, delta);
-
-			// Initialize collisions
-			for (uint i = 0; i < m_Contacts.size(); i++)
-				m_Contacts.at(i).PreCompute(delta, m_Gravity);
 
 			// Solve joints
 			for (uint i = 0; i < m_Joints.size(); i++)
 				JointImpulse::IntegrateJointForce((RevoluteJoint*)m_Joints.at(i));
+
+			// Initialize collisions
+			for (uint i = 0; i < m_Contacts.size(); i++)
+				m_Contacts.at(i).PreCompute(delta, m_Gravity);
 
 			// Solve collisions
 			for (uint i = 0; i < m_Contacts.size(); i++)

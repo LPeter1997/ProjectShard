@@ -1,4 +1,5 @@
 #include "JointImpulse.h"
+#include <iostream>
 
 namespace Shard
 {
@@ -14,10 +15,13 @@ namespace Shard
 				Maths::Vector2f ancha = A->BodyShape->Transform * joint->AnchorPointA;
 				Maths::Vector2f anchb = B->BodyShape->Transform * joint->AnchorPointB;
 
-				Maths::Vector2f relativeVel = (B->Position + B->Velocity + anchb) - (A->Position + A->Velocity + ancha);
+				Maths::Vector2f relativeVel = B->Position + anchb + B->Velocity + Maths::Vector2f::CrossProduct(B->AngularVelocity, anchb) -
+					A->Velocity - A->Position - ancha - Maths::Vector2f::CrossProduct(A->AngularVelocity, anchb);
 
-				B->ApplyImpulse(Maths::Vector2f(-relativeVel.x, -relativeVel.y), anchb);
+				Maths::Vector2f relativePos = (B->Position + anchb) - (A->Position + ancha) - relativeVel;
+
 				A->ApplyImpulse(relativeVel, ancha);
+				B->ApplyImpulse(Maths::Vector2f(-relativeVel.x, -relativeVel.y), anchb);
 			}
 		}
 	}
