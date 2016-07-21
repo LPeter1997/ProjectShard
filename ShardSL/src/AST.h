@@ -4,7 +4,7 @@
 
 enum class NodeType
 {
-	FnDef, ArrayType, TypeName, ParamDef
+	FnDef, ArrayType, TypeName, ParamDef, VarDecl, VarDef, VarAss, UniformDecl, UniformDef, Operator
 };
 
 struct Node
@@ -68,6 +68,85 @@ public:
 public:
 	ParamDef(const std::string& nm, Node* pt)
 		: Node(NodeType::ParamDef), Name(nm), ParamType(pt)
+	{
+	}
+};
+
+struct VarDecl : public Node
+{
+public:
+	std::string Name;
+	Node* VarType;
+
+public:
+	VarDecl(const std::string& nm, Node* tp)
+		: Node(NodeType::VarDecl), Name(nm), VarType(tp)
+	{
+	}
+};
+
+struct VarDef : public Node
+{
+public:
+	std::string Name;
+	Node* VarType;
+	Node* Value;
+
+public:
+	VarDef(const std::string& nm, Node* tp, Node* val)
+		: Node(NodeType::VarDef), Name(nm), VarType(tp), Value(val)
+	{
+	}
+};
+
+struct VarAss : public Node
+{
+public:
+	std::string Name;
+	Node* Value;
+
+public:
+	VarAss(const std::string& nm, Node* val)
+		: Node(NodeType::VarDef), Name(nm), Value(val)
+	{
+	}
+};
+
+struct UniformDecl : public Node
+{
+public:
+	std::string Name;
+	Node* VarType;
+
+public:
+	UniformDecl(const std::string& nm, Node* tp)
+		: Node(NodeType::UniformDecl), Name(nm), VarType(tp)
+	{
+	}
+};
+
+struct UniformDef : public Node
+{
+public:
+	std::string Name;
+	Node* VarType;
+	Node* Value;
+
+public:
+	UniformDef(const std::string& nm, Node* tp, Node* val)
+		: Node(NodeType::UniformDef), Name(nm), VarType(tp), Value(val)
+	{
+	}
+};
+
+struct Operator : public Node
+{
+public:
+	TokenType Op;
+
+public:
+	Operator(TokenType op)
+		: Node(NodeType::Operator), Op(op)
 	{
 	}
 };

@@ -7,6 +7,10 @@ int main(void)
 {
 	const char* str =
 		R"(
+		foo : () -> int
+		{
+		}
+
 		main : (foo : float32, bar : Mat4[][]) -> uint8
 		{
 		}
