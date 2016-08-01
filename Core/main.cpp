@@ -1,7 +1,8 @@
+#include <GL\glew.h>
 #include <iostream>
 #include <GLFW\glfw3.h>
-#include "src\Shard.h"
 #include "src\Debugging\Logger.h"
+#include "src\Gfx\Display.h"
 #include "src\Gfx\Context.h"
 
 using namespace Shard;
@@ -10,16 +11,17 @@ using namespace Debugging;
 
 int main(void)
 {
-	Core::Initialize();
-	Context::Create(ContextAttribs({ 960, 540, "Shard Engine!" }));
+	Display::Create(DisplayAttribs({ 960, 540, "Shard Engine!" }));
+	Context::Initialize();
 
-	while (!Context::CloseRequested())
+	while (!Display::CloseRequested())
 	{
-		Context::Update();
+		Context::Present();
+		Display::Update();
 	}
 
 	Context::Destroy();
-	Core::Terminate();
+	Display::Destroy();
 
 	system("PAUSE");
 	return 0;

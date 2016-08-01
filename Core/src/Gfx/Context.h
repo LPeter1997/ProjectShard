@@ -1,11 +1,13 @@
 #pragma once
 
-#include <type_traits>
-#include "ContextAttribs.h"
-#include "../Arch/RenderAPI.h"
+/*
+Rendering context
+Supported APIs: OpenGL, DirectX
+*/
+
+#include "../Arch/Platform.h"
 #include "../Arch/OpenGL/GLContext.h"
 #include "../Arch/DirectX/DXContext.h"
-#include "../Debugging/Logger.h"
 
 namespace Shard
 {
@@ -17,72 +19,52 @@ namespace Shard
 			Context() = delete;
 
 		public:
-			// Create ///////////////////////////////////////////////////////////////////////////////////////////////////////
+			// Initialize //////////////////////////////////////////////////////////////////////////////////////////////
 			template <Platform::RenderAPI A = Platform::GetRenderAPI()>
-			static inline void Create(ContextAttribs const& attribs)
+			static inline bool Initialize()
 			{
-				Debugging::Logger::f() << "Could not create rendering context (Rendering API not supported)!" << std::endl;
-			}
-
-			template <>
-			static inline void Create<Platform::RenderAPI::OpenGL>(ContextAttribs const& attribs)
-			{
-				GL::Context::Create(attribs);
-			}
-
-			template <>
-			static inline void Create<Platform::RenderAPI::DirectX>(ContextAttribs const& attribs)
-			{
-				DX::Context::Create(attribs);
-			}
-			/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-			// Update ///////////////////////////////////////////////////////////////////////////////////////////////////////
-			template <Platform::RenderAPI A = Platform::GetRenderAPI()>
-			static inline void Update()
-			{
-				Debugging::Logger::f() << "Could not update rendering context (Rendering API not supported)!" << std::endl;
-			}
-
-			template <>
-			static inline void Update<Platform::RenderAPI::OpenGL>()
-			{
-				GL::Context::Update();
-			}
-
-			template <>
-			static inline void Update<Platform::RenderAPI::DirectX>()
-			{
-				DX::Context::Update();
-			}
-			/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-			// CloseRequested ///////////////////////////////////////////////////////////////////////////////////////////////
-			template <Platform::RenderAPI A = Platform::GetRenderAPI()>
-			static inline bool CloseRequested()
-			{
-				Debugging::Logger::f() << "Rendering API not supported!" << std::endl;
+				Debugging::Logger::f() << "Could not create rendering contect (Rendering API not supported)!" << std::endl;
 				return false;
 			}
 
 			template <>
-			static inline bool CloseRequested<Platform::RenderAPI::OpenGL>()
+			static inline bool Initialize<Platform::RenderAPI::OpenGL>()
 			{
-				return GL::Context::CloseRequested();
+				return GL::Context::Initialize();
 			}
 
 			template <>
-			static inline bool CloseRequested<Platform::RenderAPI::DirectX>()
+			static inline bool Initialize<Platform::RenderAPI::DirectX>()
 			{
-				return DX::Context::CloseRequested();
+				return DX::Context::Initialize();
 			}
-			/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-			// Destroy //////////////////////////////////////////////////////////////////////////////////////////////////////
+			// Present /////////////////////////////////////////////////////////////////////////////////////////////////
+			template <Platform::RenderAPI A = Platform::GetRenderAPI()>
+			static inline void Present()
+			{
+				Debugging::Logger::f() << "Could not present rendering contect (Rendering API not supported)!" << std::endl;
+			}
+
+			template <>
+			static inline void Present<Platform::RenderAPI::OpenGL>()
+			{
+				GL::Context::Present();
+			}
+
+			template <>
+			static inline void Present<Platform::RenderAPI::DirectX>()
+			{
+				DX::Context::Present();
+			}
+			////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+			// Destroy /////////////////////////////////////////////////////////////////////////////////////////////////
 			template <Platform::RenderAPI A = Platform::GetRenderAPI()>
 			static inline void Destroy()
 			{
-				Debugging::Logger::f() << "Rendering API not supported!" << std::endl;
+				Debugging::Logger::f() << "Could not destroy rendering contect (Rendering API not supported)!" << std::endl;
 			}
 
 			template <>
@@ -96,7 +78,7 @@ namespace Shard
 			{
 				DX::Context::Destroy();
 			}
-			/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		};
 	}
 }

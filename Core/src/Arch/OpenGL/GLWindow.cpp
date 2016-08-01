@@ -1,5 +1,5 @@
 #include <GL/glew.h>
-#include "GLContext.h"
+#include "GLWindow.h"
 #include "../../Debugging/Logger.h"
 
 namespace Shard
@@ -8,9 +8,9 @@ namespace Shard
 	{
 		namespace GL
 		{
-			GLFWwindow* Context::s_Window = nullptr;
+			GLFWwindow* Window::s_Window = nullptr;
 
-			void Context::Create(ContextAttribs const& attribs)
+			void Window::Create(DisplayAttribs const& attribs)
 			{
 				glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 				s_Window = glfwCreateWindow(attribs.Width, attribs.Height, attribs.Title.c_str(), nullptr, nullptr);
@@ -22,33 +22,24 @@ namespace Shard
 
 				Debugging::Logger::i() << "GLFW window created successfully!" << std::endl;
 
+				/*
 				glfwMakeContextCurrent(s_Window);
-
-				if (glewInit() != GLEW_OK)
-				{
-					Debugging::Logger::Log<Debugging::Error>() << "Failed to initialize GLEW context!" << std::endl;
-					return;
-				}
-
-				Debugging::Logger::Log<Debugging::Info>() << "GLEW context initialized successfully!" << std::endl;
-
 				glfwSwapInterval(0);
+				*/
 			}
 
-			void Context::Update()
+			void Window::Update()
 			{
 				glfwPollEvents();
 				glfwSwapBuffers(s_Window);
-				glClearColor(0.2f, 0.3f, 1.0f, 1.0f);
-				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			}
 
-			bool Context::CloseRequested()
+			bool Window::CloseRequested()
 			{
 				return glfwWindowShouldClose(s_Window) > 0;
 			}
 
-			void Context::Destroy()
+			void Window::Destroy()
 			{
 				glfwDestroyWindow(s_Window);
 				Debugging::Logger::i() << "GLFW window destroyed!" << std::endl;

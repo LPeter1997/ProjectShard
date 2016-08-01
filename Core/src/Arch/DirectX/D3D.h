@@ -6,7 +6,7 @@
 #include <D3Dcompiler.h>
 #include <DirectXMath.h>
 #include "d3dx12.h"
-#include "DXContext.h"
+#include "../Windows/WinWindow.h"
 #include "../../Types.h"
 
 namespace Shard
@@ -18,7 +18,7 @@ namespace Shard
 			class D3D
 			{
 			private:
-				static constexpr uint s_FrameBufferCount = 3;
+				static constexpr uint s_FrameBufferCount = 2;
 
 				static ID3D12CommandAllocator* s_CommandAllocator[s_FrameBufferCount];
 				static ID3D12GraphicsCommandList* s_CommandList;

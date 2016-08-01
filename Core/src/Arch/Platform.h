@@ -1,6 +1,7 @@
 #pragma once
 
-#define PLATFORM_OpenGL
+#define PLATFORM_DirectX
+#define OS_Windows
 
 namespace Shard
 {
@@ -9,6 +10,11 @@ namespace Shard
 		enum class RenderAPI
 		{
 			NoAPI, OpenGL, DirectX
+		};
+
+		enum class OperatingSystem
+		{
+			NoOS, Windows
 		};
 
 		constexpr RenderAPI GetRenderAPI()
@@ -21,6 +27,15 @@ namespace Shard
 #else
 			return RenderAPI::NoAPI;
 #endif
+#endif
+		}
+
+		constexpr OperatingSystem GetOS()
+		{
+#ifdef OS_Windows
+			return OperatingSystem::Windows;
+#else
+			return OperatingSystem::NoOS;
 #endif
 		}
 	}

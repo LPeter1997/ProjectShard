@@ -7,7 +7,7 @@ namespace Shard
 {
 	namespace Gfx
 	{
-		struct ContextAttribs
+		struct DisplayAttribs
 		{
 			// Dimensions
 			uint Width;

@@ -1,17 +1,17 @@
-#include "DXContext.h"
+#include "WinWindow.h"
 #include "../../Debugging/Logger.h"
-#include "D3D.h"
 
 namespace Shard
 {
 	namespace Gfx
 	{
-		namespace DX
+		namespace Windows
 		{
-			bool Context::s_Closed = false;
-			HWND Context::s_Handle;
+			bool Window::s_Closed = false;
+			HWND Window::s_Handle;
+			HDC Window::s_ContextHandle;
 
-			void Context::Create(ContextAttribs const& attribs)
+			void Window::Create(DisplayAttribs const& attribs)
 			{
 				// DX window attribs
 				WNDCLASSEX wc;
@@ -19,7 +19,7 @@ namespace Shard
 
 				// Fill attribs
 				wc.cbSize = sizeof(WNDCLASSEX);
-				wc.style = CS_HREDRAW | CS_VREDRAW;
+				wc.style = CS_OWNDC | CS_HREDRAW | CS_VREDRAW;
 				wc.lpfnWndProc = window_proc;
 				wc.cbClsExtra = NULL;
 				wc.cbWndExtra = NULL;
@@ -32,7 +32,7 @@ namespace Shard
 				// Register window
 				if (!RegisterClassEx(&wc))
 				{
-					Debugging::Logger::e() << "Failed to register DirectX class!" << std::endl;
+					Debugging::Logger::e() << "Failed to register Win32 class!" << std::endl;
 					return;
 				}
 
@@ -58,27 +58,54 @@ namespace Shard
 
 				if (!s_Handle)
 				{
-					Debugging::Logger::e() << "Failed to create DirectX window!" << std::endl;
+					Debugging::Logger::e() << "Failed to create Win32 window!" << std::endl;
 					return;
 				}
 
-				Debugging::Logger::i() << "DirectX window created successfully!" << std::endl;
+				s_ContextHandle = GetDC(s_Handle);
 
-				// Initialize Direct3D
-				if (!D3D::Initialize())
+				// Set the pixel format
+				PIXELFORMATDESCRIPTOR pfd =
 				{
-					Debugging::Logger::e() << "Failed to initialize Direct3D!" << std::endl;
+					sizeof(PIXELFORMATDESCRIPTOR),
+					1,
+					PFD_SUPPORT_OPENGL | PFD_DRAW_TO_WINDOW | PFD_DOUBLEBUFFER,
+					PFD_TYPE_RGBA,
+					16,
+					0, 0, 0, 0, 0, 0,
+					0,
+					0,
+					0,
+					0, 0, 0, 0,
+					16,
+					0,
+					0,
+					PFD_MAIN_PLANE,
+					0,
+					0, 0, 0
+				};
+
+				int pixelFormat = ChoosePixelFormat(s_ContextHandle, &pfd);
+				if (!pixelFormat)
+				{
+					Debugging::Logger::e() << "Failed to choose Win32 window pixel format!" << std::endl;
 					return;
 				}
 
-				Debugging::Logger::i() << "Direct3D initialized successfully!" << std::endl;
+				if (SetPixelFormat(s_ContextHandle, pixelFormat, &pfd) != TRUE)
+				{
+					Debugging::Logger::e() << "Failed to set Win32 window pixel format!" << std::endl;
+					return;
+				}
+
+				Debugging::Logger::i() << "Win32 window created successfully!" << std::endl;
 
 				// Display the window
 				ShowWindow(s_Handle, SW_SHOW);
 				UpdateWindow(s_Handle);
 			}
 
-			void Context::Update()
+			void Window::Update()
 			{
 				MSG msg;
 
@@ -87,26 +114,21 @@ namespace Shard
 					TranslateMessage(&msg);
 					DispatchMessage(&msg);
 				}
-				else
-				{
-					D3D::Present();
-				}
 			}
 
-			bool Context::CloseRequested()
+			bool Window::CloseRequested()
 			{
 				return s_Closed;
 			}
 
-			void Context::Destroy()
+			void Window::Destroy()
 			{
-				D3D::Terminate();
-				Debugging::Logger::i() << "Direct3D terminated!" << std::endl;
+				ReleaseDC(s_Handle, s_ContextHandle);
 				DestroyWindow(s_Handle);
-				Debugging::Logger::i() << "DirectX window destroyed!" << std::endl;
+				Debugging::Logger::i() << "Win32 window destroyed!" << std::endl;
 			}
 
-			LRESULT CALLBACK Context::window_proc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+			LRESULT CALLBACK Window::window_proc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			{
 				switch (message)
 				{

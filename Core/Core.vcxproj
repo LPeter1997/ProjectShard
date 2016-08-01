@@ -127,22 +127,23 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\Arch\DirectX\D3D.cpp" />
-    <ClCompile Include="src\Arch\DirectX\DXContext.cpp" />
-    <ClCompile Include="src\Arch\OpenGL\GLContext.cpp" />
+    <ClCompile Include="src\Arch\Windows\WinWindow.cpp" />
+    <ClCompile Include="src\Arch\OpenGL\GLWindow.cpp" />
     <ClCompile Include="src\Debugging\Logger.cpp" />
-    <ClCompile Include="src\Shard.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Arch\DirectX\D3D.h" />
     <ClInclude Include="src\Arch\DirectX\d3dx12.h" />
     <ClInclude Include="src\Arch\DirectX\DXContext.h" />
     <ClInclude Include="src\Arch\OpenGL\GLContext.h" />
-    <ClInclude Include="src\Arch\RenderAPI.h" />
+    <ClInclude Include="src\Arch\Windows\WinWindow.h" />
+    <ClInclude Include="src\Arch\OpenGL\GLWindow.h" />
+    <ClInclude Include="src\Arch\Platform.h" />
     <ClInclude Include="src\Debugging\Logger.h" />
     <ClInclude Include="src\Debugging\LogLevel.h" />
     <ClInclude Include="src\Gfx\Context.h" />
-    <ClInclude Include="src\Gfx\ContextAttribs.h" />
-    <ClInclude Include="src\Shard.h" />
+    <ClInclude Include="src\Gfx\DisplayAttribs.h" />
+    <ClInclude Include="src\Gfx\Display.h" />
     <ClInclude Include="src\Types.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
