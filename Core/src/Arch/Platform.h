@@ -9,7 +9,7 @@ namespace Shard
 	{
 		enum class RenderAPI
 		{
-			NoAPI, OpenGL, DirectX
+			NoAPI, OpenGL, DirectX, Vulkan
 		};
 
 		enum class OperatingSystem
@@ -19,20 +19,18 @@ namespace Shard
 
 		constexpr RenderAPI GetRenderAPI()
 		{
-#ifdef PLATFORM_OpenGL
+#if defined(PLATFORM_OpenGL)
 			return RenderAPI::OpenGL;
-#else
-#ifdef PLATFORM_DirectX
+#elif defined(PLATFORM_DirectX)
 			return RenderAPI::DirectX;
 #else
 			return RenderAPI::NoAPI;
-#endif
 #endif
 		}
 
 		constexpr OperatingSystem GetOS()
 		{
-#ifdef OS_Windows
+#if defined(OS_Windows)
 			return OperatingSystem::Windows;
 #else
 			return OperatingSystem::NoOS;

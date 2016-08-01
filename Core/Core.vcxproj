@@ -69,12 +69,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\GLEW\include;C:\Program Files %28x86%29\Windows Kits\10\Include\10.0.10240.0\um;C:\Program Files %28x86%29\Windows Kits\10\Include\10.0.10240.0\shared;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\GLEW\include;C:\Program Files %28x86%29\Windows Kits\10\Include\10.0.10240.0\um;C:\Program Files %28x86%29\Windows Kits\10\Include\10.0.10240.0\shared;$(SolutionDir)Dependencies\DirectX\include;$(SolutionDir)Dependencies\Vulkan\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Dependencies\GLFW\lib;$(SolutionDir)Dependencies\GLEW\lib;C:\Program Files %28x86%29\Windows Kits\10\Lib\10.0.10240.0\um\x86;$(LibraryPath)</LibraryPath>
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\GLEW\include;C:\Program Files %28x86%29\Windows Kits\10\Include\10.0.10240.0\um;C:\Program Files %28x86%29\Windows Kits\10\Include\10.0.10240.0\shared;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\GLEW\include;C:\Program Files %28x86%29\Windows Kits\10\Include\10.0.10240.0\um;C:\Program Files %28x86%29\Windows Kits\10\Include\10.0.10240.0\shared;$(SolutionDir)Dependencies\DirectX\include;$(SolutionDir)Dependencies\Vulkan\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Dependencies\GLFW\lib;$(SolutionDir)Dependencies\GLEW\lib;C:\Program Files %28x86%29\Windows Kits\10\Lib\10.0.10240.0\um\x86;$(LibraryPath)</LibraryPath>
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
@@ -127,15 +127,16 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\Arch\DirectX\D3D.cpp" />
+    <ClCompile Include="src\Arch\Vulkan\VKDevice.cpp" />
     <ClCompile Include="src\Arch\Windows\WinWindow.cpp" />
     <ClCompile Include="src\Arch\OpenGL\GLWindow.cpp" />
     <ClCompile Include="src\Debugging\Logger.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Arch\DirectX\D3D.h" />
-    <ClInclude Include="src\Arch\DirectX\d3dx12.h" />
     <ClInclude Include="src\Arch\DirectX\DXContext.h" />
     <ClInclude Include="src\Arch\OpenGL\GLContext.h" />
+    <ClInclude Include="src\Arch\Vulkan\VKDevice.h" />
     <ClInclude Include="src\Arch\Windows\WinWindow.h" />
     <ClInclude Include="src\Arch\OpenGL\GLWindow.h" />
     <ClInclude Include="src\Arch\Platform.h" />

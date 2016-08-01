@@ -4,6 +4,7 @@
 #include "src\Debugging\Logger.h"
 #include "src\Gfx\Display.h"
 #include "src\Gfx\Context.h"
+#include "src\Arch\Vulkan\VKDevice.h"
 
 using namespace Shard;
 using namespace Gfx;
@@ -12,15 +13,16 @@ using namespace Debugging;
 int main(void)
 {
 	Display::Create(DisplayAttribs({ 960, 540, "Shard Engine!" }));
-	Context::Initialize();
+	VK::Device::Create();
+	//Context::Initialize();
 
 	while (!Display::CloseRequested())
 	{
-		Context::Present();
+		//Context::Present();
 		Display::Update();
 	}
 
-	Context::Destroy();
+	//Context::Destroy();
 	Display::Destroy();
 
 	system("PAUSE");
