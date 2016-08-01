@@ -224,7 +224,7 @@ namespace Shard
 				s_CommandList->OMSetRenderTargets(1, &rtvHandle, FALSE, nullptr);
 
 				// Clear the render target
-				const float clearColor[] = { 0.0f, 0.2f, 0.4f, 1.0f };
+				const float clearColor[] = { 0.2f, 0.3f, 1.0f, 1.0f };
 				s_CommandList->ClearRenderTargetView(rtvHandle, clearColor, 0, nullptr);
 
 				// Render target from render target state to present state

@@ -1,6 +1,6 @@
 #pragma once
 
-#define PLATFORM_DirectX
+#define PLATFORM_OpenGL
 
 namespace Shard
 {

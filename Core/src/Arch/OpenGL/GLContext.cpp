@@ -1,3 +1,4 @@
+#include <GL/glew.h>
 #include "GLContext.h"
 #include "../../Debugging/Logger.h"
 
@@ -22,6 +23,15 @@ namespace Shard
 				Debugging::Logger::i() << "GLFW window created successfully!" << std::endl;
 
 				glfwMakeContextCurrent(s_Window);
+
+				if (glewInit() != GLEW_OK)
+				{
+					Debugging::Logger::Log<Debugging::Error>() << "Failed to initialize GLEW context!" << std::endl;
+					return;
+				}
+
+				Debugging::Logger::Log<Debugging::Info>() << "GLEW context initialized successfully!" << std::endl;
+
 				glfwSwapInterval(0);
 			}
 
@@ -29,6 +39,8 @@ namespace Shard
 			{
 				glfwPollEvents();
 				glfwSwapBuffers(s_Window);
+				glClearColor(0.2f, 0.3f, 1.0f, 1.0f);
+				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			}
 
 			bool Context::CloseRequested()
