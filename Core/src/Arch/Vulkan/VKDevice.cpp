@@ -60,13 +60,6 @@ namespace Shard
 				{
 					uint32 layerCount = 0;
 					vkEnumerateInstanceLayerProperties(&layerCount, NULL);
-					if (layerCount == 0)
-					{
-						Debugging::Logger::d() << "Could not load VK any validation layer" << std::endl;
-						return false;
-					}
-
-					// Layers found, check if we have what we need
 					std::vector<VkLayerProperties> availableLayers(layerCount);
 					vkEnumerateInstanceLayerProperties(&layerCount, availableLayers.data());
 
@@ -102,7 +95,7 @@ namespace Shard
 				// Load extensions
 				std::vector<const char*> extensionsNeeded =
 				{
-					VK_KHR_WIN32_SURFACE_EXTENSION_NAME, VK_KHR_SURFACE_EXTENSION_NAME
+					VK_KHR_SURFACE_EXTENSION_NAME, VK_KHR_WIN32_SURFACE_EXTENSION_NAME
 				};
 				if (enableValidationLayers)
 				{
@@ -123,14 +116,18 @@ namespace Shard
 							extFound = true;
 							break;
 						}
+					}
 
-						if (!extFound)
-						{
-							Debugging::Logger::d() << "Could not find VK extension: " << extName << std::endl;
-							return false;
-						}
+					if (!extFound)
+					{
+						Debugging::Logger::d() << "Could not find VK extension: " << extName << std::endl;
+						return false;
 					}
 				}
+
+				// Write extensions in create info
+				createInfo.enabledExtensionCount = extensionsNeeded.size();
+				createInfo.ppEnabledExtensionNames = extensionsNeeded.data();
 
 				// Create the instance
 				VkInstance instance;
