@@ -13,6 +13,7 @@ using namespace Debugging;
 int main(void)
 {
 	Display::Create(DisplayAttribs({ 960, 540, "Shard Engine!" }));
+	VK::Device::Win32_LoadVulkan();
 	VK::Device::Create();
 	//Context::Initialize();
 

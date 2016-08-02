@@ -3,6 +3,7 @@
 #define VK_USE_PLATFORM_WIN32_KHR
 #define VK_NO_PROTOTYPES
 #include <Vulkan\vulkan.h>
+#include "../../Types.h"
 
 namespace Shard
 {
@@ -10,22 +11,27 @@ namespace Shard
 	{
 		namespace VK
 		{
-#if defined(VK_USE_PLATFORM_WIN32_KHR)
-			typedef HMODULE VkLibrary;
-#elif defined(VK_USE_PLATFORM_XCB_KHR) || defined(VK_USE_PLATFORM_XLIB_KHR)
-			typedef void* VkLibrary;
-#endif
-
 			class Device
 			{
-			private:
-				static VkLibrary s_Library;
-
 			private:
 				Device() = delete;
 
 			public:
+				static bool Win32_LoadVulkan();
 				static bool Create();
+
+			private:
+				template <typename T>
+				static inline bool Win32_LoadFunction(const HMODULE& dev, T& fn, const char* name)
+				{
+					fn = (T)GetProcAddress(dev, name);
+					if (!fn)
+					{
+						Debugging::Logger::e() << "Failed to load Vulkan function: '" << name << "'!" << std::endl;
+						return false;
+					}
+					return true;
+				}
 			};
 		}
 	}
